@@ -1,29 +1,1508 @@
-<!DOCTYPE html>  
-  <html lang="en">  
-  <head>  
-    <meta charset="UTF-8">  
-    <title>Login</title>  
-    <link rel="stylesheet" type="text/css" href="Login.css"/>  
-  </head>  
-  <body> 
-    <div id="logo">
-			  <img id="logo_img" src="images/luoshu.png" alt="chat_logo" width="100" height="100"> 
-		</div>
-      
-		<div id="header_text">
-			<h1 style="color: #ffffff;">虚一阁.六壬公开课版</h1>
-		</div>
-   
-    <div id="login">  
-      <h1>Login</h1>
-	<p style="color: #ffffff;"><a href="chat.html">.</a></p>
-      <form method="post">  
-        <input type="text" required="required" placeholder="用户名" name="u"></input>  
-        <input type="password" required="required" placeholder="密码" name="p"></input>  
-        <button class="but" type="submit">登录</button>  
-      </form>  
-	
-    </div>  
-    
-  </body>  
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>响马卦排盘</title>
+<style>
+@font-face {
+  font-family: 'Qiji';
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local('令東齊伋體'),
+    local('齊伋體'),
+    local('Qiji'),
+    url('https://cdn.jsdelivr.net/gh/LingDong-/qiji-font@master/data/齊伋體.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/LingDong-/qiji-font@master/data/Qiji.ttf') format('truetype'),
+    url('https://fastly.jsdelivr.net/gh/LingDong-/qiji-font@master/data/齊伋體.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/LingDong-/qiji-font@master/dist/Qiji.woff2') format('woff2');
+}
+
+body {
+  --bg: #FFFFF0; --bg-soft: #f8f8ec;
+  --bg-panel: #fafae8; --bg-panel-border: #e8e8d0;
+  --bg-card: #ffffff; --bg-card-soft: #fbfbf0;
+  --border: #e0e0d0; --border-2: #dddddd; --border-3: #cccccc;
+  --text: #000000; --text-2: #333333; --text-3: #555555;
+  --text-4: #888888; --text-5: #aaaaaa;
+  --nature-bg: rgba(0,0,0,0.16);
+  --btn-primary-bg: #333333; --btn-primary-text: #ffffff; --btn-primary-hover: #111111;
+  --btn-ghost-bg: #ffffff; --btn-ghost-text: #333333;
+  --btn-ghost-border: #999999; --btn-ghost-hover: #f0f0e0;
+  --panel-bg: #fafae8; --panel-border: #e8e8d0;
+  --remain-border: #e0e0d0;
+  --remain-half-border: #f0c060; --remain-half-bg: #fffaf0;
+  --shadow-text: none;
+  --taiji-yin: #1a1a1a; --taiji-yang: #FFFFF0; --taiji-border: #333333;
+  --c-liutang: #c0392b; --c-maoyu: #2471a3;
+  --c-ergun: #b9770e; --c-bawan: #566573;
+  --c-yibing: #b9770e; --c-erb: #566573; --c-sanb: #1e8449;
+  --c-sib: #148f77; --c-wub: #b9770e;
+
+  --font-qiji: 'QIJIC', '令東齊伋體', '齊伋體', 'STKaiti', 'KaiTi', '楷体', serif;
+  --font-song: 'SimSun', '宋体', 'NSimSun', '新宋体', 'Songti SC', 'STSong', serif;
+
+  color-scheme: light;
+}
+
+body.dark {
+  --bg: #121212; --bg-soft: #1a1a1a;
+  --bg-panel: #1e1e1e; --bg-panel-border: #333333;
+  --bg-card: #232323; --bg-card-soft: #1c1c1c;
+  --border: #333333; --border-2: #3a3a3a; --border-3: #4a4a4a;
+  --text: #e8e8e8; --text-2: #cccccc; --text-3: #b0b0b0;
+  --text-4: #888888; --text-5: #666666;
+  --nature-bg: rgba(255,255,255,0.10);
+  --btn-primary-bg: #e8e8e8; --btn-primary-text: #121212; --btn-primary-hover: #ffffff;
+  --btn-ghost-bg: #232323; --btn-ghost-text: #e8e8e8;
+  --btn-ghost-border: #555555; --btn-ghost-hover: #2e2e2e;
+  --panel-bg: #1e1e1e; --panel-border: #333333;
+  --remain-border: #3a3a3a;
+  --remain-half-border: #8a6b1a; --remain-half-bg: #2a2416;
+  --taiji-yin: #e8e8e8; --taiji-yang: #121212; --taiji-border: #bbbbbb;
+  --c-liutang: #ff7675; --c-maoyu: #74b9ff;
+  --c-ergun: #f5b041; --c-bawan: #aeb6bf;
+  --c-yibing: #f5b041; --c-erb: #aeb6bf; --c-sanb: #58d68d;
+  --c-sib: #55efc4; --c-wub: #f5b041;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font-song);
+  font-weight: 400;
+  background: var(--bg); color: var(--text);
+  display: flex; flex-direction: column; min-height: 100vh;
+  font-size: 16px; line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background 0.2s, color 0.2s;
+}
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; background: var(--bg); color: var(--text);
+  padding: 12px 18px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0; font-family: var(--font-qiji);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+
+.taiji-icon {
+  width: 42px; height: 42px; flex-shrink: 0;
+  animation: taiji-spin 24s linear infinite;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+  transition: filter 0.2s;
+}
+body.dark .taiji-icon { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.15)); }
+@keyframes taiji-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.header-title {
+  font-size: 30px; font-weight: 400; letter-spacing: 6px;
+  color: var(--text); text-shadow: none;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;
+}
+
+.theme-toggle {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border-3); background: var(--btn-ghost-bg);
+  color: var(--text-2); font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; line-height: 1; font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.theme-toggle:hover { background: var(--btn-ghost-hover); transform: rotate(15deg); }
+.theme-toggle:active { transform: rotate(15deg) scale(0.94); }
+
+/* ---------- 导航栏 ---------- */
+nav {
+  display: flex; justify-content: center; gap: 10px; padding: 10px;
+  background: var(--bg-soft); border-bottom: 1px solid var(--border);
+  flex-shrink: 0; transition: background 0.2s, border-color 0.2s;
+}
+nav button {
+  padding: 9px 26px; border: 1px solid var(--border-3);
+  background: var(--bg-card); border-radius: 4px; cursor: pointer;
+  font-size: 19px; color: var(--text-2); font-family: inherit; font-weight: 400;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+nav button:not(.active):hover {
+  background: var(--text); color: var(--bg); border-color: var(--text);
+  transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+body.dark nav button:not(.active):hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55); }
+nav button.active {
+  background: var(--btn-primary-bg); color: var(--btn-primary-text);
+  border-color: var(--btn-primary-bg);
+}
+nav button.active:hover {
+  background: var(--btn-primary-hover); border-color: var(--btn-primary-hover);
+  color: var(--btn-primary-text); transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+body.dark nav button.active:hover { box-shadow: 0 6px 16px rgba(255, 255, 255, 0.08); }
+
+main { flex: 1; padding: 16px; overflow-y: auto; overflow-x: hidden; }
+.tab { display: none; }
+.tab.active { display: block; }
+
+.row {
+  display: flex; gap: 10px; justify-content: center;
+  align-items: center; flex-wrap: wrap; margin-bottom: 14px;
+}
+input[type="text"], input[type="date"], input[type="number"],
+input[type="datetime-local"], select {
+  padding: 8px 12px; border: 1px solid var(--border-3); border-radius: 4px;
+  font-size: 16px; font-family: inherit; background: var(--bg-card); outline: none;
+  color: var(--text); font-weight: 400;
+}
+input::placeholder { color: var(--text-5); }
+input[type="text"] { flex: 1; min-width: 150px; max-width: 340px; }
+input:focus, select:focus { border-color: var(--text-4); }
+
+.btn {
+  padding: 9px 22px; border: 1px solid var(--btn-primary-bg);
+  background: var(--btn-primary-bg); color: var(--btn-primary-text);
+  border-radius: 4px; cursor: pointer; font-size: 17px;
+  font-family: inherit; transition: all 0.15s; font-weight: 400;
+}
+.btn:hover { background: var(--btn-primary-hover); border-color: var(--btn-primary-hover); }
+.btn.ghost {
+  background: var(--btn-ghost-bg); color: var(--btn-ghost-text);
+  border-color: var(--btn-ghost-border);
+}
+.btn.ghost:hover { background: var(--btn-ghost-hover); }
+.btn.mini { padding: 8px 14px; font-size: 16px; }
+
+.info {
+  max-width: 900px; margin: 0 auto 16px; padding: 14px 18px;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 6px; font-size: 18px; line-height: 2.1; color: var(--text-2);
+  font-weight: 400;
+}
+.info b { color: var(--text); }
+
+/* ---------- 问题 / 断语 ---------- */
+.qa-section {
+  max-width: 900px; margin: 20px auto 16px; padding: 14px 16px;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 8px;
+}
+.qa-row {
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;
+}
+.qa-row:last-child { margin-bottom: 0; }
+.qa-label {
+  font-size: 18px; font-weight: 400; color: var(--text-2);
+  padding-top: 10px; flex-shrink: 0; width: 58px; letter-spacing: 1px;
+}
+.qa-textarea {
+  flex: 1; min-height: 68px; padding: 9px 13px;
+  border: 1px solid var(--border-3); border-radius: 6px;
+  background: var(--bg-card); color: var(--text);
+  font-family: inherit; font-size: 17px; font-weight: 400;
+  line-height: 1.6; resize: vertical; outline: none;
+}
+.qa-textarea:focus { border-color: var(--text-4); }
+.qa-textarea::placeholder { color: var(--text-5); }
+
+/* ---------- 自定义盘面 ---------- */
+.custom-section { max-width: 900px; margin: 0 auto 18px; }
+.custom-head { text-align: center; margin-bottom: 10px; }
+.custom-body {
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 8px; padding: 14px;
+}
+.custom-hint {
+  font-size: 14px; color: var(--text-4); text-align: center;
+  margin-bottom: 12px; line-height: 1.8;
+}
+.custom-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-bottom: 12px;
+}
+.custom-cell {
+  background: var(--bg-card); border: 1px solid var(--border-2);
+  border-radius: 6px; padding: 8px 6px;
+}
+.custom-cell-name {
+  font-size: 15px; color: var(--text-4); font-weight: 400;
+  margin-bottom: 6px; letter-spacing: 1px;
+}
+.custom-slot {
+  display: flex; gap: 4px; align-items: center; margin-bottom: 4px;
+}
+.custom-slot:last-child { margin-bottom: 0; }
+.custom-slot-idx {
+  font-size: 14px; color: var(--text-3); width: 22px;
+  text-align: center; flex-shrink: 0;
+  white-space: nowrap;
+}
+.custom-select {
+  flex: 1; padding: 4px 6px; font-size: 14px;
+  border: 1px solid var(--border-3); border-radius: 4px;
+  background: var(--bg-card); font-family: inherit; min-width: 0;
+  color: var(--text);
+}
+.custom-face-btn {
+  width: 28px; height: 28px; border: 1px solid var(--btn-ghost-border);
+  background: var(--bg-card); border-radius: 4px; cursor: pointer;
+  font-size: 15px; color: var(--text-2);
+  padding: 0; font-family: inherit; flex-shrink: 0; line-height: 1;
+}
+.custom-face-btn:hover { background: var(--btn-ghost-hover); }
+.custom-remaining {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; margin-bottom: 12px; font-size: 14px;
+}
+.remain-item {
+  padding: 4px 9px; border-radius: 12px; background: var(--bg-card);
+  border: 1px solid var(--remain-border); color: var(--text-2);
+}
+.remain-item.half {
+  border-color: var(--remain-half-border);
+  background: var(--remain-half-bg);
+}
+.remain-item.done { opacity: 0.45; }
+.custom-actions {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+
+/* ---------- 盘面 ---------- */
+.pan-pair {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  justify-content: center; align-items: flex-start;
+  max-width: 1480px; margin: 0 auto 10px;
+}
+.pan-pair > .pan {
+  flex: 1 1 400px; min-width: 0; max-width: 720px; margin-bottom: 16px;
+}
+.pan { width: 100%; margin: 0 auto 20px; font-family: var(--font-qiji); }
+.pan-title {
+  text-align: center; font-size: 24px; font-weight: 400;
+  letter-spacing: 6px; margin-bottom: 10px; color: var(--text-2);
+}
+
+.pan-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  --pan-font-size: 20px;
+  --gong-name-size: 14px;
+  --nature-size: 60px;
+}
+.gong {
+  position: relative; background: var(--bg-card);
+  border: 1px solid var(--border-2);
+  border-radius: 6px; aspect-ratio: 1 / 1; padding: 8px; overflow: hidden;
+}
+.gong-name {
+  position: absolute; top: 6px; left: 8px;
+  font-size: var(--gong-name-size); color: var(--text-4);
+  z-index: 2;
+}
+.gong-nature {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: var(--nature-size); color: var(--nature-bg);
+  pointer-events: none; user-select: none; z-index: 0; line-height: 1;
+}
+.gong-content {
+  position: relative; z-index: 1; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; height: 100%;
+  gap: 6px; font-size: var(--pan-font-size); line-height: 1.3;
+  text-align: center; word-break: break-all;
+  color: var(--text);
+}
+.gong-content > div { white-space: nowrap; }
+
+.card-text {
+  display: inline-flex; flex-direction: row; align-items: center;
+  letter-spacing: 0.3px; text-shadow: none;
+  white-space: nowrap; line-height: 1.15;
+}
+.card-sym { display: inline-block; margin-right: 2px; }
+.card-body { display: inline-flex; flex-direction: row; align-items: center; }
+.card-face { display: inline-block; margin-left: 1px; }
+
+.card-text.card-liutang { color: var(--c-liutang); }
+.card-text.card-maoyu   { color: var(--c-maoyu); }
+.card-text.card-ergun   { color: var(--c-ergun); }
+.card-text.card-bawan   { color: var(--c-bawan); }
+.card-text.card-yibing  { color: var(--c-yibing); }
+.card-text.card-erb     { color: var(--c-erb); }
+.card-text.card-sanb    { color: var(--c-sanb); }
+.card-text.card-sib     { color: var(--c-sib); }
+.card-text.card-wub     { color: var(--c-wub); }
+
+/* ---------- 抽签 ---------- */
+.live-section {
+  max-width: 900px; margin: 20px auto;
+  padding: 20px;
+  background: var(--panel-bg); border: 1px solid var(--panel-border);
+  border-radius: 8px;
+}
+.live-head {
+  text-align: center; margin-bottom: 20px;
+}
+.live-cards {
+  display: flex; gap: 14px; justify-content: center;
+  flex-wrap: wrap;
+}
+.live-card {
+  width: 160px; height: 160px; background: var(--bg-card);
+  border: 1px solid var(--border-2); border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; position: relative;
+  font-family: var(--font-qiji);
+  transition: background 0.2s, border-color 0.2s;
+}
+.live-card .idx {
+  position: absolute; top: 8px; left: 10px;
+  font-size: 13px; color: var(--text-5);
+}
+.live-card .val { font-size: 32px; }
+.live-card .sub {
+  font-size: 14px; color: var(--text-4);
+}
+
+.export-row {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  max-width: 600px; margin: 0 auto 24px;
+}
+.export-row .btn { font-size: 16px; padding: 8px 17px; }
+
+#toast {
+  position: fixed; left: 50%; bottom: 80px;
+  transform: translateX(-50%) translateY(16px);
+  background: rgba(0,0,0,0.85); color: #fff; padding: 11px 24px;
+  border-radius: 20px; font-size: 16px; opacity: 0;
+  pointer-events: none; transition: all 0.25s; z-index: 999;
+  max-width: 90vw; text-align: center;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+footer {
+  text-align: center; padding: 14px; font-size: 15px;
+  color: var(--text-4); border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+@media (max-width: 860px) {
+  .pan-pair > .pan { flex: 1 1 100%; max-width: 720px; }
+}
+@media (max-width: 480px) {
+  header { padding: 10px 12px; }
+  .header-left { gap: 10px; }
+  .taiji-icon { width: 34px; height: 34px; }
+  .theme-toggle { width: 36px; height: 36px; font-size: 18px; }
+  nav button { padding: 8px 18px; font-size: 17px; }
+  main { padding: 10px; }
+  .qa-label { width: 48px; font-size: 16px; }
+  .qa-textarea { font-size: 15px; }
+  .custom-select { font-size: 13px; padding: 3px 4px; }
+  .custom-cell { padding: 6px 4px; }
+  .custom-face-btn { width: 24px; height: 24px; font-size: 13px; }
+  .custom-slot-idx { width: 20px; font-size: 13px; }
+  .custom-cell-name { font-size: 13px; }
+  .live-card { width: 110px; height: 110px; }
+  .live-card .val { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+      <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+      <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+    </svg>
+    <h1 class="header-title">【明华】响马卦排盘</h1>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" title="切换昼夜模式" aria-label="切换昼夜模式">🌙</button>
+</header>
+
+<nav>
+  <button class="active" data-tab="regular">常规</button>
+  <button data-tab="live">抽签</button>
+</nav>
+
+<main>
+  <!-- ============ 常规页 ============ -->
+  <section class="tab active" id="tab-regular">
+    <div class="row">
+      <span style="font-size:17px;color:var(--text-3)">时间：</span>
+      <input type="datetime-local" id="pan-time" step="60">
+      <button class="btn ghost mini" id="btn-now">现在</button>
+      <button class="btn" id="btn-pan">起卦</button>
+    </div>
+
+    <div class="custom-section">
+      <div class="custom-head">
+        <button class="btn ghost mini" id="btn-custom-toggle">自定义盘面 ▾</button>
+      </div>
+      <div class="custom-body" id="custom-body" style="display:none">
+        <div class="custom-hint">
+          为九宫设置牌面（每宫 2 张，上方为「阴」位，下方为「阳」位）。<br>
+          每种牌共 2 张，有朝向的牌可点击右侧按钮切换 ↑ / ↓ 朝向。<br>
+          留空的槽位应用时会自动用剩余牌随机填充。
+        </div>
+        <div class="custom-grid" id="custom-grid"></div>
+        <div class="custom-remaining" id="custom-remaining"></div>
+        <div class="custom-actions">
+          <button class="btn ghost mini" id="btn-custom-random">全部随机</button>
+          <button class="btn ghost mini" id="btn-custom-clear">清空</button>
+          <button class="btn mini" id="btn-custom-apply">应用并起卦</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info" id="info-regular" style="display:none"></div>
+    <div id="out-regular"></div>
+
+    <div class="qa-section">
+      <div class="qa-row">
+        <label class="qa-label" for="question">问题</label>
+        <textarea id="question" class="qa-textarea" placeholder="请输入问题（选填）"></textarea>
+      </div>
+      <div class="qa-row">
+        <label class="qa-label" for="duanyu">断语</label>
+        <textarea id="duanyu" class="qa-textarea" placeholder="请输入断语（选填）"></textarea>
+      </div>
+    </div>
+
+    <div class="export-row" id="export-regular" style="display:none">
+      <button class="btn ghost" data-act="txt-xian">复制先天·文字</button>
+      <button class="btn ghost" data-act="txt-hou">复制后天·文字</button>
+      <button class="btn ghost" data-act="img-xian">导出先天·图片</button>
+      <button class="btn ghost" data-act="img-hou">导出后天·图片</button>
+    </div>
+  </section>
+
+  <!-- ============ 抽签页 ============ -->
+  <section class="tab" id="tab-live">
+    <div class="live-section">
+      <div class="live-head">
+        <button class="btn" id="btn-live">抽三张牌</button>
+      </div>
+      <div id="out-live"></div>
+    </div>
+  </section>
+</main>
+
+<footer>作者：姜玄衣</footer>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+ *  常量
+ * ============================================================ */
+var GONG_KEYS = ['乾','坎','艮','震','巽','离','坤','兑','中'];
+var NATURE = {'中':'宅','坎':'险','艮':'止','震':'动','巽':'空','离':'亡','坤':'地','兑':'缺','乾':'天'};
+var GRID = ['巽','离','坤','震','中','兑','艮','坎','乾'];
+var OUTER = ['乾','坎','艮','震','巽','离','坤','兑'];
+
+var CARDS = ['刘唐','毛鱼','二棍','八万','一并','二并','三并','四并','五并'];
+var FACE_CARDS = ['刘唐','毛鱼','二棍','八万'];
+
+var CARD_CLASS = {
+  '刘唐':'card-liutang','毛鱼':'card-maoyu','二棍':'card-ergun','八万':'card-bawan',
+  '一并':'card-yibing','二并':'card-erb','三并':'card-sanb','四并':'card-sib','五并':'card-wub'
+};
+var CARD_COLOR_LIGHT = {
+  '刘唐':'#c0392b','毛鱼':'#2471a3','二棍':'#b9770e','八万':'#566573',
+  '一并':'#b9770e','二并':'#566573','三并':'#1e8449','四并':'#148f77','五并':'#b9770e'
+};
+var CARD_COLOR_DARK = {
+  '刘唐':'#ff7675','毛鱼':'#74b9ff','二棍':'#f5b041','八万':'#aeb6bf',
+  '一并':'#f5b041','二并':'#aeb6bf','三并':'#58d68d','四并':'#55efc4','五并':'#f5b041'
+};
+var CARD_SYMBOL = {
+  '刘唐':'●','毛鱼':'▲','二棍':'■','八万':'◆',
+  '一并':'①','二并':'②','三并':'③','四并':'④','五并':'⑤'
+};
+
+/* 抽签：第三张牌 → 宫位性质 */
+var CARD_NATURE = {'刘唐':'亡','毛鱼':'险','二棍':'地','八万':'天','一并':'止','二并':'缺','三并':'动','四并':'空','五并':'中'};
+/* 宫位性质 → 宫位 */
+var NATURE_GONG = {'中':'中','险':'坎','止':'艮','动':'震','空':'巽','亡':'离','地':'坤','缺':'兑','天':'乾'};
+
+var XT_ORDER = [
+  ['中',0],['离',0],['巽',0],['震',0],['艮',0],['坎',0],['乾',0],['兑',0],['坤',0],
+  ['离',1],['巽',1],['震',1],['艮',1],['坎',1],['乾',1],['兑',1],['坤',1],['中',1]
+];
+
+var FACE_OUT = '↑';
+var FACE_IN  = '↓';
+
+/* ============================================================
+ *  工具
+ * ============================================================ */
+function baseName(c){
+  return c == null ? '' : String(c).replace(/[\^v↑↓]$/, '');
+}
+function disp(v){ return v == null ? '' : String(v); }
+function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+
+function fmtTime(d){
+  return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate())
+       + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds());
+}
+function toLocalInputValue(d){
+  return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate())
+       + 'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+}
+function toast(msg){
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.classList.remove('show'); }, 2000);
+}
+
+/* ============================================================
+ *  昼夜模式
+ * ============================================================ */
+function isDarkMode(){ return document.body.classList.contains('dark'); }
+function updateThemeButton(){
+  var btn = document.getElementById('theme-toggle');
+  if(!btn) return;
+  btn.textContent = isDarkMode() ? '☀' : '🌙';
+}
+(function initTheme(){
+  var saved = null;
+  try { saved = localStorage.getItem('xiangma-theme'); } catch(e){}
+  var prefersDark = false;
+  try { prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  var useDark = (saved === 'dark') || (saved !== 'light' && prefersDark);
+  if(useDark) document.body.classList.add('dark');
+  updateThemeButton();
+
+  document.getElementById('theme-toggle').addEventListener('click', function(){
+    document.body.classList.toggle('dark');
+    try { localStorage.setItem('xiangma-theme', isDarkMode() ? 'dark' : 'light'); } catch(e){}
+    updateThemeButton();
+  });
+})();
+
+/* ============================================================
+ *  Tab 切换
+ * ============================================================ */
+document.querySelectorAll('nav button').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('nav button').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    var tab = this.getAttribute('data-tab');
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+    scheduleFitPanFonts();
+  });
+});
+
+/* ============================================================
+ *  字体自适应
+ * ============================================================ */
+var fitScheduled = false;
+function scheduleFitPanFonts(){
+  if(fitScheduled) return;
+  fitScheduled = true;
+  requestAnimationFrame(function(){
+    fitScheduled = false;
+    fitPanFonts();
+  });
+}
+
+function fitPanFonts(){
+  document.querySelectorAll('.pan-grid').forEach(function(grid){
+    var cell = grid.querySelector('.gong');
+    if(!cell) return;
+    var w = cell.offsetWidth;
+    if(w <= 0) return;
+    var fontSize = Math.max(10, Math.min(24, w / 5.5));
+    var nameSize = Math.max(9, Math.min(16, w / 9.5));
+    var natureSize = Math.max(26, Math.min(68, w / 2.4));
+    grid.style.setProperty('--pan-font-size', fontSize.toFixed(2) + 'px');
+    grid.style.setProperty('--gong-name-size', nameSize.toFixed(2) + 'px');
+    grid.style.setProperty('--nature-size', natureSize.toFixed(2) + 'px');
+  });
+}
+
+window.addEventListener('resize', scheduleFitPanFonts);
+window.addEventListener('orientationchange', scheduleFitPanFonts);
+
+(function initResizeObserver(){
+  if(typeof ResizeObserver === 'function'){
+    var ro = new ResizeObserver(function(){ scheduleFitPanFonts(); });
+    document.querySelectorAll('.pan-grid').forEach(function(el){ ro.observe(el); });
+  }
+})();
+
+/* ============================================================
+ *  牌堆
+ * ============================================================ */
+function makeDeck(){
+  var deck = [];
+  for(var i = 0; i < CARDS.length; i++){
+    var name = CARDS[i];
+    for(var j = 0; j < 2; j++){
+      if(FACE_CARDS.indexOf(name) >= 0){
+        deck.push(name + (Math.random() < 0.5 ? FACE_OUT : FACE_IN));
+      } else {
+        deck.push(name);
+      }
+    }
+  }
+  for(var k = deck.length - 1; k > 0; k--){
+    var m = Math.floor(Math.random() * (k + 1));
+    var t = deck[k]; deck[k] = deck[m]; deck[m] = t;
+  }
+  return deck;
+}
+
+function makeXiantian(deck){
+  var g = {};
+  for(var i = 0; i < GONG_KEYS.length; i++) g[GONG_KEYS[i]] = [null, null];
+  for(var j = 0; j < XT_ORDER.length; j++){
+    g[XT_ORDER[j][0]][XT_ORDER[j][1]] = deck[j];
+  }
+  return g;
+}
+
+function makeHoutian(src){
+  var g = {};
+  for(var i = 0; i < GONG_KEYS.length; i++) g[GONG_KEYS[i]] = src[GONG_KEYS[i]].slice();
+
+  if(baseName(g['中'][0]) === baseName(g['中'][1])) return g;
+
+  var hand = g['中'][0];
+  g['中'][0] = g['中'][1];
+  g['中'][1] = null;
+
+  var guard = 0;
+  while(guard++ < 200){
+    var hn = baseName(hand);
+    if(hn === '') break;
+
+    var found = null, fIdx = -1;
+    for(var i2 = 0; i2 < OUTER.length; i2++){
+      var kk = OUTER[i2];
+      if(baseName(g[kk][0]) === hn){ found = kk; fIdx = 0; break; }
+      if(baseName(g[kk][1]) === hn){ found = kk; fIdx = 1; break; }
+    }
+    if(!found) break;
+
+    if(FACE_CARDS.indexOf(hn) >= 0){
+      var face = String(g[found][fIdx]).slice(-1);
+      hand = hn + face;
+    }
+
+    var other = 1 - fIdx;
+    var tmp = g[found][other];
+    g[found][other] = hand;
+    hand = tmp;
+  }
+
+  g['中'][1] = hand;
+  return g;
+}
+
+/* ============================================================
+ *  渲染
+ * ============================================================ */
+function createCardEl(cardStr){
+  var dv = document.createElement('div');
+  var bn = baseName(cardStr);
+  var cls = CARD_CLASS[bn];
+  dv.className = 'card-text' + (cls ? ' ' + cls : '');
+
+  var symbol = CARD_SYMBOL[bn] || '';
+  var faceMatch = String(cardStr).match(/[\^v↑↓]$/);
+  var face = faceMatch ? faceMatch[0] : '';
+
+  if(symbol){
+    var symEl = document.createElement('span');
+    symEl.className = 'card-sym';
+    symEl.textContent = symbol;
+    dv.appendChild(symEl);
+  }
+
+  var body = document.createElement('span');
+  body.className = 'card-body';
+  body.appendChild(document.createTextNode(bn));
+  if(face){
+    var faceEl = document.createElement('span');
+    faceEl.className = 'card-face';
+    faceEl.textContent = face;
+    body.appendChild(faceEl);
+  }
+  dv.appendChild(body);
+  return dv;
+}
+
+function createPanEl(g, title){
+  var wrap = document.createElement('div');
+  wrap.className = 'pan';
+
+  var t = document.createElement('div');
+  t.className = 'pan-title';
+  t.textContent = title;
+  wrap.appendChild(t);
+
+  var grid = document.createElement('div');
+  grid.className = 'pan-grid';
+
+  for(var i = 0; i < GRID.length; i++){
+    var k = GRID[i];
+    var arr = g[k];
+    var cell = document.createElement('div');
+    cell.className = 'gong';
+
+    var nm = document.createElement('div');
+    nm.className = 'gong-name';
+    nm.textContent = k;
+
+    var na = document.createElement('div');
+    na.className = 'gong-nature';
+    na.textContent = NATURE[k];
+
+    var ct = document.createElement('div');
+    ct.className = 'gong-content';
+    ct.appendChild(createCardEl(arr[1]));
+    ct.appendChild(createCardEl(arr[0]));
+
+    cell.appendChild(nm);
+    cell.appendChild(na);
+    cell.appendChild(ct);
+    grid.appendChild(cell);
+  }
+
+  wrap.appendChild(grid);
+  return wrap;
+}
+
+/* ============================================================
+ *  抽签
+ * ============================================================ */
+function renderLive(res){
+  var container = document.getElementById('out-live');
+  container.innerHTML = '';
+
+  var row = document.createElement('div');
+  row.className = 'live-cards';
+
+  var labels = ['第一张', '第二张', '第三张'];
+  for(var i = 0; i < 3; i++){
+    var c = document.createElement('div');
+    c.className = 'live-card';
+
+    var idx = document.createElement('div');
+    idx.className = 'idx';
+    idx.textContent = labels[i];
+
+    var val = createCardEl(res.picked[i]);
+    val.classList.add('val');
+
+    c.appendChild(idx);
+    c.appendChild(val);
+
+    if(i === 2){
+      var sub = document.createElement('div');
+      sub.className = 'sub';
+      sub.textContent = res.gong + '宫 · ' + res.nature;
+      c.appendChild(sub);
+    }
+    row.appendChild(c);
+  }
+  container.appendChild(row);
+}
+
+function doLive(){
+  var deck = makeDeck();
+  var picked = [deck[0], deck[1], deck[2]];
+  var third = picked[2];
+  var nature = CARD_NATURE[baseName(third)];
+  var gong = NATURE_GONG[nature];
+  renderLive({ picked: picked, nature: nature, gong: gong });
+}
+
+/* ============================================================
+ *  自定义盘面
+ * ============================================================ */
+var customState = {};
+var SLOT_ORDER = [1, 0];
+var SLOT_LABEL = ['阳', '阴'];
+
+function initCustomState(){
+  customState = {};
+  for(var i = 0; i < GONG_KEYS.length; i++){
+    customState[GONG_KEYS[i]] = [
+      { name: '', face: FACE_OUT },
+      { name: '', face: FACE_OUT }
+    ];
+  }
+}
+
+function renderCustomPanel(){
+  var grid = document.getElementById('custom-grid');
+  grid.innerHTML = '';
+
+  for(var i = 0; i < GRID.length; i++){
+    var k = GRID[i];
+    var cell = document.createElement('div');
+    cell.className = 'custom-cell';
+
+    var nm = document.createElement('div');
+    nm.className = 'custom-cell-name';
+    nm.textContent = k;
+    cell.appendChild(nm);
+
+    for(var si = 0; si < 2; si++){
+      var s = SLOT_ORDER[si];
+      var row = document.createElement('div');
+      row.className = 'custom-slot';
+
+      var idxTag = document.createElement('span');
+      idxTag.className = 'custom-slot-idx';
+      idxTag.textContent = SLOT_LABEL[s];
+
+      var sel = document.createElement('select');
+      sel.className = 'custom-select';
+      sel.dataset.gong = k;
+      sel.dataset.slot = s;
+
+      var optEmpty = document.createElement('option');
+      optEmpty.value = '';
+      optEmpty.textContent = '—';
+      sel.appendChild(optEmpty);
+
+      for(var c = 0; c < CARDS.length; c++){
+        var opt = document.createElement('option');
+        opt.value = CARDS[c];
+        opt.textContent = CARDS[c];
+        sel.appendChild(opt);
+      }
+      sel.value = customState[k][s].name;
+      sel.addEventListener('change', onCustomSelectChange);
+
+      var faceBtn = document.createElement('button');
+      faceBtn.className = 'custom-face-btn';
+      faceBtn.dataset.gong = k;
+      faceBtn.dataset.slot = s;
+      faceBtn.textContent = customState[k][s].face;
+      faceBtn.title = '切换朝向';
+      faceBtn.addEventListener('click', onCustomFaceClick);
+
+      if(FACE_CARDS.indexOf(customState[k][s].name) < 0){
+        faceBtn.style.display = 'none';
+      }
+
+      row.appendChild(idxTag);
+      row.appendChild(sel);
+      row.appendChild(faceBtn);
+      cell.appendChild(row);
+    }
+
+    grid.appendChild(cell);
+  }
+
+  updateCustomUI();
+}
+
+function onCustomSelectChange(e){
+  var sel = e.target;
+  var gong = sel.dataset.gong;
+  var slot = parseInt(sel.dataset.slot, 10);
+  customState[gong][slot].name = sel.value;
+  updateCustomUI();
+}
+
+function onCustomFaceClick(e){
+  var btn = e.currentTarget;
+  var gong = btn.dataset.gong;
+  var slot = parseInt(btn.dataset.slot, 10);
+  customState[gong][slot].face =
+    (customState[gong][slot].face === FACE_OUT) ? FACE_IN : FACE_OUT;
+  btn.textContent = customState[gong][slot].face;
+}
+
+function countCustomUsed(){
+  var used = {};
+  for(var c = 0; c < CARDS.length; c++) used[CARDS[c]] = 0;
+  for(var k in customState){
+    for(var s = 0; s < 2; s++){
+      if(customState[k][s].name) used[customState[k][s].name]++;
+    }
+  }
+  return used;
+}
+
+function updateCustomRemaining(){
+  var used = countCustomUsed();
+  var html = '';
+  for(var c = 0; c < CARDS.length; c++){
+    var name = CARDS[c];
+    var left = 2 - used[name];
+    var cls = left === 0 ? 'remain-item done' : (left === 1 ? 'remain-item half' : 'remain-item');
+    var sym = CARD_SYMBOL[name] || '';
+    html += '<span class="' + cls + '">' +
+            '<span class="card-text ' + CARD_CLASS[name] + '">' +
+              '<span class="card-sym">' + sym + '</span>' +
+              '<span class="card-body">' + name + '</span>' +
+            '</span>' +
+            ' ×' + left +
+            '</span>';
+  }
+  document.getElementById('custom-remaining').innerHTML = html;
+}
+
+function updateCustomSelects(){
+  var used = countCustomUsed();
+  document.querySelectorAll('#custom-grid .custom-select').forEach(function(sel){
+    var gong = sel.dataset.gong;
+    var slot = parseInt(sel.dataset.slot, 10);
+    var curName = customState[gong][slot].name;
+    for(var i = 0; i < sel.options.length; i++){
+      var opt = sel.options[i];
+      if(!opt.value) continue;
+      opt.disabled = (used[opt.value] >= 2 && opt.value !== curName);
+    }
+  });
+}
+
+function updateCustomFaceButtons(){
+  document.querySelectorAll('#custom-grid .custom-face-btn').forEach(function(btn){
+    var gong = btn.dataset.gong;
+    var slot = parseInt(btn.dataset.slot, 10);
+    var name = customState[gong][slot].name;
+    if(FACE_CARDS.indexOf(name) >= 0){
+      btn.style.display = '';
+      btn.textContent = customState[gong][slot].face;
+    } else {
+      btn.style.display = 'none';
+    }
+  });
+}
+
+function updateCustomUI(){
+  updateCustomRemaining();
+  updateCustomSelects();
+  updateCustomFaceButtons();
+}
+
+function fillCustomEmpty(){
+  var used = countCustomUsed();
+  var emptySlots = [];
+  for(var k in customState){
+    for(var s = 0; s < 2; s++){
+      if(!customState[k][s].name){
+        emptySlots.push({ gong: k, slot: s });
+      }
+    }
+  }
+  if(emptySlots.length === 0) return;
+
+  var pool = [];
+  for(var c = 0; c < CARDS.length; c++){
+    var name = CARDS[c];
+    var need = 2 - (used[name] || 0);
+    for(var i = 0; i < need; i++) pool.push(name);
+  }
+
+  for(var i = pool.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+
+  for(var i2 = 0; i2 < emptySlots.length; i2++){
+    var es = emptySlots[i2];
+    var n = pool[i2];
+    var face = FACE_OUT;
+    if(FACE_CARDS.indexOf(n) >= 0){
+      face = Math.random() < 0.5 ? FACE_OUT : FACE_IN;
+    }
+    customState[es.gong][es.slot].name = n;
+    customState[es.gong][es.slot].face = face;
+  }
+}
+
+function customToDeck(){
+  var deck = [];
+  for(var i = 0; i < XT_ORDER.length; i++){
+    var gong = XT_ORDER[i][0];
+    var slot = XT_ORDER[i][1];
+    var item = customState[gong][slot];
+    if(!item.name) return null;
+    var cardStr = item.name;
+    if(FACE_CARDS.indexOf(item.name) >= 0){
+      cardStr += item.face;
+    }
+    deck.push(cardStr);
+  }
+  return deck;
+}
+
+function clearCustom(){
+  for(var k in customState){
+    for(var s = 0; s < 2; s++){
+      customState[k][s].name = '';
+      customState[k][s].face = FACE_OUT;
+    }
+  }
+  renderCustomPanel();
+}
+
+function randomCustom(){
+  for(var k in customState){
+    for(var s = 0; s < 2; s++){
+      customState[k][s].name = '';
+      customState[k][s].face = FACE_OUT;
+    }
+  }
+  fillCustomEmpty();
+  renderCustomPanel();
+  toast('已随机填充全部牌面');
+}
+
+/* ============================================================
+ *  导出：文字
+ * ============================================================ */
+function panToText(g, title, opts){
+  opts = opts || {};
+  var s = '';
+  if(opts.question) s += '问题：' + opts.question + '\n';
+  if(opts.duanyu) s += '断语：' + opts.duanyu + '\n';
+  if(opts.timeStr) s += '时间：' + opts.timeStr + '\n';
+  s += '【' + title + '】\n';
+
+  for(var r = 0; r < 3; r++){
+    var rowKeys = [GRID[r*3], GRID[r*3+1], GRID[r*3+2]];
+    var lines = [1, 0];
+    for(var li = 0; li < lines.length; li++){
+      var idx = lines[li];
+      var parts = [];
+      for(var c = 0; c < 3; c++){
+        var v = disp(g[rowKeys[c]][idx]);
+        parts.push(v === '' ? '　' : v);
+      }
+      s += parts.join('\t') + '\n';
+    }
+    s += '\n';
+  }
+  return s;
+}
+
+function legacyCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+function copyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text)
+      .then(function(){ return true; })
+      .catch(function(){ return legacyCopy(text); });
+  }
+  return Promise.resolve(legacyCopy(text));
+}
+
+/* ============================================================
+ *  导出：图片
+ * ============================================================ */
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+var CN_FONT    = '"Qiji","令東齊伋體","齊伋體","STKaiti","KaiTi","楷体","PingFang SC","Microsoft YaHei",serif';
+var CN_FONT_FS = '"SimSun","宋体","NSimSun","新宋体","Songti SC","STSong",serif';
+
+function getCanvasTheme(){
+  if(isDarkMode()){
+    return {
+      bg: '#121212', titleText: '#e8e8e8', text: '#e8e8e8',
+      textSoft: '#b0b0b0', muted: '#888888',
+      cellBg: '#232323', cellBorder: '#3a3a3a',
+      nature: 'rgba(255,255,255,0.10)',
+      defaultCardColor: '#e8e8e8',
+      cardColors: CARD_COLOR_DARK
+    };
+  }
+  return {
+    bg: '#FFFFF0', titleText: '#222222', text: '#222222',
+    textSoft: '#333333', muted: '#888888',
+    cellBg: '#ffffff', cellBorder: '#dddddd',
+    nature: 'rgba(0,0,0,0.16)',
+    defaultCardColor: '#222222',
+    cardColors: CARD_COLOR_LIGHT
+  };
+}
+
+function drawCleanText(ctx, text, cx, cy){
+  ctx.fillText(text, cx, cy);
+}
+
+function wrapText(ctx, text, maxWidth){
+  var lines = [];
+  var paragraphs = String(text).split('\n');
+  for(var p = 0; p < paragraphs.length; p++){
+    var para = paragraphs[p];
+    if(para === ''){ lines.push(''); continue; }
+    var cur = '';
+    for(var i = 0; i < para.length; i++){
+      var ch = para.charAt(i);
+      var test = cur + ch;
+      if(ctx.measureText(test).width > maxWidth && cur.length > 0){
+        lines.push(cur);
+        cur = ch;
+      } else {
+        cur = test;
+      }
+    }
+    if(cur) lines.push(cur);
+  }
+  if(lines.length === 0) lines.push('');
+  return lines;
+}
+
+function drawCardText(ctx, cardStr, cx, cy, fontSize, theme){
+  if(cardStr == null || cardStr === '') return;
+  var bn = baseName(cardStr);
+  var color = (theme && theme.cardColors && theme.cardColors[bn])
+              || (theme && theme.defaultCardColor)
+              || '#000';
+  var symbol = CARD_SYMBOL[bn] || '';
+  var text = (symbol ? symbol + ' ' : '') + cardStr;
+  ctx.fillStyle = color;
+  ctx.font = fontSize + 'px ' + CN_FONT;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  drawCleanText(ctx, text, cx, cy);
+}
+
+function drawFooterInfo(ctx, W, pad, y, question, duanyu, T){
+  var q = (question || '').trim();
+  var d = (duanyu || '').trim();
+  if(!q && !d) return 0;
+
+  var lineH = 24;
+  var maxW = W - pad * 2;
+  var gapBetween = 6;
+  var totalH = 0;
+
+  ctx.font = '17px ' + CN_FONT_FS;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+
+  if(q){
+    var qLines = wrapText(ctx, '问题：' + q, maxW);
+    ctx.fillStyle = T.text;
+    for(var i = 0; i < qLines.length; i++){
+      drawCleanText(ctx, qLines[i], pad, y);
+      y += lineH; totalH += lineH;
+    }
+    if(d){ y += gapBetween; totalH += gapBetween; }
+  }
+  if(d){
+    var dLines = wrapText(ctx, '断语：' + d, maxW);
+    ctx.fillStyle = T.text;
+    for(var j = 0; j < dLines.length; j++){
+      drawCleanText(ctx, dLines[j], pad, y);
+      y += lineH; totalH += lineH;
+    }
+  }
+  return totalH;
+}
+
+var _measureCtx = null;
+function getMeasureCtx(){
+  if(!_measureCtx){
+    var c = document.createElement('canvas');
+    _measureCtx = c.getContext('2d');
+  }
+  return _measureCtx;
+}
+
+function measureFooterHeight(W, pad, question, duanyu){
+  var q = (question || '').trim();
+  var d = (duanyu || '').trim();
+  if(!q && !d) return { height: 0, gap: 0 };
+  var lineH = 24;
+  var maxW = W - pad * 2;
+  var ctx = getMeasureCtx();
+  ctx.font = '17px ' + CN_FONT_FS;
+  var qLines = q ? wrapText(ctx, '问题：' + q, maxW) : [];
+  var dLines = d ? wrapText(ctx, '断语：' + d, maxW) : [];
+  var h = qLines.length * lineH + dLines.length * lineH;
+  if(qLines.length && dLines.length) h += 6;
+  return { height: h, gap: 18 };
+}
+
+function drawPanCanvas(g, title, opts){
+  opts = opts || {};
+  var T = getCanvasTheme();
+  var scale = 2;
+  var cellW = 150, cellH = 150, gap = 6, pad = 24;
+
+  var gridW = cellW * 3 + gap * 2;
+  var gridH = cellH * 3 + gap * 2;
+  var W = gridW + pad * 2;
+
+  var timeStr = (opts.timeStr || '').trim();
+  var topHeaderH = 32 + (timeStr ? 24 : 0);
+  var footer = measureFooterHeight(W, pad, opts.question, opts.duanyu);
+
+  var topGap = 10;
+  var H = pad + topHeaderH + topGap + gridH
+        + footer.gap + footer.height
+        + (footer.height ? 12 : 0) + pad;
+
+  var canvas = document.createElement('canvas');
+  canvas.width = W * scale;
+  canvas.height = H * scale;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  ctx.fillStyle = T.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  var cy = pad;
+  ctx.fillStyle = T.titleText;
+  ctx.font = '26px ' + CN_FONT;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  drawCleanText(ctx, title, W / 2, cy);
+  cy += 32;
+
+  if(timeStr){
+    ctx.fillStyle = T.textSoft;
+    ctx.font = '17px ' + CN_FONT;
+    drawCleanText(ctx, '时间：' + timeStr, W / 2, cy);
+    cy += 24;
+  }
+
+  var oy = cy + topGap;
+
+  for(var i = 0; i < 9; i++){
+    var k = GRID[i];
+    var r = Math.floor(i / 3);
+    var c = i % 3;
+    var x = pad + c * (cellW + gap);
+    var y = oy + r * (cellH + gap);
+
+    ctx.fillStyle = T.cellBg;
+    ctx.strokeStyle = T.cellBorder;
+    ctx.lineWidth = 1;
+    roundRect(ctx, x, y, cellW, cellH, 6);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = T.muted;
+    ctx.font = '17px ' + CN_FONT;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    drawCleanText(ctx, k, x + 8, y + 8);
+
+    ctx.fillStyle = T.nature;
+    ctx.font = '76px ' + CN_FONT;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    drawCleanText(ctx, NATURE[k], x + cellW / 2, y + cellH / 2);
+
+    var arr = g[k];
+    var lineH = 42;
+    var totalH = 2 * lineH;
+    var startY = y + cellH / 2 - totalH / 2 + lineH / 2;
+
+    drawCardText(ctx, arr[1], x + cellW / 2, startY, 28, T);
+    drawCardText(ctx, arr[0], x + cellW / 2, startY + lineH, 28, T);
+  }
+
+  var by = oy + gridH + footer.gap;
+  drawFooterInfo(ctx, W, pad, by, opts.question, opts.duanyu, T);
+
+  return canvas;
+}
+
+function downloadCanvas(canvas, filename){
+  var a = document.createElement('a');
+  a.download = filename;
+  a.href = canvas.toDataURL('image/png');
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+/* ============================================================
+ *  状态
+ * ============================================================ */
+var state = {
+  xiantian: null,
+  houtian: null,
+  timeStr: ''
+};
+
+function readPanTime(){
+  var timeEl = document.getElementById('pan-time');
+  if(timeEl && timeEl.value){
+    var d = new Date(timeEl.value);
+    if(!isNaN(d.getTime())) return d;
+  }
+  return new Date();
+}
+
+function timeStamp(){
+  return (state.timeStr || '').replace(/[:\s]/g, '').replace(/-/g, '');
+}
+
+function renderPanResult(xt, ht){
+  var infoEl = document.getElementById('info-regular');
+  infoEl.innerHTML = '<div><b>时间：</b>' + state.timeStr + '</div>';
+  infoEl.style.display = 'block';
+
+  var out = document.getElementById('out-regular');
+  out.innerHTML = '';
+  var pair = document.createElement('div');
+  pair.className = 'pan-pair';
+  pair.appendChild(createPanEl(xt, '先天盘'));
+  pair.appendChild(createPanEl(ht, '后天盘'));
+  out.appendChild(pair);
+
+  document.getElementById('export-regular').style.display = 'flex';
+  scheduleFitPanFonts();
+}
+
+function doPan(){
+  var now = readPanTime();
+
+  var deck = makeDeck();
+  var xt = makeXiantian(deck);
+  var ht = makeHoutian(xt);
+
+  state.xiantian = xt;
+  state.houtian = ht;
+  state.timeStr = fmtTime(now);
+
+  renderPanResult(xt, ht);
+}
+
+function applyCustomPan(){
+  fillCustomEmpty();
+  renderCustomPanel();
+
+  var deck = customToDeck();
+  if(!deck || deck.length !== 18){ toast('牌面不完整，请检查'); return; }
+
+  var now = readPanTime();
+  var xt = makeXiantian(deck);
+  var ht = makeHoutian(xt);
+
+  state.xiantian = xt;
+  state.houtian = ht;
+  state.timeStr = fmtTime(now);
+
+  renderPanResult(xt, ht);
+  toast('自定义盘面已应用');
+}
+
+/* ============================================================
+ *  事件绑定
+ * ============================================================ */
+document.getElementById('btn-pan').addEventListener('click', doPan);
+document.getElementById('btn-live').addEventListener('click', doLive);
+
+document.getElementById('btn-now').addEventListener('click', function(){
+  document.getElementById('pan-time').value = toLocalInputValue(new Date());
+  toast('已设为当前时间');
+});
+
+var customOpen = false;
+document.getElementById('btn-custom-toggle').addEventListener('click', function(){
+  customOpen = !customOpen;
+  document.getElementById('custom-body').style.display = customOpen ? 'block' : 'none';
+  this.textContent = customOpen ? '自定义盘面 ▴' : '自定义盘面 ▾';
+});
+
+document.getElementById('btn-custom-random').addEventListener('click', randomCustom);
+document.getElementById('btn-custom-clear').addEventListener('click', function(){
+  clearCustom();
+  toast('已清空');
+});
+document.getElementById('btn-custom-apply').addEventListener('click', applyCustomPan);
+
+document.getElementById('export-regular').addEventListener('click', function(e){
+  var btn = e.target.closest ? e.target.closest('button') : null;
+  if(!btn || !state.xiantian) return;
+  var act = btn.getAttribute('data-act');
+
+  var q = (document.getElementById('question').value || '').trim();
+  var d = (document.getElementById('duanyu').value || '').trim();
+
+  if(act === 'txt-xian' || act === 'txt-hou'){
+    var isXian = (act === 'txt-xian');
+    var g = isXian ? state.xiantian : state.houtian;
+    var title = isXian ? '先天盘' : '后天盘';
+    var text = panToText(g, title, {
+      question: q, duanyu: d, timeStr: state.timeStr
+    });
+    copyText(text).then(function(ok){
+      toast(ok ? (title + '文字已复制到剪贴板') : '复制失败，请手动选择文本');
+    });
+  } else if(act === 'img-xian' || act === 'img-hou'){
+    var isXian2 = (act === 'img-xian');
+    var g2 = isXian2 ? state.xiantian : state.houtian;
+    var t2 = isXian2 ? '先天盘' : '后天盘';
+    try{
+      downloadCanvas(drawPanCanvas(g2, t2, {
+        question: q, duanyu: d, timeStr: state.timeStr
+      }), t2 + '_' + timeStamp() + '.png');
+      toast(t2 + '图片已导出');
+    }catch(err){
+      toast('导出失败：' + err.message);
+    }
+  }
+});
+
+/* ============================================================
+ *  初始化
+ * ============================================================ */
+(function init(){
+  document.getElementById('pan-time').value = toLocalInputValue(new Date());
+  initCustomState();
+  renderCustomPanel();
+})();
+
+})();
+</script>
+</body>
 </html>
