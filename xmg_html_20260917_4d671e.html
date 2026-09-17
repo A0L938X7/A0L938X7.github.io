@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>响马卦两大主要派系的研究与实践</title>
+<style>
+@font-face{font-family:'Qiji';src:local('令東齊伋體'),local('齊伋體'),local('Qiji');}
+:root{--bg:#FFFFF0;--bg-soft:#f8f8ec;--bg-panel:#fafae8;--bg-panel-border:#e8e8d0;--bg-card:#fff;--bg-card-soft:#fbfbf0;--border:#e0e0d0;--border-2:#ddd;--border-3:#ccc;--text:#000;--text-2:#333;--text-3:#555;--text-4:#888;--text-5:#aaa;--btn-primary-bg:#333;--btn-primary-text:#fff;--btn-primary-hover:#111;--btn-ghost-bg:#fff;--btn-ghost-text:#333;--btn-ghost-border:#999;--btn-ghost-hover:#f0f0e0;--accent:#c0392b;--accent-soft:#fff5f2;--link:#2471a3;--taiji-yin:#1a1a1a;--taiji-yang:#FFFFF0;--taiji-border:#333;--font-qiji:'Qiji','令東齊伋體','STKaiti','KaiTi',serif;--font-serif:'Noto Serif SC','Source Han Serif SC','SimSun','Songti SC',serif;color-scheme:light;}
+body.dark{--bg:#121212;--bg-soft:#1a1a1a;--bg-panel:#1e1e1e;--bg-panel-border:#333;--bg-card:#232323;--bg-card-soft:#1c1c1c;--border:#333;--border-2:#3a3a3a;--border-3:#4a4a4a;--text:#e8e8e8;--text-2:#ccc;--text-3:#b0b0b0;--text-4:#888;--text-5:#666;--btn-primary-bg:#e8e8e8;--btn-primary-text:#121212;--btn-primary-hover:#fff;--btn-ghost-bg:#232323;--btn-ghost-text:#e8e8e8;--btn-ghost-border:#555;--btn-ghost-hover:#2e2e2e;--accent:#ff7675;--accent-soft:#2a1a1a;--link:#74b9ff;--taiji-yin:#e8e8e8;--taiji-yang:#121212;--taiji-border:#bbb;color-scheme:dark;}
+*{box-sizing:border-box;margin:0;padding:0;}html,body{height:100%;}
+body{font-family:var(--font-serif);background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;transition:background .2s,color .2s;}
+a{color:var(--link);text-decoration:none;}a:hover{text-decoration:underline;}button{font-family:inherit;}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border-bottom:1px solid var(--border);padding:0 16px;flex-shrink:0;position:sticky;top:0;z-index:100;min-height:56px;}
+.header-left{display:flex;align-items:center;gap:14px;min-width:0;flex-shrink:0;}
+.taiji-icon{width:32px;height:32px;animation:taiji-spin 24s linear infinite;flex-shrink:0;}
+@keyframes taiji-spin{to{transform:rotate(360deg);}}
+.brand{font-family:var(--font-qiji);font-size:22px;letter-spacing:3px;white-space:nowrap;}
+.navbar{display:flex;align-items:stretch;gap:0;flex:1;margin-left:12px;min-width:0;}
+.navbar button{padding:0 18px;height:56px;border:none;border-right:1px solid var(--border);background:transparent;color:var(--text-2);font-size:15px;font-family:inherit;cursor:pointer;transition:background .12s;white-space:nowrap;}
+.navbar button:first-child{border-left:1px solid var(--border);}
+.navbar button:hover{background:var(--bg-soft);color:var(--text);}
+.navbar button.active{background:var(--btn-primary-bg);color:var(--btn-primary-text);}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.icon-btn{width:36px;height:36px;border:1px solid var(--border-3);background:var(--btn-ghost-bg);color:var(--text-2);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+.icon-btn:hover{background:var(--btn-ghost-hover);}
+.hamburger{display:none;transition:transform .22s;}
+.hamburger.open{transform:rotate(90deg);}
+.mobile-nav{position:fixed;top:56px;left:0;right:0;background:var(--bg-panel);border-bottom:1px solid var(--border);z-index:99;display:flex;flex-direction:column;max-height:calc(100vh - 56px);overflow-y:auto;opacity:0;transform:translateY(-12px);pointer-events:none;transition:all .26s cubic-bezier(.16,1,.3,1);}
+.mobile-nav.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+@media(min-width:821px){.mobile-nav{display:none;}}
+.mobile-nav-group-title{padding:12px 20px 6px;font-family:var(--font-qiji);font-size:14px;letter-spacing:2px;color:var(--accent);background:var(--bg-soft);border-bottom:1px solid var(--border);border-top:1px solid var(--border);}
+.mobile-nav-group-title:first-child{border-top:none;}
+.mobile-nav-subgroup-title{padding:8px 20px 4px 28px;font-size:12px;color:var(--text-4);background:var(--bg-soft);border-bottom:1px solid var(--border);}
+.mobile-nav-item{padding:12px 20px 12px 28px;border:none;border-bottom:1px solid var(--border);background:transparent;color:var(--text-2);font-size:14px;text-align:left;cursor:pointer;font-family:inherit;transition:all .12s;}
+.mobile-nav-item:hover{background:var(--bg-soft);color:var(--text);}
+.mobile-nav-item.active{color:var(--accent);background:var(--accent-soft);border-left:2px solid var(--accent);padding-left:26px;}
+.mobile-nav-divider{height:0;border-top:3px double var(--border-3);margin:6px 20px 10px;}
+.mobile-nav-page-label{padding:4px 20px 6px;font-family:var(--font-qiji);font-size:13px;color:var(--text-4);}
+@media(max-width:820px){.navbar{display:none;}.hamburger{display:flex;}}
+main{flex:1;min-height:0;display:flex;flex-direction:column;}
+.page{display:none;flex:1;min-height:0;flex-direction:column;}
+.page.active{display:flex;}
+#page-welcome.active{overflow-y:auto;}
+.welcome-wrap{max-width:1000px;margin:0 auto;padding:48px 24px 96px;width:100%;}
+.welcome-hero{text-align:center;margin-bottom:40px;}
+.welcome-hero h1{font-family:var(--font-qiji);font-size:38px;letter-spacing:6px;font-weight:400;margin-bottom:12px;line-height:1.4;}
+.welcome-hero .sub{font-size:17px;color:var(--text-3);letter-spacing:4px;}
+.welcome-hero .divider{width:80px;height:1px;background:var(--border-3);margin:28px auto;}
+.welcome-hero .tagline{font-size:16px;color:var(--text-2);max-width:720px;margin:0 auto;line-height:2;}
+.welcome-grid{display:grid;grid-template-columns:1fr 320px;gap:40px;margin-bottom:48px;align-items:start;}
+.welcome-intro h2{font-size:20px;font-family:var(--font-qiji);letter-spacing:3px;font-weight:400;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.welcome-intro p{font-size:15px;color:var(--text-2);line-height:2;margin-bottom:12px;}
+.instructor-card{background:var(--bg-panel);border:1px solid var(--bg-panel-border);padding:24px;text-align:center;}
+.instructor-avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--border-3);margin:0 auto 16px;display:block;background:var(--bg-card);}
+.instructor-avatar-fallback{width:120px;height:120px;border-radius:50%;border:2px solid var(--border-3);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-family:var(--font-qiji);font-size:36px;color:var(--accent);background:var(--bg-card);}
+.instructor-name{font-size:20px;font-family:var(--font-qiji);letter-spacing:3px;margin-bottom:6px;}
+.instructor-role{font-size:13px;color:var(--text-4);letter-spacing:1px;margin-bottom:16px;}
+.instructor-desc{font-size:14px;color:var(--text-3);line-height:1.9;text-align:left;}
+.welcome-toc h2,.welcome-path h2{font-size:20px;font-family:var(--font-qiji);letter-spacing:3px;font-weight:400;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.toc-group{margin-bottom:24px;}
+.toc-group-title{font-family:var(--font-qiji);font-size:16px;letter-spacing:2px;color:var(--accent);padding:8px 0;border-bottom:1px dashed var(--border);margin-bottom:8px;}
+.toc-list{list-style:none;}
+.toc-list li{padding:7px 0 7px 20px;border-bottom:1px dashed var(--border);display:flex;align-items:baseline;gap:12px;font-size:14px;}
+.toc-list li.sub{padding-left:40px;font-size:13.5px;}
+.toc-list li .idx{font-family:var(--font-qiji);color:var(--text-4);font-size:13px;flex-shrink:0;width:24px;}
+.toc-list li.sub .idx{width:0;display:none;}
+.toc-list li .t{color:var(--text-2);}
+.path-grid{display:grid;gap:20px;margin-bottom:40px;}
+.path-card{background:var(--bg-panel);border:1px solid var(--bg-panel-border);padding:20px;}
+.path-card h3{font-family:var(--font-qiji);font-size:18px;letter-spacing:2px;font-weight:400;margin-bottom:12px;color:var(--accent);}
+.start-btn-wrap{text-align:center;margin-top:32px;}
+.btn{display:inline-block;padding:12px 36px;border:1px solid var(--btn-primary-bg);background:var(--btn-primary-bg);color:var(--btn-primary-text);font-size:16px;font-family:inherit;letter-spacing:2px;cursor:pointer;transition:all .12s;}
+.btn:hover{background:var(--btn-primary-hover);border-color:var(--btn-primary-hover);}
+.btn.ghost{background:var(--btn-ghost-bg);color:var(--btn-ghost-text);border-color:var(--btn-ghost-border);}
+.btn.ghost:hover{background:var(--btn-ghost-hover);}
+.module-layout{display:grid;grid-template-columns:280px 1fr 300px;flex:1;min-height:0;width:100%;}
+.sidebar{border-right:1px solid var(--border);background:var(--bg-soft);overflow-y:auto;padding:18px 0;}
+.sidebar-inner{padding:0 14px;position:sticky;top:0;background:var(--bg-soft);z-index:5;}
+.sidebar-search{width:100%;padding:8px 10px;border:1px solid var(--border-3);background:var(--bg-card);color:var(--text);font-size:13px;font-family:inherit;margin-bottom:14px;outline:none;}
+.sidebar-group{margin-bottom:18px;}
+.sidebar-group-title{font-family:var(--font-qiji);font-size:15px;letter-spacing:2px;color:var(--accent);padding:8px 6px;border-bottom:1px solid var(--border);margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.sidebar-group-title .arrow{font-size:11px;color:var(--text-4);transition:transform .2s;}
+.sidebar-group.collapsed .arrow{transform:rotate(-90deg);}
+.sidebar-group.collapsed .sidebar-group-body{display:none;}
+.sidebar-subgroup-title{font-family:var(--font-qiji);font-size:13px;color:var(--text-3);padding:8px 8px 4px 8px;margin-top:4px;border-bottom:1px dashed var(--border);}
+.sidebar-list{list-style:none;}
+.sidebar-list li{padding:8px 10px;font-size:13.5px;color:var(--text-2);cursor:pointer;border-left:2px solid transparent;transition:all .12s;line-height:1.4;}
+.sidebar-list li:hover{background:var(--bg-card);color:var(--text);}
+.sidebar-list li.active{background:var(--bg-card);border-left-color:var(--accent);color:var(--accent);font-weight:500;}
+.sidebar-list li .num{display:inline-block;width:22px;color:var(--text-4);font-size:12px;font-family:var(--font-qiji);}
+.content-area{overflow-y:auto;padding:32px 40px 64px;min-width:0;}
+.content-area h1{font-family:var(--font-qiji);font-size:30px;letter-spacing:5px;font-weight:400;margin-bottom:8px;}
+.content-area .module-sub{font-size:14px;color:var(--text-4);letter-spacing:2px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.content-area h2{font-family:var(--font-qiji);font-size:21px;letter-spacing:4px;font-weight:400;margin:32px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.content-area h3{font-size:17px;font-weight:500;margin:24px 0 10px;letter-spacing:1px;}
+.content-area h4{font-size:15px;font-weight:600;margin:18px 0 8px;color:var(--text-3);}
+.content-area p{font-size:15px;color:var(--text-2);line-height:2;margin-bottom:12px;}
+.content-area ul,.content-area ol{padding-left:24px;margin-bottom:14px;color:var(--text-2);font-size:15px;line-height:2;}
+.content-area li{margin-bottom:4px;}
+.content-area strong{color:var(--text);font-weight:600;}
+.content-area table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+.content-area th,.content-area td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top;}
+.content-area th{background:var(--bg-panel);font-weight:600;white-space:nowrap;}
+.callout{background:var(--accent-soft);border-left:3px solid var(--accent);padding:14px 18px;margin:18px 0;font-size:14px;color:var(--text-2);line-height:1.9;}
+.callout-title{font-weight:600;color:var(--accent);margin-bottom:4px;}
+.module-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border);gap:12px;}
+.module-nav button{padding:10px 20px;border:1px solid var(--border-3);background:var(--btn-ghost-bg);color:var(--btn-ghost-text);cursor:pointer;font-size:14px;}
+.module-nav button:hover:not(:disabled){background:var(--btn-ghost-hover);}
+.module-nav button:disabled{opacity:.4;cursor:not-allowed;}
+.right-panel{border-left:1px solid var(--border);background:var(--bg-soft);overflow-y:auto;padding:18px 14px;}
+.panel-section{margin-bottom:24px;}
+.panel-title{font-family:var(--font-qiji);font-size:15px;letter-spacing:2px;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.graph-svg{width:100%;height:auto;display:block;background:var(--bg-card);border:1px solid var(--border);}
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--bg-card);stroke:var(--border-3);stroke-width:1.2;}
+.graph-node:hover circle{stroke:var(--accent);fill:var(--accent-soft);}
+.graph-node.active circle{fill:var(--accent);stroke:var(--accent);}
+.graph-node text{font-size:9px;fill:var(--text-2);text-anchor:middle;dominant-baseline:middle;pointer-events:none;font-family:var(--font-qiji);}
+.graph-node.active text{fill:#fff;}
+.graph-edge{stroke:var(--border-3);stroke-width:1;fill:none;}
+.graph-edge.active{stroke:var(--accent);stroke-width:1.5;}
+.outline-list{list-style:none;font-size:13px;}
+.outline-list li{padding:6px 0;color:var(--text-3);cursor:pointer;border-left:2px solid transparent;padding-left:10px;line-height:1.4;}
+.outline-list li:hover{color:var(--accent);border-left-color:var(--accent);}
+.outline-list li.h3{padding-left:22px;font-size:12px;}
+.pan-link-btn{display:block;width:100%;padding:12px;background:var(--btn-primary-bg);color:var(--btn-primary-text);border:none;cursor:pointer;font-size:14px;letter-spacing:2px;font-family:inherit;text-align:center;}
+.quiz-layout{display:grid;grid-template-columns:280px 1fr 220px;flex:1;min-height:0;}
+.quiz-main{overflow-y:auto;padding:32px 40px 64px;min-width:0;}
+.quiz-main h1{font-family:var(--font-qiji);font-size:28px;letter-spacing:5px;font-weight:400;margin-bottom:8px;}
+.quiz-main .quiz-sub{font-size:14px;color:var(--text-4);margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.quiz-card-list{display:flex;flex-direction:column;gap:10px;}
+.quiz-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all .12s;}
+.quiz-card:hover{border-color:var(--border-3);}
+.quiz-card-main{flex:1;min-width:0;}
+.quiz-card-title{font-size:16px;font-weight:600;margin-bottom:4px;}
+.quiz-card-meta{font-size:12px;color:var(--text-4);display:flex;gap:16px;}
+.quiz-card-status{flex-shrink:0;font-size:13px;padding:4px 12px;border:1px solid var(--border-3);color:var(--text-3);}
+.quiz-card-status.done{border-color:var(--accent);color:var(--accent);}
+.quiz-question{margin-bottom:28px;padding-bottom:20px;border-bottom:1px dashed var(--border);}
+.quiz-q-text{font-size:16px;margin-bottom:14px;line-height:1.8;font-weight:500;}
+.quiz-q-num{display:inline-block;color:var(--accent);font-family:var(--font-qiji);margin-right:8px;}
+.quiz-options{list-style:none;}
+.quiz-options li{padding:10px 14px;margin-bottom:8px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:14px;color:var(--text-2);transition:all .12s;display:flex;align-items:center;gap:10px;}
+.quiz-options li:hover{border-color:var(--border-3);background:var(--bg-soft);}
+.quiz-options li.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);}
+.quiz-options li.correct{border-color:#27ae60;background:rgba(39,174,96,.1);color:#27ae60;}
+.quiz-options li.wrong{border-color:#c0392b;background:rgba(192,57,43,.1);color:#c0392b;}
+.quiz-options li .opt-letter{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid currentColor;font-size:12px;flex-shrink:0;}
+.quiz-actions{margin-top:28px;display:flex;gap:12px;align-items:center;}
+.quiz-result{margin-top:20px;padding:16px 20px;border:1px solid var(--border);background:var(--bg-panel);font-size:15px;}
+.quiz-result .score{font-family:var(--font-qiji);font-size:26px;color:var(--accent);}
+.score-panel{border-left:1px solid var(--border);background:var(--bg-soft);padding:24px 16px;overflow-y:auto;}
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 0;}
+.score-ring{width:160px;height:160px;}
+.score-ring .track{fill:none;stroke:var(--border);stroke-width:12;}
+.score-ring .fill{fill:none;stroke:var(--accent);stroke-width:12;transition:stroke-dashoffset .6s;transform:rotate(-90deg);transform-origin:50% 50%;}
+.score-ring .pct{font-family:var(--font-qiji);font-size:32px;fill:var(--text);text-anchor:middle;dominant-baseline:middle;}
+.score-ring .pct-label{font-size:12px;fill:var(--text-4);text-anchor:middle;dominant-baseline:middle;}
+.score-stats{font-size:13px;color:var(--text-3);text-align:center;line-height:1.9;}
+.score-stats strong{color:var(--accent);}
+.pan-page-wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:0;}
+#pan-host{flex:1 1 0;min-height:0;position:relative;background:var(--bg);display:flex;overflow:hidden;}
+footer{text-align:center;padding:14px;font-size:13px;color:var(--text-4);border-top:1px solid var(--border);flex-shrink:0;background:var(--bg);}
+@media(max-width:1100px){.module-layout{grid-template-columns:260px 1fr;}.right-panel{display:none;}.quiz-layout{grid-template-columns:260px 1fr 200px;}}
+@media(max-width:820px){.welcome-grid{grid-template-columns:1fr;}.welcome-hero h1{font-size:26px;letter-spacing:4px;}.module-layout{grid-template-columns:1fr;}.sidebar{display:none;}.content-area{padding:24px 20px 48px;}.quiz-layout{grid-template-columns:1fr;}.quiz-main{padding:24px 20px 48px;}.score-panel{border-left:none;border-top:1px solid var(--border);}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-left">
+<svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+<path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+<circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+<circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+<circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+<circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+</svg>
+<div class="brand">响马卦</div>
+</div>
+<nav class="navbar" id="navbar">
+<button data-page="welcome" class="active">欢迎页面</button>
+<button data-page="modules">学习模块</button>
+<button data-page="quizzes">快速检测</button>
+<button data-page="pan">排盘软件</button>
+</nav>
+<div class="header-right">
+<button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+<button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+</div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+
+<section class="page active" id="page-welcome">
+<div class="welcome-wrap">
+<div class="welcome-hero">
+<h1>响马卦两大主要派系的研究与实践</h1>
+<div class="sub">东北 · 西北 · 传承与实操</div>
+<div class="divider"></div>
+<div class="tagline">响马牌卦，源流西北，脱胎奇门，自有发明。法用十八张，牌演九星，天地人神，变动不居。<br>本系列课程将东北、西北两派知识传承分别整理，配以小测与排盘工具，供学生循序研习。</div>
+</div>
+<div class="welcome-grid">
+<div class="welcome-intro">
+<h2>欢迎来到：响马卦两大主要派系的研究与实践</h2>
+<p>响马卦，民间又称响马牌卦，以十八张牌为体，脱胎于奇门遁甲，融合九星、八门、八神、九宫。此法多在东北、西北一带口耳相传，故名声不显，然其理法简易，举重若轻，四盘备立，遍推八门。</p>
+<p>东北派重中宫、头顶脚踩、四柱、层次消元与身交用神；西北派以刘唐、毛鱼、二棍、八万等牌为主，重中宫、用神落宫、对宫、走宫碰与朝向。两派同源异流，各有侧重。</p>
+<p>本课程将两派学习路径分别拆解为若干阶段，从识牌、起卦、盘层、用神，到分类占、进阶技法、牌谱与实战，逐层推进。每阶段配有小测，便于自检；排盘工具已内嵌于本系统，方便实占验证。</p>
+<div class="callout"><div class="callout-title">学习提示</div>初学者不要同时混用两派牌名与起卦方向，建议先选定一派作为起点，待熟练后，再学习另外一派。需注意：「并」即「皮」，「二条」即「二棍」，只是地方叫法不同。</div>
+</div>
+<div class="instructor-card">
+<img class="instructor-avatar" src="jiang.jpg" alt="姜玄衣" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+<div class="instructor-avatar-fallback" style="display:none;">姜</div>
+<div class="instructor-name">姜玄衣</div>
+<div class="instructor-role">讲师 · 响马卦传承人</div>
+<div class="instructor-desc">自癸卯始习响马卦，遍览前贤诸篇，后承明华师传，遍历东北西北两家民间诸派所传。删繁就简，理气定规，使统系自洽。今汇两派真传歌诀、秘图与个人传习手记，纂为系列课程，以俟后学。</div>
+</div>
+</div>
+<div class="welcome-toc">
+<h2>课程目录</h2>
+<div class="toc-group">
+<div class="toc-group-title">东北派</div>
+<ul class="toc-list">
+<li><span class="idx">01</span><span class="t">东北响马卦的选牌与识牌</span></li>
+<li><span class="idx">02</span><span class="t">东北响马卦的起卦与行持</span></li>
+<li><span class="idx">03</span><span class="t">东北响马卦的整体结构</span></li>
+<li><span class="idx">04</span><span class="t">东北响马卦的基本占断思路</span></li>
+<li><span class="idx">05</span><span class="t">分类占精讲</span></li>
+<li><span class="idx">06</span><span class="t">进阶资料·理气内秘</span></li>
+<li><span class="idx">07</span><span class="t">实战入手思路</span></li>
+<li><span class="idx">08</span><span class="t">秘传流运卦思路</span></li>
+</ul>
+</div>
+<div class="toc-group">
+<div class="toc-group-title">西北派</div>
+<ul class="toc-list">
+<li><span class="idx">01</span><span class="t">西北响马卦的选牌与识牌</span></li>
+<li><span class="idx">02</span><span class="t">西北响马卦的起卦</span></li>
+<li><span class="idx">03</span><span class="t">西北响马卦的取象规律</span></li>
+<li><span class="idx">04</span><span class="t">西北响马卦的演绎象法</span></li>
+<li><span class="idx">05</span><span class="t">九宫象法</span></li>
+<li><span class="idx">06</span><span class="t">后天卦</span></li>
+<li class="sub"><span class="t">后天枢要</span></li>
+<li class="sub"><span class="t">走卦名和落卦名的运用</span></li>
+<li><span class="idx">07</span><span class="t">先天卦</span></li>
+<li class="sub"><span class="t">碰牌十法</span></li>
+<li class="sub"><span class="t">换太极法</span></li>
+<li class="sub"><span class="t">单宫定象法</span></li>
+<li class="sub"><span class="t">秘传活八门九星八神之法</span></li>
+<li class="sub"><span class="t">一卦多占与六亲分宫法</span></li>
+<li class="sub"><span class="t">分类占的基本思路</span></li>
+<li class="sub"><span class="t">应期思路</span></li>
+<li><span class="idx">08</span><span class="t">三盘合参</span></li>
+<li><span class="idx">09</span><span class="t">十二宫终身卦思路</span></li>
+</ul>
+</div>
+<div class="toc-group">
+<div class="toc-group-title">补充资料</div>
+<ul class="toc-list"><li><span class="t">牌谱四种</span></li></ul>
+</div>
+</div>
+<div class="welcome-path">
+<h2>推荐学习方式</h2>
+<div class="path-grid" style="grid-template-columns:1fr;">
+<div class="path-card">
+<h3>学习路径建议</h3>
+<p style="color:var(--text-2);font-size:14px;line-height:2;margin-bottom:12px;">建议新手先学习东北派，或者西北派的后天卦。</p>
+<ul style="list-style:none;padding-left:0;color:var(--text-2);font-size:14px;line-height:2;">
+<li style="padding:6px 0;border-bottom:1px dashed var(--border);"><strong>选择东北派入门</strong>：先学完东北派，再跳转到西北派的后天卦；学完后，再学西北派的先天卦。两派都掌握之后，学习三盘合参与运筹，最后学终身卦。</li>
+<li style="padding:6px 0;"><strong>选择西北派入门</strong>：按照西北派路线循序渐进；学完之后，再回头学习东北派即可。</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="start-btn-wrap"><button class="btn" id="start-learning">开始学习 →</button></div>
+</div>
+</section>
+
+<section class="page" id="page-modules">
+<div class="module-layout">
+<aside class="sidebar">
+<div class="sidebar-inner">
+<input type="text" class="sidebar-search" id="module-search" placeholder="搜索模块…">
+</div>
+<div id="sidebar-groups" style="padding:0 14px;"></div>
+</aside>
+<div class="content-area" id="module-content">
+<div class="module-empty">
+<h1>学习模块</h1>
+<p class="module-sub">请从左侧目录选择模块开始学习</p>
+<p style="color:var(--text-3);line-height:2;">本系统将东北、西北两派学习路径分别拆解为若干阶段。<br>东北派重中宫、头脚、四柱、层次消元与身交用神；<br>西北派重中宫、用神落宫、对宫、走宫碰与朝向。</p>
+</div>
+</div>
+<aside class="right-panel">
+<div class="panel-section"><div class="panel-title">知识图谱</div><svg class="graph-svg" id="graph-svg" viewBox="0 0 280 360"></svg></div>
+<div class="panel-section"><div class="panel-title">本页内容</div><ul class="outline-list" id="outline-list"><li style="color:var(--text-4);">请选择模块</li></ul></div>
+<div class="panel-section"><div class="panel-title">排盘入口</div><button class="pan-link-btn" onclick="goPage('pan')">打开排盘软件</button></div>
+</aside>
+</div>
+</section>
+
+<section class="page" id="page-quizzes">
+<div class="quiz-layout">
+<aside class="sidebar">
+<div class="sidebar-inner">
+<div class="sidebar-group">
+<div class="sidebar-group-title"><span>小测目录</span><span class="arrow">▼</span></div>
+<ul class="sidebar-list" id="quiz-sidebar"></ul>
+</div>
+</div>
+</aside>
+<div class="quiz-main" id="quiz-main"></div>
+<aside class="score-panel">
+<div class="panel-title">目前总成绩</div>
+<div class="score-ring-wrap">
+<svg class="score-ring" viewBox="0 0 160 160">
+<circle class="track" cx="80" cy="80" r="66"></circle>
+<circle class="fill" id="score-ring-fill" cx="80" cy="80" r="66" stroke-dasharray="414.7" stroke-dashoffset="414.7"></circle>
+<text class="pct" id="score-pct" x="80" y="76">0%</text>
+<text class="pct-label" x="80" y="98">完成度</text>
+</svg>
+</div>
+<div class="score-stats" id="score-stats">已完成 <strong>0</strong> / 0 个小测</div>
+</aside>
+</div>
+</section>
+
+<section class="page" id="page-pan">
+<div class="pan-page-wrap">
+<div id="pan-host"></div>
+</div>
+</section>
+
+</main>
+<footer>响马卦学习系统 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script type="text/x-template" id="pan-app-template">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>响马卦排盘</title>
+<style>
+:host{--bg:#FFFFF0;--bg-soft:#f8f8ec;--bg-panel:#fafae8;--bg-panel-border:#e8e8d0;--bg-card:#fff;--bg-card-soft:#fbfbf0;--border:#e0e0d0;--border-2:#ddd;--border-3:#ccc;--text:#000;--text-2:#333;--text-3:#555;--text-4:#888;--text-5:#aaa;--nature-bg:rgba(0,0,0,0.16);--btn-primary-bg:#333;--btn-primary-text:#fff;--btn-primary-hover:#111;--btn-ghost-bg:#fff;--btn-ghost-text:#333;--btn-ghost-border:#999;--btn-ghost-hover:#f0f0e0;--panel-bg:#fafae8;--panel-border:#e8e8d0;--c-liutang:#c0392b;--c-maoyu:#2471a3;--c-ergun:#b9770e;--c-bawan:#566573;--c-yibing:#b9770e;--c-erb:#566573;--c-sanb:#1e8449;--c-sib:#148f77;--c-wub:#b9770e;--lt-palace:#b92b27;--lt-sha:#1a6fb5;--lt-tag:#555;display:flex;flex-direction:column;min-height:100%;width:100%;background:var(--bg);color:var(--text);font-family:var(--font-serif,'Noto Serif SC',SimSun,'Songti SC',serif);font-size:15px;line-height:1.5;transition:background .2s,color .2s;min-height:0;overflow:hidden;flex:1;}
+:host(.dark){--bg:#121212;--bg-soft:#1a1a1a;--bg-panel:#1e1e1e;--bg-panel-border:#333;--bg-card:#232323;--bg-card-soft:#1c1c1c;--border:#333;--border-2:#3a3a3a;--border-3:#4a4a4a;--text:#e8e8e8;--text-2:#ccc;--text-3:#b0b0b0;--text-4:#888;--text-5:#666;--nature-bg:rgba(255,255,255,0.10);--btn-primary-bg:#e8e8e8;--btn-primary-text:#121212;--btn-primary-hover:#fff;--btn-ghost-bg:#232323;--btn-ghost-text:#e8e8e8;--btn-ghost-border:#555;--btn-ghost-hover:#2e2e2e;--panel-bg:#1e1e1e;--panel-border:#333;--c-liutang:#ff7675;--c-maoyu:#74b9ff;--c-ergun:#f5b041;--c-bawan:#aeb6bf;--c-yibing:#f5b041;--c-erb:#aeb6bf;--c-sanb:#58d68d;--c-sib:#55efc4;--c-wub:#f5b041;--lt-palace:#ff8a80;--lt-sha:#82b1ff;--lt-tag:#bbb;color-scheme:dark;}
+*{box-sizing:border-box;margin:0;padding:0;}
+nav{display:flex;justify-content:center;gap:10px;padding:10px;background:var(--bg-soft);border-bottom:1px solid var(--border);flex-shrink:0;transition:background .2s,border-color .2s;}
+nav button{padding:9px 26px;border:1px solid var(--border-3);background:var(--bg-card);cursor:pointer;font-size:19px;color:var(--text-2);font-family:inherit;transition:all .12s;}
+nav button.active{background:var(--btn-primary-bg);color:var(--btn-primary-text);border-color:var(--btn-primary-bg);}
+main{flex:1;padding:16px;overflow-y:auto;color:var(--text);}
+.tab{display:none;}.tab.active{display:block;}
+.row{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:900px;width:100%;margin:0 auto 14px;}
+input[type="text"],input[type="date"],input[type="number"],input[type="datetime-local"],select{padding:8px 12px;border:1px solid var(--border-3);background:var(--bg-card);color:var(--text);font-size:16px;font-family:inherit;}
+.btn{padding:9px 22px;border:1px solid var(--btn-primary-bg);background:var(--btn-primary-bg);color:var(--btn-primary-text);cursor:pointer;font-size:17px;font-family:inherit;}
+.btn.ghost{background:var(--btn-ghost-bg);color:var(--btn-ghost-text);border-color:var(--btn-ghost-border);}
+.btn.mini{padding:8px 14px;font-size:16px;}
+label.radio{display:inline-flex;align-items:center;gap:5px;font-size:16px;cursor:pointer;color:var(--text-2);}
+.info{max-width:900px;margin:0 auto 16px;padding:14px 18px;background:var(--panel-bg);border:1px solid var(--panel-border);font-size:18px;line-height:2.1;color:var(--text-2);}
+.qa-section{max-width:900px;margin:20px auto 16px;padding:14px 16px;background:var(--panel-bg);border:1px solid var(--panel-border);}
+.qa-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.qa-label{font-size:18px;color:var(--text-2);padding-top:10px;flex-shrink:0;width:58px;}
+.qa-textarea{flex:1;min-height:68px;padding:9px 13px;border:1px solid var(--border-3);background:var(--bg-card);color:var(--text);font-family:inherit;font-size:17px;resize:vertical;outline:none;}
+.pan-pair{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:flex-start;max-width:900px;margin:0 auto 10px;}
+.pan-pair>.pan{flex:1 1 400px;max-width:720px;margin-bottom:16px;}
+.pan{width:100%;margin:0 auto 20px;font-family:var(--font-qiji,'STKaiti',KaiTi,serif);}
+.pan-title{text-align:center;font-size:26px;letter-spacing:6px;margin-bottom:12px;color:var(--text-2);font-family:var(--font-qiji,'STKaiti',KaiTi,serif);}
+.pan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;--pan-font-size:22px;--gong-name-size:15px;--nature-size:60px;}
+.gong{position:relative;background:var(--bg-card);border:1px solid var(--border-2);aspect-ratio:1/1;padding:8px;overflow:hidden;transition:background .2s,border-color .2s;}
+.gong-name{position:absolute;top:6px;left:8px;font-size:var(--gong-name-size);color:var(--text-4);z-index:2;}
+.gong-nature{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:var(--nature-size);color:var(--nature-bg);pointer-events:none;z-index:0;}
+.gong-content{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;gap:4px;font-size:var(--pan-font-size);text-align:center;}
+.gong-content>div{white-space:nowrap;}
+.card-text{display:inline-flex;flex-direction:row;align-items:center;white-space:nowrap;line-height:1.15;}
+.card-sym{margin-right:2px;}
+.card-face{margin-left:1px;}
+.card-text.card-liutang{color:var(--c-liutang);}
+.card-text.card-maoyu{color:var(--c-maoyu);}
+.card-text.card-ergun{color:var(--c-ergun);}
+.card-text.card-bawan{color:var(--c-bawan);}
+.card-text.card-yibing{color:var(--c-yibing);}
+.card-text.card-erb{color:var(--c-erb);}
+.card-text.card-sanb{color:var(--c-sanb);}
+.card-text.card-sib{color:var(--c-sib);}
+.card-text.card-wub{color:var(--c-wub);}
+.live-cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+.live-card{width:140px;height:140px;background:var(--bg-card);border:1px solid var(--border-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;}
+.live-card .idx{position:absolute;top:6px;left:8px;font-size:13px;color:var(--text-5);}
+.live-card .val{font-size:28px;}
+.live-card .sub{font-size:13px;color:var(--text-4);}
+#toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:11px 24px;font-size:16px;opacity:0;pointer-events:none;transition:all .25s;z-index:999;}
+#toast.show{opacity:1;}
+.export-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:16px auto 24px;}
+</style>
+</head>
+<body>
+<nav>
+<button class="active" data-tab="regular">常规</button>
+<button data-tab="lifetime">终身</button>
+<button data-tab="live">活盘</button>
+</nav>
+<main>
+<section class="tab active" id="tab-regular">
+<div class="row"><span style="font-size:17px;color:var(--text-3)">时间：</span><input type="datetime-local" id="pan-time" step="60"><button class="btn ghost mini" id="btn-now">现在</button><button class="btn" id="btn-pan">起卦</button></div>
+<div class="info" id="info-regular" style="display:none"></div>
+<div id="out-regular"></div>
+<div class="qa-section">
+<div class="qa-row"><label class="qa-label" for="question">问题</label><textarea id="question" class="qa-textarea" placeholder="请输入问题（选填）"></textarea></div>
+<div class="qa-row"><label class="qa-label" for="duanyu">断语</label><textarea id="duanyu" class="qa-textarea" placeholder="请输入断语（选填）"></textarea></div>
+</div>
+<div class="export-row" id="export-regular">
+<button class="btn ghost" data-act="txt-xian">复制先天·文字</button>
+<button class="btn ghost" data-act="txt-hou">复制后天·文字</button>
+<button class="btn ghost" data-act="img-xian">导出先天·图片</button>
+<button class="btn ghost" data-act="img-hou">导出后天·图片</button>
+</div>
+</section>
+<section class="tab" id="tab-lifetime">
+<div class="row">
+<label class="radio"><input type="radio" name="lt-mode" value="convert" checked> 先天卦换算</label>
+<label class="radio"><input type="radio" name="lt-mode" value="fresh"> 单独排盘</label>
+</div>
+<div class="row"><span style="font-size:17px;color:var(--text-3)">命宫排盘（自选生肖）：</span><select id="lt-shengxiao"></select><span style="font-size:17px;color:var(--text-3)">月：</span><select id="lt-month"></select><span style="font-size:17px;color:var(--text-3)">日：</span><select id="lt-day"></select><label class="radio"><input type="radio" name="lt-gender" value="male" checked> 乾造</label><label class="radio"><input type="radio" name="lt-gender" value="female"> 坤造</label></div>
+<div class="row"><span style="font-size:17px;color:var(--text-3)">神煞排盘（自选太岁）：</span><input type="number" id="lt-year" placeholder="如 2024" style="width:110px"><button class="btn" id="btn-lifetime">排盘</button></div>
+<div id="out-lifetime"></div>
+<div class="export-row" id="export-lifetime">
+<button class="btn ghost" data-act="img-lt">导出图片文件</button>
+</div>
+</section>
+<section class="tab" id="tab-live">
+<div class="row"><button class="btn" id="btn-live">抽三张牌</button></div>
+<div id="out-live"></div>
+</section>
+</main>
+<div id="toast"></div>
+<script>
+(function(){
+'use strict';
+var GONG_KEYS=['乾','坎','艮','震','巽','离','坤','兑','中'];
+var NATURE={'中':'宅','坎':'险','艮':'止','震':'动','巽':'空','离':'亡','坤':'地','兑':'缺','乾':'天'};
+var GRID=['巽','离','坤','震','中','兑','艮','坎','乾'];
+var RING=['巽','离','坤','兑','乾','坎','艮','震'];
+var OUTER=['乾','坎','艮','震','巽','离','坤','兑'];
+var CARDS=['刘唐','毛鱼','二棍','八万','一并','二并','三并','四并','五并'];
+var FACE_CARDS=['刘唐','毛鱼','二棍','八万'];
+var CARD_CLASS={'刘唐':'card-liutang','毛鱼':'card-maoyu','二棍':'card-ergun','八万':'card-bawan','一并':'card-yibing','二并':'card-erb','三并':'card-sanb','四并':'card-sib','五并':'card-wub'};
+var CARD_SYMBOL={'刘唐':'●','毛鱼':'▲','二棍':'■','八万':'◆','一并':'①','二并':'②','三并':'③','四并':'④','五并':'⑤'};
+var MEN_OF={'刘唐':'景门','毛鱼':'休门','二棍':'死门','八万':'开门','一并':'生门','二并':'惊门','三并':'伤门','四并':'杜门','五并':'死门'};
+var XING_OF={'刘唐':'天乙','毛鱼':'太乙','二棍':'摄提','八万':'青龙','一并':'太阴','二并':'咸池','三并':'轩辕','四并':'招摇','五并':'天符'};
+var MEN_SEQ=['休门','生门','伤门','杜门','景门','死门','惊门','开门'];
+var XING_SEQ=['太乙','摄提','轩辕','招摇','天符','青龙','咸池','太阴','天乙'];
+var LUOSHU=['坎','坤','震','巽','中','乾','兑','艮','离'];
+var CARD_NATURE={'刘唐':'亡','毛鱼':'险','二棍':'地','八万':'天','一并':'止','二并':'缺','三并':'动','四并':'空','五并':'中'};
+var NATURE_GONG={'宅':'中','险':'坎','止':'艮','动':'震','空':'巽','亡':'离','地':'坤','缺':'兑','天':'乾'};
+var SHICHEN=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+var SC_GONG={'子':'坎','丑':'艮','寅':'艮','卯':'震','辰':'巽','巳':'巽','午':'离','未':'坤','申':'坤','酉':'兑','戌':'乾','亥':'乾'};
+var YANG_SC=['子','寅','辰','午','申','戌'];
+var GAN=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+var ZHI=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+var JIEQI=[[1,6,'小寒'],[1,20,'大寒'],[2,4,'立春'],[2,19,'雨水'],[3,6,'惊蛰'],[3,21,'春分'],[4,5,'清明'],[4,20,'谷雨'],[5,6,'立夏'],[5,21,'小满'],[6,6,'芒种'],[6,21,'夏至'],[7,7,'小暑'],[7,23,'大暑'],[8,8,'立秋'],[8,23,'处暑'],[9,8,'白露'],[9,23,'秋分'],[10,8,'寒露'],[10,23,'霜降'],[11,7,'立冬'],[11,22,'小雪'],[12,7,'大雪'],[12,22,'冬至']];
+var YANG_JIEQI=['冬至','小寒','大寒','立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种'];
+var JIE_TO_ZHI={0:'丑',2:'寅',4:'卯',6:'辰',8:'巳',10:'午',12:'未',14:'申',16:'酉',18:'戌',20:'亥',22:'子'};
+var ZHI_ORDER12=['寅','卯','辰','巳','午','未','申','酉','戌','亥','子','丑'];
+var ZHI_CCW=['巳','辰','卯','寅','丑','子','亥','戌','酉','申','未','午'];
+var ZHI_CW=['巳','午','未','申','酉','戌','亥','子','丑','寅','卯','辰'];
+var PALACE_ORDER=['命宫','财帛','兄弟','田宅','男女','仆役','夫妻','疾厄','迁移','官禄','福德','相貌'];
+var SHA_ORDER=['太岁','青龙','丧门','六合','官符','小耗','大耗','朱雀','白虎','贵人','吊客','病符'];
+var LT_POS={'巳':[1,1],'午':[1,2],'未':[1,3],'申':[1,4],'辰':[2,1],'酉':[2,4],'卯':[3,1],'戌':[3,4],'寅':[4,1],'丑':[4,2],'子':[4,3],'亥':[4,4]};
+var XT_ORDER=[['中',0],['离',0],['巽',0],['震',0],['艮',0],['坎',0],['乾',0],['兑',0],['坤',0],['离',1],['巽',1],['震',1],['艮',1],['坎',1],['乾',1],['兑',1],['坤',1],['中',1]];
+var FACE_OUT='↑',FACE_IN='↓';
+function baseName(c){return c==null?'':String(c).replace(/[\^v↑↓]$/,'');}
+function disp(v){return v==null?'':String(v);}
+function pad2(n){return n<10?'0'+n:''+n;}
+function fmtTime(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds());}
+function toLocalInputValue(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes());}
+function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2000);}
+function getShichen(d){var h=d.getHours();return SHICHEN[Math.floor(((h+1)%24)/2)];}
+function getJieqiIndex(d){var md=(d.getMonth()+1)*100+d.getDate();var idx=-1;for(var i=0;i<JIEQI.length;i++){var v=JIEQI[i][0]*100+JIEQI[i][1];if(md>=v)idx=i;}if(idx<0)idx=23;return idx;}
+function getJieqiName(d){return JIEQI[getJieqiIndex(d)][2];}
+function getDun(jq){return YANG_JIEQI.indexOf(jq)>=0?'阳':'阴';}
+function yearGZ(y){var i=((y-4)%60+60)%60;return GAN[i%10]+ZHI[i%12];}
+function monthZhi(d){var idx=getJieqiIndex(d);if(idx%2===1)idx--;return JIE_TO_ZHI[idx]||'子';}
+function monthGZ(d){var yg=GAN.indexOf(yearGZ(d.getFullYear())[0]);var mz=monthZhi(d);var map={0:2,5:2,1:4,6:4,2:6,7:6,3:8,8:8,4:0,9:0};var sg=map[yg];var mi=ZHI_ORDER12.indexOf(mz);return GAN[(sg+mi)%10]+mz;}
+function dayGZ(d){var y=d.getFullYear(),m=d.getMonth()+1,dd=d.getDate();var a=Math.floor((14-m)/12);var yy=y+4800-a;var mm=m+12*a-3;var jdn=dd+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;var idx=((jdn+49)%60+60)%60;return GAN[idx%10]+ZHI[idx%12];}
+function hourGZ(d){var dg=GAN.indexOf(dayGZ(d)[0]);var sc=getShichen(d);var si=SHICHEN.indexOf(sc);var map={0:0,5:0,1:2,6:2,2:4,7:4,3:6,8:6,4:8,9:8};return GAN[(map[dg]+si)%10]+sc;}
+function siZhu(d){return[yearGZ(d.getFullYear()),monthGZ(d),dayGZ(d),hourGZ(d)];}
+function makeDeck(){var deck=[];for(var i=0;i<CARDS.length;i++){var name=CARDS[i];for(var j=0;j<2;j++){if(FACE_CARDS.indexOf(name)>=0)deck.push(name+(Math.random()<0.5?FACE_OUT:FACE_IN));else deck.push(name);}}for(var k=deck.length-1;k>0;k--){var m=Math.floor(Math.random()*(k+1));var t=deck[k];deck[k]=deck[m];deck[m]=t;}return deck;}
+function makeXiantian(deck){var g={};for(var i=0;i<GONG_KEYS.length;i++)g[GONG_KEYS[i]]=[null,null,null,null];for(var j=0;j<XT_ORDER.length;j++){g[XT_ORDER[j][0]][XT_ORDER[j][1]]=deck[j];}return g;}
+function addHuopan(g,date){var sc=getShichen(date);var jq=getJieqiName(date);var dun=getDun(jq);var sg=SC_GONG[sc];var isYang=YANG_SC.indexOf(sc)>=0;var menCard=isYang?g['中'][0]:g['中'][1];var xingCard=isYang?g['中'][1]:g['中'][0];var initMen=MEN_OF[baseName(menCard)]||'休门';var initXing=XING_OF[baseName(xingCard)]||'太乙';var r0=RING.indexOf(sg);var m0=MEN_SEQ.indexOf(initMen);for(var i=0;i<8;i++){var gi=(r0+i)%8;var mi=(dun==='阳')?(m0+i)%8:((m0-i)%8+8)%8;g[RING[gi]][2]=MEN_SEQ[mi];}var l0=LUOSHU.indexOf(sg);var x0=XING_SEQ.indexOf(initXing);for(var k=0;k<9;k++){var gk=(l0+k)%9;var xi=(dun==='阳')?(x0+k)%9:((x0-k)%9+9)%9;g[LUOSHU[gk]][3]=XING_SEQ[xi];}return{shichen:sc,jieqi:jq,dun:dun,shichenGong:sg,initMen:initMen,initXing:initXing,menCard:menCard,xingCard:xingCard};}
+function makeHoutian(src){var g={};for(var i=0;i<GONG_KEYS.length;i++)g[GONG_KEYS[i]]=src[GONG_KEYS[i]].slice();if(baseName(g['中'][0])===baseName(g['中'][1]))return g;var hand=g['中'][0];g['中'][0]=g['中'][1];g['中'][1]=null;var guard=0;while(guard++<200){var hn=baseName(hand);if(hn==='')break;var found=null,fIdx=-1;for(var i2=0;i2<OUTER.length;i2++){var kk=OUTER[i2];if(baseName(g[kk][0])===hn){found=kk;fIdx=0;break;}if(baseName(g[kk][1])===hn){found=kk;fIdx=1;break;}}if(!found)break;if(FACE_CARDS.indexOf(hn)>=0){var face=String(g[found][fIdx]).slice(-1);hand=hn+face;}var other=1-fIdx;var tmp=g[found][other];g[found][other]=hand;hand=tmp;}g['中'][1]=hand;return g;}
+function createCardEl(s){var dv=document.createElement('div');var bn=baseName(s);var cls=CARD_CLASS[bn];dv.className='card-text'+(cls?' '+cls:'');var sym=CARD_SYMBOL[bn]||'';var fm=String(s).match(/[\^v↑↓]$/);var face=fm?fm[0]:'';if(sym){var e1=document.createElement('span');e1.className='card-sym';e1.textContent=sym;dv.appendChild(e1);}var body=document.createElement('span');body.className='card-body';body.appendChild(document.createTextNode(bn));if(face){var e2=document.createElement('span');e2.className='card-face';e2.textContent=face;body.appendChild(e2);}dv.appendChild(body);return dv;}
+function createPanEl(g,title){var wrap=document.createElement('div');wrap.className='pan';var t=document.createElement('div');t.className='pan-title';t.textContent=title;wrap.appendChild(t);var grid=document.createElement('div');grid.className='pan-grid';for(var i=0;i<GRID.length;i++){var k=GRID[i];var arr=g[k];var cell=document.createElement('div');cell.className='gong';var nm=document.createElement('div');nm.className='gong-name';nm.textContent=k;var na=document.createElement('div');na.className='gong-nature';na.textContent=NATURE[k];var ct=document.createElement('div');ct.className='gong-content';var order=[3,1,0,2];for(var j=0;j<order.length;j++)ct.appendChild(createCardEl(arr[order[j]]));cell.appendChild(nm);cell.appendChild(na);cell.appendChild(ct);grid.appendChild(cell);}wrap.appendChild(grid);return wrap;}
+function buildLifetimeCards(xt){if(xt){var outer={'子':xt['坎'][1],'丑':xt['艮'][0],'寅':xt['艮'][1],'卯':xt['震'][1],'辰':xt['巽'][0],'巳':xt['巽'][1],'午':xt['离'][1],'未':xt['坤'][0],'申':xt['坤'][1],'酉':xt['兑'][1],'戌':xt['乾'][0],'亥':xt['乾'][1]};return{ming:xt['中'][0],shen:xt['中'][1],gen:xt['震'][0],miao:xt['离'][0],hua:xt['兑'][0],guo:xt['坎'][0],outer:outer};}var deck=makeDeck();var o2={};for(var d=0;d<ZHI_ORDER12.length;d++){o2[ZHI_ORDER12[d]]=deck[d];}return{ming:deck[12],gen:deck[13],miao:deck[14],hua:deck[15],guo:deck[16],shen:deck[17],outer:o2};}
+/* 新命宫起法：生肖起月，月起日，男顺四位女逆四位 */
+function calcMingGongZhi(shengxiao, month, day, gender){
+  var zhiList=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  var start=zhiList.indexOf(shengxiao);
+  if(start<0)start=0;
+  // 生肖起月：从生肖所在宫起正月
+  var yueIdx=(start+(month-1))%12;
+  // 月起日：从月所在宫起初一
+  var riIdx=(yueIdx+(day-1))%12;
+  // 男顺四位，女逆四位
+  var mingIdx;
+  if(gender==='male'){mingIdx=(riIdx+4)%12;}
+  else{mingIdx=(riIdx-4+12)%12;}
+  return zhiList[mingIdx];
+}
+function calcPalaces(mingZhi,gender){var res={};if(gender==='male'){var start=ZHI_CW.indexOf(mingZhi);for(var i=0;i<12;i++){res[ZHI_CW[(start+i)%12]]=PALACE_ORDER[i];}}else{var start2=ZHI_CCW.indexOf(mingZhi);for(var j=0;j<12;j++){res[ZHI_CCW[(start2+j)%12]]=PALACE_ORDER[j];}}return res;}
+function calcSha(yearZhi){var res={};var start=ZHI_CW.indexOf(yearZhi);for(var i=0;i<12;i++){res[ZHI_CW[(start+i)%12]]=SHA_ORDER[i];}return res;}
+function createLifetimeEl(data){
+  var wrap=document.createElement('div');wrap.className='pan';
+  var title=document.createElement('div');title.className='pan-title';title.textContent='终身盘';wrap.appendChild(title);
+  var grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:6px;width:100%;max-width:780px;margin:0 auto;aspect-ratio:1/1;';
+  var zhis=Object.keys(LT_POS);
+  for(var i=0;i<zhis.length;i++){
+    var z=zhis[i];var pos=LT_POS[z];
+    var cell=document.createElement('div');
+    cell.style.cssText='position:relative;background:var(--bg-card);border:1px solid var(--border-2);padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;gap:4px;';
+    cell.style.gridRow=pos[0];cell.style.gridColumn=pos[1];
+    var zh=document.createElement('div');
+    zh.style.cssText='position:absolute;top:4px;left:8px;font-size:22px;font-weight:600;color:var(--text-2);z-index:2;font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+    zh.textContent=z;
+    var ce=createCardEl(data.cards.outer[z]);ce.style.marginTop='20px';ce.style.fontSize='20px';
+    var pe=document.createElement('div');
+    pe.style.cssText='font-size:17px;font-weight:600;color:var(--lt-palace);text-align:center;line-height:1.3;font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+    pe.textContent=data.palaces[z]||'';
+    var se=document.createElement('div');
+    se.style.cssText='font-size:17px;font-weight:600;color:var(--lt-sha);text-align:center;line-height:1.3;font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+    se.textContent=data.sha[z]||'';
+    cell.appendChild(zh);cell.appendChild(ce);cell.appendChild(pe);cell.appendChild(se);grid.appendChild(cell);
+  }
+  var center=document.createElement('div');
+  center.style.cssText='grid-column:2/4;grid-row:2/4;display:flex;flex-direction:column;gap:6px;padding:8px;background:var(--bg-card-soft);border:1px solid var(--border-2);';
+  var r1=document.createElement('div');
+  r1.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border-2);background:var(--bg-card);position:relative;';
+  var r1t=document.createElement('span');
+  r1t.style.cssText='position:absolute;top:4px;left:8px;font-size:16px;font-weight:600;color:var(--lt-tag);font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+  r1t.textContent='命宫';
+  r1.appendChild(r1t);
+  var ce1=createCardEl(data.cards.ming);ce1.style.fontSize='22px';r1.appendChild(ce1);
+  var r2=document.createElement('div');
+  r2.style.cssText='flex:1;display:flex;gap:5px;';
+  var gmhg=[['根',data.cards.gen],['苗',data.cards.miao],['花',data.cards.hua],['果',data.cards.guo]];
+  for(var j=0;j<4;j++){
+    var d=document.createElement('div');
+    d.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border-2);background:var(--bg-card);position:relative;overflow:hidden;padding:2px;';
+    var t2=document.createElement('span');
+    t2.style.cssText='position:absolute;top:3px;left:5px;font-size:14px;font-weight:600;color:var(--lt-tag);font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+    t2.textContent=gmhg[j][0];
+    d.appendChild(t2);
+    var cej=createCardEl(gmhg[j][1]);cej.style.fontSize='20px';d.appendChild(cej);
+    r2.appendChild(d);
+  }
+  var r3=document.createElement('div');
+  r3.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border-2);background:var(--bg-card);position:relative;';
+  var r3t=document.createElement('span');
+  r3t.style.cssText='position:absolute;top:4px;left:8px;font-size:16px;font-weight:600;color:var(--lt-tag);font-family:var(--font-qiji,"STKaiti",KaiTi,serif);';
+  r3t.textContent='身宫';
+  r3.appendChild(r3t);
+  var ce3=createCardEl(data.cards.shen);ce3.style.fontSize='22px';r3.appendChild(ce3);
+  center.appendChild(r1);center.appendChild(r2);center.appendChild(r3);grid.appendChild(center);
+  wrap.appendChild(grid);return wrap;
+}
+function renderLive(res){var c=document.getElementById('out-live');c.innerHTML='';var wrap=document.createElement('div');wrap.className='pan';var t=document.createElement('div');t.className='pan-title';t.textContent='先天盘';wrap.appendChild(t);var row=document.createElement('div');row.className='live-cards';var lb=['第一张','第二张','第三张'];for(var i=0;i<3;i++){var cc=document.createElement('div');cc.className='live-card';var ix=document.createElement('div');ix.className='idx';ix.textContent=lb[i];var v=createCardEl(res.picked[i]);v.classList.add('val');cc.appendChild(ix);cc.appendChild(v);if(i===2){var sb=document.createElement('div');sb.className='sub';sb.textContent=res.gong+'宫 · '+res.nature;cc.appendChild(sb);}row.appendChild(cc);}wrap.appendChild(row);c.appendChild(wrap);}
+var state={xiantian:null,houtian:null,huopan:null,timeStr:'',sizhu:null,lifetime:null,lifetimeTime:''};
+function doPan(){var timeEl=document.getElementById('pan-time');var now=timeEl&&timeEl.value?new Date(timeEl.value):new Date();if(isNaN(now.getTime()))now=new Date();var deck=makeDeck();var xt=makeXiantian(deck);var hp=addHuopan(xt,now);var ht=makeHoutian(xt);state.xiantian=xt;state.houtian=ht;state.huopan=hp;state.timeStr=fmtTime(now);state.sizhu=siZhu(now);var infoEl=document.getElementById('info-regular');infoEl.innerHTML='<div><b>时间：</b>'+state.timeStr+'</div><div><b>四柱：</b>'+state.sizhu.join('　')+'</div><div><b>节气：</b>'+hp.jieqi+'　·　'+hp.dun+'遁</div><div><b>时辰：</b>'+hp.shichen+'（'+hp.shichenGong+'宫）</div>';infoEl.style.display='block';var out=document.getElementById('out-regular');out.innerHTML='';var pair=document.createElement('div');pair.className='pan-pair';pair.appendChild(createPanEl(xt,'先天盘'));pair.appendChild(createPanEl(ht,'后天盘'));out.appendChild(pair);}
+function buildLifetimePalaces(){var palaces={};var sha={};var sx=document.getElementById('lt-shengxiao').value;var mo=parseInt(document.getElementById('lt-month').value,10);var dy=parseInt(document.getElementById('lt-day').value,10);var gd=document.querySelector('input[name="lt-gender"]:checked').value;if(sx&&mo&&dy){var mg=calcMingGongZhi(sx,mo,dy,gd);palaces=calcPalaces(mg,gd);}var yv=document.getElementById('lt-year').value;if(yv){var y=parseInt(yv,10);if(!isNaN(y)){var yz=yearGZ(y)[1];sha=calcSha(yz);}}return{palaces:palaces,sha:sha};}
+function doLifetime(){var modeEl=document.querySelector('input[name="lt-mode"]:checked');var mode=modeEl?modeEl.value:'convert';var xt=null;if(mode==='convert'){if(state.xiantian)xt=state.xiantian;else{xt=makeXiantian(makeDeck());state.xiantian=xt;}}var cards=buildLifetimeCards(xt);var extra=buildLifetimePalaces();state.lifetimeTime=fmtTime(new Date());state.lifetime={cards:cards,palaces:extra.palaces,sha:extra.sha};var out=document.getElementById('out-lifetime');out.innerHTML='';out.appendChild(createLifetimeEl(state.lifetime));toast('终身盘已生成');}
+function doLive(){var deck=makeDeck();var picked=[deck[0],deck[1],deck[2]];var third=picked[2];var nature=CARD_NATURE[baseName(third)];var gong=NATURE_GONG[nature];renderLive({picked:picked,nature:nature,gong:gong});}
+document.querySelectorAll('nav button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('nav button').forEach(function(x){x.classList.remove('active');});this.classList.add('active');var tab=this.getAttribute('data-tab');document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});document.getElementById('tab-'+tab).classList.add('active');});});
+document.getElementById('btn-pan').addEventListener('click',doPan);
+document.getElementById('btn-lifetime').addEventListener('click',doLifetime);
+document.getElementById('btn-live').addEventListener('click',doLive);
+document.getElementById('btn-now').addEventListener('click',function(){document.getElementById('pan-time').value=toLocalInputValue(new Date());});
+
+/* 导出模块 */
+function panToText(g,title){
+  var s='';
+  var qEl=document.getElementById('question'),dEl=document.getElementById('duanyu');
+  var q=qEl?qEl.value.trim():'',d=dEl?dEl.value.trim():'';
+  if(q)s+='问题：'+q+'\n';
+  if(d)s+='断语：'+d+'\n';
+  if(state.timeStr)s+='时间：'+state.timeStr+'\n';
+  if(state.sizhu)s+='四柱：'+state.sizhu.join('　')+'\n';
+  if(state.huopan){s+='节气：'+state.huopan.jieqi+'　'+state.huopan.dun+'遁\n';s+='时辰：'+state.huopan.shichen+'（'+state.huopan.shichenGong+'宫）\n';}
+  s+='【'+title+'】\n';
+  for(var r=0;r<3;r++){
+    var rowKeys=[GRID[r*3],GRID[r*3+1],GRID[r*3+2]];
+    var lines=[3,1,0,2];
+    for(var li=0;li<lines.length;li++){
+      var idx=lines[li];var parts=[];
+      for(var c=0;c<3;c++){var v=disp(g[rowKeys[c]][idx]);parts.push(v===''?'　':v);}
+      s+=parts.join('\t')+'\n';
+    }
+    s+='\n';
+  }
+  return s;
+}
+function legacyCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.setAttribute('readonly','');
+  ta.style.position='fixed';ta.style.left='-9999px';ta.style.top='0';
+  document.body.appendChild(ta);
+  ta.select();ta.setSelectionRange(0,ta.value.length);
+  var ok=false;try{ok=document.execCommand('copy');}catch(e){ok=false;}
+  document.body.removeChild(ta);
+  return ok;
+}
+function copyText(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).then(function(){return true;}).catch(function(){return legacyCopy(text);});
+  }
+  return Promise.resolve(legacyCopy(text));
+}
+function _rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+var _CN='"Qiji","令東齊伋體","STKaiti","KaiTi",serif';
+var _CNFS='"Noto Serif SC","Source Han Serif SC","SimSun","Songti SC",serif';
+function _theme(){
+  var dark=document.body.classList.contains('dark');
+  if(dark)return{bg:'#121212',titleText:'#e8e8e8',text:'#e8e8e8',textSoft:'#b0b0b0',muted:'#888',cellBg:'#232323',cellBorder:'#3a3a3a',nature:'rgba(255,255,255,0.10)',centerBg:'#1c1c1c',centerBorder:'#3a3a3a',centerInnerBorder:'#2c2c2c',palace:'#ff8a80',sha:'#82b1ff',tag:'#bbb',defColor:'#e8e8e8',cc:{'刘唐':'#ff7675','毛鱼':'#74b9ff','二棍':'#f5b041','八万':'#aeb6bf','一并':'#f5b041','二并':'#aeb6bf','三并':'#58d68d','四并':'#55efc4','五并':'#f5b041'}};
+  return{bg:'#FFFFF0',titleText:'#222',text:'#222',textSoft:'#333',muted:'#888',cellBg:'#fff',cellBorder:'#ddd',nature:'rgba(0,0,0,0.16)',centerBg:'#fbfbf0',centerBorder:'#ddd',centerInnerBorder:'#eee',palace:'#b92b27',sha:'#1a6fb5',tag:'#555',defColor:'#222',cc:{'刘唐':'#c0392b','毛鱼':'#2471a3','二棍':'#b9770e','八万':'#566573','一并':'#b9770e','二并':'#566573','三并':'#1e8449','四并':'#148f77','五并':'#b9770e'}};
+}
+function _wrap(ctx,t,mw){
+  var lines=[],ps=String(t).split('\n');
+  for(var p=0;p<ps.length;p++){
+    var para=ps[p];
+    if(para===''){lines.push('');continue;}
+    var cur='';
+    for(var i=0;i<para.length;i++){
+      var ch=para.charAt(i),test=cur+ch;
+      if(ctx.measureText(test).width>mw&&cur.length>0){lines.push(cur);cur=ch;}
+      else cur=test;
+    }
+    if(cur)lines.push(cur);
+  }
+  if(!lines.length)lines.push('');
+  return lines;
+}
+function _dc(ctx,s,cx,cy,fs,T){
+  if(!s)return;
+  var bn=baseName(s);
+  var color=(T.cc&&T.cc[bn])||T.defColor;
+  var sym=CARD_SYMBOL[bn]||'';
+  var text=(sym?sym+' ':'')+s;
+  ctx.fillStyle=color;ctx.font=fs+'px '+_CN;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(text,cx,cy);
+}
+function _dcv(ctx,s,cx,cy,fs,T){
+  if(!s)return;
+  var bn=baseName(s);
+  var color=(T.cc&&T.cc[bn])||T.defColor;
+  var sym=CARD_SYMBOL[bn]||'';
+  var fm=String(s).match(/[\^v↑↓]$/);
+  var face=fm?fm[0]:'';
+  var lines=[];
+  if(sym)lines.push(sym);
+  for(var i=0;i<bn.length;i++)lines.push(bn.charAt(i));
+  if(face)lines.push(face);
+  ctx.fillStyle=color;ctx.font=fs+'px '+_CN;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  var lh=fs*1.06,th=lines.length*lh,sy=cy-th/2+lh/2;
+  for(var j=0;j<lines.length;j++)ctx.fillText(lines[j],cx,sy+j*lh);
+}
+var _mctx=null;
+function _measure(W,pad,q,d){
+  if(!q&&!d)return{height:0,gap:0};
+  var lh=24,mw=W-pad*2;
+  if(!_mctx){_mctx=document.createElement('canvas').getContext('2d');}
+  _mctx.font='17px '+_CNFS;
+  var ql=q?_wrap(_mctx,'问题：'+q,mw):[];
+  var dl=d?_wrap(_mctx,'断语：'+d,mw):[];
+  var h=ql.length*lh+dl.length*lh;
+  if(ql.length&&dl.length)h+=6;
+  return{height:h,gap:18};
+}
+function _footer(ctx,W,pad,y,q,d,T){
+  if(!q&&!d)return;
+  var lh=24,mw=W-pad*2,gap=6;
+  ctx.font='17px '+_CNFS;ctx.textAlign='left';ctx.textBaseline='top';
+  if(q){var ql=_wrap(ctx,'问题：'+q,mw);ctx.fillStyle=T.text;for(var i=0;i<ql.length;i++){ctx.fillText(ql[i],pad,y);y+=lh;}if(d)y+=gap;}
+  if(d){var dl=_wrap(ctx,'断语：'+d,mw);ctx.fillStyle=T.text;for(var j=0;j<dl.length;j++){ctx.fillText(dl[j],pad,y);y+=lh;}}
+}
+function drawPanCanvas(g,title){
+  var T=_theme(),scale=2;
+  var cw=150,ch=150,gap=6,pad=24;
+  var gw=cw*3+gap*2,gh=ch*3+gap*2,W=gw+pad*2;
+  var timeStr=(state.timeStr||'').trim();
+  var hh=32+(timeStr?24:0);
+  var qEl=document.getElementById('question'),dEl=document.getElementById('duanyu');
+  var q=qEl?qEl.value.trim():'',d=dEl?dEl.value.trim():'';
+  var foot=_measure(W,pad,q,d);
+  var tg=10;
+  var H=pad+hh+tg+gh+foot.gap+foot.height+(foot.height?12:0)+pad;
+  var cv=document.createElement('canvas');
+  cv.width=W*scale;cv.height=H*scale;
+  var ctx=cv.getContext('2d');ctx.scale(scale,scale);
+  ctx.fillStyle=T.bg;ctx.fillRect(0,0,W,H);
+  var cy=pad;
+  ctx.fillStyle=T.titleText;ctx.font='26px '+_CN;
+  ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText(title,W/2,cy);cy+=32;
+  if(timeStr){ctx.fillStyle=T.textSoft;ctx.font='17px '+_CN;ctx.fillText('时间：'+timeStr,W/2,cy);cy+=24;}
+  var oy=cy+tg;
+  for(var i=0;i<9;i++){
+    var k=GRID[i],r=Math.floor(i/3),c=i%3;
+    var x=pad+c*(cw+gap),y=oy+r*(ch+gap);
+    ctx.fillStyle=T.cellBg;ctx.strokeStyle=T.cellBorder;ctx.lineWidth=1;
+    _rr(ctx,x,y,cw,ch,6);ctx.fill();ctx.stroke();
+    ctx.fillStyle=T.muted;ctx.font='17px '+_CN;
+    ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(k,x+8,y+8);
+    ctx.fillStyle=T.nature;ctx.font='76px '+_CN;
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(NATURE[k],x+cw/2,y+ch/2);
+    var arr=g[k],order=[3,1,0,2],lh=30,th=4*lh;
+    var sy=y+ch/2-th/2+lh/2;
+    for(var j=0;j<order.length;j++)_dc(ctx,arr[order[j]],x+cw/2,sy+j*lh,23,T);
+  }
+  var by=oy+gh+foot.gap;
+  _footer(ctx,W,pad,by,q,d,T);
+  return cv;
+}
+function downloadCanvas(cv,filename){
+  var url=cv.toDataURL('image/png');
+  var a=document.createElement('a');
+  a.href=url;a.download=filename;
+  a.style.display='none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){try{document.body.removeChild(a);}catch(e){}},200);
+}
+function _ts(){return(state.timeStr||'').replace(/[:\s]/g,'').replace(/-/g,'');}
+document.getElementById('export-regular').addEventListener('click',function(e){
+  var btn=e.target.closest?e.target.closest('button'):null;
+  if(!btn)return;
+  var act=btn.getAttribute('data-act');
+  try{
+    if(act==='txt-xian'||act==='txt-hou'){
+      var isX=(act==='txt-xian');
+      var g=isX?state.xiantian:state.houtian;
+      if(!g){toast('请先起卦');return;}
+      var t=isX?'先天盘':'后天盘';
+      copyText(panToText(g,t)).then(function(ok){toast(ok?(t+'文字已复制'):'复制失败');});
+    }else if(act==='img-xian'||act==='img-hou'){
+      var isX2=(act==='img-xian');
+      var g2=isX2?state.xiantian:state.houtian;
+      if(!g2){toast('请先起卦');return;}
+      var t2=isX2?'先天盘':'后天盘';
+      downloadCanvas(drawPanCanvas(g2,t2),t2+'_'+_ts()+'.png');
+      toast(t2+'图片已导出');
+    }
+  }catch(err){toast('导出失败：'+err.message);}
+});
+document.getElementById('export-lifetime').addEventListener('click',function(){
+  try{
+    if(!state.lifetime){toast('请先排盘');return;}
+    var ts=(state.lifetimeTime||'').replace(/[:\s]/g,'').replace(/-/g,'');
+    downloadCanvas(drawLifetimeCanvas(state.lifetime),'终身盘_'+ts+'.png');
+    toast('终身盘图片已导出');
+  }catch(err){toast('导出失败：'+err.message);}
+});
+function drawLifetimeCanvas(data){
+  var T=_theme(),scale=2;
+  var cw=140,ch=140,gap=6,pad=24;
+  var gw=cw*4+gap*3,gh=ch*4+gap*3,W=gw+pad*2;
+  var timeStr=(state.lifetimeTime||'').trim();
+  var hh=32+(timeStr?24:0);
+  var qEl=document.getElementById('question'),dEl=document.getElementById('duanyu');
+  var q=qEl?qEl.value.trim():'',d=dEl?dEl.value.trim():'';
+  var foot=_measure(W,pad,q,d);
+  var tg=10;
+  var H=pad+hh+tg+gh+foot.gap+foot.height+(foot.height?12:0)+pad;
+  var cv=document.createElement('canvas');
+  cv.width=W*scale;cv.height=H*scale;
+  var ctx=cv.getContext('2d');ctx.scale(scale,scale);
+  ctx.fillStyle=T.bg;ctx.fillRect(0,0,W,H);
+  var cy=pad;
+  ctx.fillStyle=T.titleText;ctx.font='26px '+_CN;
+  ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillText('终身盘',W/2,cy);cy+=32;
+  if(timeStr){ctx.fillStyle=T.textSoft;ctx.font='17px '+_CN;ctx.fillText('时间：'+timeStr,W/2,cy);cy+=24;}
+  var oy=cy+tg;
+  var zhis=Object.keys(LT_POS);
+  for(var i=0;i<zhis.length;i++){
+    var z=zhis[i],pos=LT_POS[z];
+    var x=pad+(pos[1]-1)*(cw+gap),y=oy+(pos[0]-1)*(ch+gap);
+    ctx.fillStyle=T.cellBg;ctx.strokeStyle=T.cellBorder;ctx.lineWidth=1;
+    _rr(ctx,x,y,cw,ch,6);ctx.fill();ctx.stroke();
+    ctx.fillStyle=T.text;ctx.font='24px '+_CN;
+    ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(z,x+8,y+8);
+    _dc(ctx,data.cards.outer[z],x+cw/2,y+ch/2-24,22,T);
+    if(data.palaces[z]){ctx.fillStyle=T.palace;ctx.font='20px '+_CN;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(data.palaces[z],x+cw/2,y+ch/2+12);}
+    if(data.sha[z]){ctx.fillStyle=T.sha;ctx.font='20px '+_CN;ctx.fillText(data.sha[z],x+cw/2,y+ch/2+42);}
+  }
+  var cx=pad+(cw+gap),cyy=oy+(ch+gap);
+  var cw2=cw*2+gap,ch2=ch*2+gap;
+  ctx.fillStyle=T.centerBg;ctx.strokeStyle=T.centerBorder;
+  _rr(ctx,cx,cyy,cw2,ch2,6);ctx.fill();ctx.stroke();
+  var rowH=(ch2-14)/3;
+  ctx.fillStyle=T.cellBg;ctx.strokeStyle=T.centerInnerBorder;
+  _rr(ctx,cx+7,cyy+7,cw2-14,rowH-4,4);ctx.fill();ctx.stroke();
+  _dc(ctx,data.cards.ming,cx+cw2/2,cyy+7+(rowH-4)/2,22,T);
+  ctx.fillStyle=T.tag;ctx.font='15px '+_CN;ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('命宫',cx+12,cyy+14);
+  var gmy=cyy+7+rowH,gw2=(cw2-14-3*4)/4;
+  var gmhg=[['根',data.cards.gen],['苗',data.cards.miao],['花',data.cards.hua],['果',data.cards.guo]];
+  for(var m=0;m<4;m++){
+    var gx=cx+7+m*(gw2+4);
+    ctx.fillStyle=T.cellBg;ctx.strokeStyle=T.centerInnerBorder;
+    _rr(ctx,gx,gmy,gw2,rowH-4,4);ctx.fill();ctx.stroke();
+    var vSize=Math.min(18,(rowH-12)/4.2);if(vSize<12)vSize=12;
+    _dcv(ctx,gmhg[m][1],gx+gw2/2,gmy+(rowH-4)/2+2,vSize,T);
+    ctx.fillStyle=T.tag;ctx.font='13px '+_CN;ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText(gmhg[m][0],gx+4,gmy+4);
+  }
+  var sy=cyy+7+rowH*2;
+  ctx.fillStyle=T.cellBg;ctx.strokeStyle=T.centerInnerBorder;
+  _rr(ctx,cx+7,sy,cw2-14,rowH-4,4);ctx.fill();ctx.stroke();
+  _dc(ctx,data.cards.shen,cx+cw2/2,sy+(rowH-4)/2,22,T);
+  ctx.fillStyle=T.tag;ctx.font='15px '+_CN;ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('身宫',cx+12,sy+8);
+  var by=oy+gh+foot.gap;
+  _footer(ctx,W,pad,by,q,d,T);
+  return cv;
+}
+(function init(){
+  var hs=document.getElementById('lt-hour');
+  var sx=document.getElementById('lt-shengxiao');
+  if(sx){['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'].forEach(function(z){var o=document.createElement('option');o.value=z;o.textContent=z; sx.appendChild(o);});sx.value='子';}
+  var mo=document.getElementById('lt-month');
+  if(mo){for(var i=1;i<=12;i++){var o=document.createElement('option');o.value=i;o.textContent=i+'月';mo.appendChild(o);}mo.value=1;}
+  var dy=document.getElementById('lt-day');
+  if(dy){for(var j=1;j<=30;j++){var o2=document.createElement('option');o2.value=j;o2.textContent=j+'日';dy.appendChild(o2);}dy.value=1;}
+  var td=new Date();
+  var ly=document.getElementById('lt-year');
+  if(ly)ly.value=td.getFullYear();
+  var pt=document.getElementById('pan-time');
+  if(pt)pt.value=toLocalInputValue(td);
+})();
+})();
+<\/script>
+</body>
+</html>
+</script>
+
+<script>
+var MODULES = {
+northeast:{title:'东北派',subtitle:'理气妙论',sections:[
+{id:'ne-1',title:'东北响马卦的选牌与识牌',html:'<h2>学习目标</h2><p>熟记东北九星牌名、吉凶、牌象、神煞，建立牌感；了解不同地区卦牌的差异，避免买错牌。</p><h2>不同地区卦牌的选取</h2><p>东北牌和西北牌使用的纸牌虽然一脉相承，但由于地方文化的差异，牌面上的画面和信息发生了一些变化。比如西北地区的刘唐、笃驴，被白花代替；二棍、阮小二、二贡被称为二条。因此购买卦牌时，应该搜索<strong>水浒牌、小牌、老妈妈牌</strong>这类字眼，而非「毛鱼牌」「蒙古牌」之类。</p><h2>牌组构成</h2><p>东北响马卦用牌共十八张，分为九组，每组两张：</p><ul><li>一并两张，二并两张，三并两张，四并两张，五并两张</li><li>二条两张，白花两张，八万两张，小鱼两张</li></ul><p>牌为九星，为天门。九星牌名与宫位对应如下：</p><table><tr><th>宫</th><th>牌名</th><th>星名/牌象</th><th>吉凶</th><th>核心象</th></tr><tr><td>乾</td><td>八万</td><td>福神</td><td>吉</td><td>男贵人、官财、神佛</td></tr><tr><td>坤</td><td>二条</td><td>腾蛇</td><td>凶</td><td>是非、坎坷、吊客</td></tr><tr><td>艮</td><td>一并</td><td>勾陈</td><td>凶</td><td>小人、阻隔、官讼</td></tr><tr><td>巽</td><td>二并</td><td>病符</td><td>凶</td><td>疾病、犹豫、香炉</td></tr><tr><td>震</td><td>三并</td><td>驿马</td><td>吉</td><td>信息、出行、生气</td></tr><tr><td>兑</td><td>四并</td><td>白虎</td><td>凶</td><td>伤亡、口舌、官司</td></tr><tr><td>中</td><td>五并</td><td>六合</td><td>无吉无凶</td><td>本人、亲朋、五路财神</td></tr><tr><td>离</td><td>白花</td><td>朱雀</td><td>吉</td><td>女贵人、桃花、文书</td></tr><tr><td>坎</td><td>小鱼</td><td>青龙</td><td>吉</td><td>贵人、小孩、流动财</td></tr></table><div class="callout"><div class="callout-title">术语纠正</div>东北篇原书杂神门表格中所谓「六神」列，实际混入了「福神、病符、驿马、六合」等，并非六神。<strong>六神只有六个：青龙、白虎、朱雀、玄武、腾蛇、勾陈</strong>，且六神主要用于西北牌。东北篇应改称「星名」或「牌象」。</div><h2>九星逐牌详解</h2><h3>青龙小鱼（坎水，吉）</h3><p>青龙坎水小吉星，若临中堂万事顺。暗精灵活不得罪，天乙贵人女子助。</p><ul><li>牌头：猪鼻子；牌象：小孩，鱼</li><li>青龙坐堂：万事顺遂</li><li>占性格：暗精、头脑灵活、圆滑不得罪人</li><li>占终身：命占贵人，得子女力，男占青龙为童子</li><li>万物类象：顺、童子、贵人、医生、发动、婴灵、男孩、旱地得雨、流动财、生育系统、女性乳房、泌尿、血液、酒食</li><li>牌门神煞：天乙贵人，青龙，迷惑煞，胎神</li></ul><h3>腾蛇二条（坤土，凶）</h3><p>腾蛇坤土空亡星，口舌吊客惊恐灾。混乱浮躁心眼多，自刑驳婚犯阴星。</p><ul><li>牌头：刺刀；牌象：无</li><li>腾蛇坐堂：多是非灾厄</li><li>占性格：心眼多、不实在、倒错、扭曲、阴险、三心二意、混乱</li><li>占终身：命运坎坷，犯阴星，易有虚病、精神病，爱幻想，占驳婚煞，易受骗，聪明反被聪明误，少去河边、暗处，少看出殡，抑郁，有时候总想哭，腿不得劲</li><li>万物类象：坎坷，不顺，牵绊，蛇，肠子，脾胃，坑，吊客，偏财，车，路</li><li>牌门神煞：二条藏勾绞煞，腾蛇，吊客，小耗，地刑，地网，太阴，败气，丧车，天目</li></ul><h3>朱雀白花（离火，吉）</h3><p>朱雀离火速喜神，女贵网络花姐腿。乐观气急文采逸，婚姻功名走失神。</p><ul><li>牌头：火眼金睛；牌象：女子</li><li>朱雀坐堂：红红火火</li><li>占性格：好说，外向。乐观开朗，阳光，脾气急，聪明，有文采，很多都有高文凭</li><li>占终身：男人会有好的妻子，桃花旺，有女贵人</li><li>万物类象：花姐，心脑系统，网络之财，教师，女人，学业，最大的信，失物，桃花，婚姻</li><li>牌门神煞：红花藏朱雀，红鸾，桃花，亡神，败气</li></ul><h3>勾陈一并（艮土，凶）</h3><p>勾陈艮土山留连，小人争讼入官庭。死板戒备不变通，兵马靠山阻隔宅。</p><ul><li>牌头：箍刀，钩子；牌象：官人，官兵</li><li>勾陈坐堂：小人拦路</li><li>占性格：固执，倔，孤独，戒备心强，死板，不懂灵活变通</li><li>占终身：占劫财，犯小人，犯天罗地网怨亲债主，家庭不和，夫妻易分居，适合认干亲解灾</li><li>万物类象：军人，兵马，小人，警察，手，衣服，皮肤，脾胃，争斗之财，官方之财，阻隔，冤亲债主</li><li>牌门神煞：一并藏勾陈，官符，人刑，孤星，烂桃花，官人，劫煞，将星</li></ul><h3>病符二并（巽木，凶）</h3><p>病符眼目翼木缺，事情不定多分歧。犹豫闷气没主见，迷惑医卜牙人商。</p><ul><li>牌头：月亮；牌象：眼睛</li><li>病符坐堂：事情不定，多出岔头</li><li>占性格：没主见，办事易犹豫，喜欢生闷气，经常迷茫，会渴望依赖别人</li><li>占终身：最好当医生（不开刀的那种），如中医，能解灾，或干算卦会有发展。身体不好，易有慢性病，家中有供神</li><li>万物类象：香炉碗，算卦，疾病生气，云雾，肝胆眼，贸易，中介</li><li>牌门神煞：二并藏病符，六害，小耗，月厌，华盖，毛头煞</li></ul><h3>驿马三并（震木，吉）</h3><p>驿马雷木震消息，生气外地出行官。上进主见兄弟交，庙兄官府马面来。</p><ul><li>牌头：被动的眼睛；牌象：无</li><li>驿马坐堂：事有生气</li><li>占性格：闲不住，总想动，性子直，有领导气质，有上进心，有主见，有魄力</li><li>占终身：祖上是外地人，家中出政府官员，自己也容易是体制内，也有可能开大车、跑销售、经常出差，娶外地妻子，女命可能会嫁到外地，适合离乡发展</li><li>万物类象：为信，一切信息的用神，庙，政府部门，阴曹地府，亲朋好友，小贵人，肝，朋友</li><li>牌门神煞：三并藏驿马，金舆，攀鞍，阳赶，龙德，盗神</li></ul><h3>白虎四并（兑金，凶）</h3><p>白虎事金兑赤口，伤亡疾病四废神。自负暴躁只顺受，驳婚空车口舌官。</p><ul><li>牌头：墓碑，牌位，挡；牌象：无</li><li>白虎坐堂：不亡就伤</li><li>占性格：自负自大，脾气暴，听不了不爱听的，自以为是，喜欢被人捧着</li><li>占终身：占四废星，白虎关，办事有头无尾，驳婚煞，家中易出横死之人，有出马仙的缘分，身上有刀口</li><li>万物类象：为事情本身的用神，一切没法归类取用的都看四并，堂单，状书，空亡，心空，车，车前马后，口舌，官门，官司，定门窗急猫，呼吸系统</li><li>牌门神煞：四并藏白虎关，四杀星，十恶大败，丧门，天刑，天罗，牢狱关，官门，灾煞，天空，大耗，破碎，天耳</li></ul><h3>六合五并（中土，无吉无凶，随事而动）</h3><p>六合中黄主身交，华盖五福伏位财。诚实守信不定命，脾胃田土车宅钱。</p><ul><li>牌头：上下两个轮子；牌象：本人</li><li>六合坐堂：合住了，六合合财则吉，合灾则凶，化五鬼星，或吉凶皆有</li><li>占性格：五并寄中为伏位星，土主信，诚实守信，中宫为太极，太极生万物，有无限可能</li><li>占终身：命带五路人马，五方财神，五福星，一生无病无灾，有福可享，有出马缘分</li><li>万物类象：五路人马，五方财神，本人，自身，占住了的意思，脾胃，车，财，土地财</li><li>牌门神煞：五并藏六合，元神，五鬼</li></ul><h3>福神八万（乾金，吉）</h3><p>福神乾金同大安，元亨利贞富贵夫。上进沉稳有韧耐，贵人财首尊神佛。</p><ul><li>牌头：房顶，堆；牌象：男人，长辈</li><li>福神坐堂：福气临门，元亨利贞</li><li>占性格：天行健，君子以自强不息，有上进心，追求完美，性格沉稳，有耐性和韧性</li><li>占终身：命里有官有财，不是个官也是个领导，女占会有好的丈夫，能得年长之人帮助，有神佛缘分</li><li>万物类象：财，官，男人，男贵人，头，胃，大肠，呼吸系统，神佛，官员</li><li>牌门神煞：八万藏天喜，福星，禄神，德神，天德，太阳</li></ul><h2>八门所属</h2><ul><li><strong>开门</strong>（乾金）：开始、公开、出行、升迁。主始也。</li><li><strong>休门</strong>（坎水）：休养、政府、稳定。从容、稳定、闲逸。</li><li><strong>生门</strong>（艮土）：生产、房地产、学习。财名双利。</li><li><strong>伤门</strong>（震木）：伤病、车、捕盗。公安捕盗、讨债。</li><li><strong>杜门</strong>（巽木）：隐藏、保密、房屋桥梁。消息不灵、保密。</li><li><strong>景门</strong>（离火）：宣传、信息、旅游。多主血光、口舌。</li><li><strong>死门</strong>（坤土）：丧事、固定、神秘。凶门。</li><li><strong>惊门</strong>（兑金）：官非、声音、诉讼。惊恐、奇怪。</li></ul><h2>九宫所属</h2><h3>乾（西北金，九月十月，数四九六一）</h3><p>乾为天门高且尊，父冷强劲势无伦，升进登高行广阔，远谋大业启乾坤。</p><h3>坤（西南土，六月七月，数五十二八）</h3><p>坤为地户母宅田，平稳昏暗心内安，家乡有惊终无险，田产安稳福自全。</p><h3>坎（北水，十一月，数一六）</h3><p>坎为河流陷溺深，桃花聚路风波侵，冲财病扰源流汇，慎行避陷莫沾襟。</p><h3>艮（东北土，正月十二月，数五十八七）</h3><p>艮为高山止不前，阻碍需腿跨登巅，靠山若遇棍和顺，登顶终成病莫延。</p><h3>震（东木，二月，数四九三）</h3><p>震为雷门吉凶移，突发外出快速期，动如雷震行无住，好事坏事变化奇。</p><h3>巽（东南木，三月四月，数三八四五）</h3><p>巽为门户顺风传，闭塞关隔近家园，消息登门知近事，风顺归心福自绵。</p><h3>离（南火，五月，数二七九三）</h3><p>离为火焰急文书，家宅争纷事始初，烧饭不凶压则吉，占病逢之费蹲。</p><h3>兑（西金，八月，数四九七二）</h3><p>兑为缺陷冷近寒，自身问题病生端，坎坷多艰身冷遇，缺伤明辨莫求全。</p><h3>中（土，数五十）</h3><p>中为宅库空身位，用神入中事未扬，终身正格所持物，空亡占好可禳灾。</p><div class="callout"><div class="callout-title">练习建议</div>默写九星吉凶、牌头牌象、神煞；给每张牌各写 10 个类象。</div>'},
+{id:'ne-2',title:'东北响马卦的起卦与行持',html:'<h2>学习目标</h2><p>能独立起卦、摆牌、配对、开门。</p><h2>起卦准备</h2><ul><li>静心、净手、问生辰。</li><li>诵卦咒：「天清地灵，卦神有灵，我今叩问，速显通灵。明彰报应，诸事分明，我布九宫，人间万事，与我速知。」</li><li>吹三口气，洗牌三轮。</li></ul><h2>摆牌规则</h2><ol><li>将第一张牌放进中宫。</li><li>之后从离卦开始，<strong>逆时针</strong>摆两轮。</li><li>周围八门（周围一圈后天八卦）每一个门上有两张牌。</li><li>最后在中宫放最后一张牌。</li><li>开牌时按起卦顺序翻开，必须左右翻，不能上下翻。</li></ol><h2>配对与开门</h2><ul><li>从离宫开始，逆时针将周围八张牌打开。</li><li>让福主从中宫左右两张扣着的牌里随机选一张翻开，跟周围八组牌找对，直到找回中宫。</li><li>能配对上周围几次就是开了几门。</li><li>如果中宫两张牌相同，配不出去，就是一门卦。</li></ul><h2>特殊格局</h2><table><tr><th>格局</th><th>条件</th><th>含义</th></tr><tr><td>卦眼不开</td><td>五门以上未开</td><td>磁场紊乱，事不稳；问人主在医院、火葬场、监狱等磁场不稳定之地，或心乱如麻</td></tr><tr><td>一门独发</td><td>中宫两张相同，外面都配不上</td><td>事情动不起来，凶兆，具体看中宫是什么牌</td></tr><tr><td>缺牌</td><td>发现少牌</td><td>丢三落四，缺什么牌论缺什么；缺太多直接以条件不足、事情不成论</td></tr><tr><td>飞牌</td><td>风刮脱手</td><td>矛盾、岔子；吉牌尚可缓解，凶牌则主凶</td></tr><tr><td>风吹局散</td><td>整局吹散</td><td>凡占不成</td></tr></table>'},
+{id:'ne-3',title:'东北响马卦的整体结构',html:'<h2>学习目标</h2><p>建立中宫、头脚、四柱、四盘的核心框架。</p><h2>卦形总论</h2><p>中宫卦眼坐堂星，无极生太极。升高降坎分始终，太极生两仪。</p><p>太极（中宫，又名中堂）分两仪（头顶脚踩，清气上升于天在离位，浊气下降于地在坎位），头顶又称天覆，脚踩又称地载。</p><h2>根苗花果赶星官，两仪化四象</h2><p>阴中自分阴阳，阳中有阴阳。由于阴阳的无限可分性，又从两仪中分出阴阳来（即四象，在响马卦中四象即四柱年月日时）：</p><ul><li><strong>年宫</strong>为少阳木位，带生发之气，主根。</li><li><strong>月宫</strong>为老阳火位，带茂盛之气，主苗。</li><li><strong>日宫</strong>为少阴金位，带肃杀之气，主花。</li><li><strong>时宫</strong>为老阴水位，带收藏之气，主果。</li></ul><p>万事万物都由土而形成，最后都归于土，所以土是承载金木水火的物质，故土位于中宫太极之位，无土则不成四象。</p><h2>天地人神皆立定，四象分八卦</h2><ul><li>天盘：九星卦牌配对后为天盘。</li><li>地盘：九宫为地盘。</li><li>人盘：八门为人盘。</li><li>神盘：中宫为神盘。</li></ul><p>看完了四柱看外盘八方为八卦，于盘中辩证身交互并和用神。</p><h2>流星赶月</h2><p>一九七二十五，三三四一追四九。五七六十五相连，离宫赶月从此始。</p><p>赶月节点：离宫所持，一岁，九岁，十七，二十五，三十三，四十一，四十九，五十七，六十五。流星赶月定根法不入中宫，只数人盘八门。法从离宫开始，无论男女逆数八宫：离一，巽二，震三，艮四，直到坤八，离九，随数目叠加，换数需重留一位。假令虚岁五十六，流行赶月节点有五十七值离，顺走一位退回五十六，即是坤宫，因此虚岁五十六，流年值坤宫。</p><h2>论中宫正理</h2><p>中宫卦眼坐堂名，无极未判力最微。万象起于阴阳判，用神入此不发行。事发未萌藏混沌，吉凶未露待分明。先天一气包寰宇，莫向尘中问败成。</p><p>中宫又叫卦眼，坐堂，乃无极所生太极，为万象之起点。太极阴阳未分，故而用神入中，事情不发。中宫是事情的总体状态，事情本身。</p><h2>论中宫功用</h2><p>中宫本是神盘尊，总持事体统乾坤。来意终身看大格，一生主体此中存。核心所向即真宰，可饰他牌象类门。机参中宫微妙法，方知万象出根源。</p><p>中宫又是神盘，所以在论终身来意的时候代表一生的主体格局、来意的核心。同时，中宫的内容也可以修饰其他牌的信息，辅助取象。</p><h2>论头顶脚踩</h2><p>封头卦脚号覆载，头顶前半事后足。凶临盖头初不利，截脚祸逢后半。中官所持内情真，头为前路脚根深。坎中离观当下态，吉凶始未自分明。</p><p>头顶脚踩又称卦头卦脚、天覆地载。头顶主事情前半段，脚踩主后半段。头顶凶为盖头，脚踩凶为截脚。中宫、头顶、脚踩合看当前状态，头顶为前路，脚踩为根底，中宫为身上所持之事和内情。</p><h2>论四柱理气</h2><p>四柱立论运动机，根苗花果两仪分。看事过程凭此断，中宫头脚助参稽。用神对宫走官参，本人官位转推移。吉凶合算方为要，始末全彰莫置疑。</p><p>响马卦的独特之处在于以四柱对应根苗花果，这是以两仪分四象衍生出的独特理论。看事情过程以四柱为准，参考中宫、头顶、脚踩。最后的吉凶需要配合用神和身父的对宫走宫合算。</p>'},
+{id:'ne-4',title:'东北响马卦的基本占断思路',html:'<h2>学习目标</h2><p>掌握用神、身交、走官转官、层次消元、五行生克与墓库。</p><h2>凡占总诀</h2><p>凡占先令选中堂，二牌择一配成双。配毕定位身与用，层层叠加莫匆忙。中宫起手渐次加，消除压制辨尊卑。众寡相胜层次定，得用之牌吉凶槎。细节须看得用者，头脚本末岁时花。中宫三并参消息，铁口直断绝尘沙。</p><p>凡占，先让求测人从中宫两张牌二选一开始配对。配对完了，先根据事情定位五并和用神，然后从中宫开始，逐层叠加，进行消除、层次压制、众寡压制。最后得用的牌就是吉凶，论细节看消除过程中得用的牌，按照头顶脚踩、年月日时的顺序作为过程，以中宫配合三并补充细节。</p><h2>论卦眼不开</h2><p>五门未开卦眼闭，磁场紊乱事难济。问主人心乱如麻，身在医院狱火际。</p><h2>论一门独发</h2><p>中宫双牌同一般，外面配对尽无端。此名一门卦中定，事滞难动凶兆安。</p><h2>论缺牌</h2><p>断卦忽觉缺牌张，事主失漏少提防。欲知何物成遗漏，但看所缺牌何主。</p><h2>论飞牌</h2><p>风刮脱手牌飞空，此是飞牌矛盾冲。吉缓凶临须仔细，事出曲折在当中。</p><h2>论风吹局散</h2><p>整局吹散乱纷纷，事亦消解散为尘。凡占百般皆不遂，莫向虚中问假真。</p><h2>论用神</h2><p>看什么事，取什么为用神：</p><ul><li>看财官干贵取八万</li><li>看感情男取红花，女取八万</li><li>看官司鬼桌车灾以及任何不好归类的事情取四并</li><li>看学业功名走失取红花</li><li>看病、坏消息真假取二并</li><li>看合作出行信息取三并</li><li>看饮食小儿事业升迁遗失物品取小鱼</li><li>看惊恐纠缠口舌小人阳宅取二条</li><li>看争斗小人阴宅官方取一并</li></ul><p>其余的事情以此类推，需要灵活通变，随事理取用。</p><h2>论身交</h2><p>五并一身主所宗，用神事主吉凶逢。走官转官参其变，身用相须莫独从。</p><p>五并就是一身所主，用交是主事之神。看走官或者转官出来什么牌论吉凶，五并需要搭配用神一块论吉凶。</p><h2>论走官转官</h2><p>身用门闭走官寻，锁定所走牌先临。离官逆走逢体卦，后通用官断果因。体修饰兮用定局，此法分明指下耕。</p><p>如果身交用身牌门不开，则走官碰牌。先锁定所走的牌，然后从离官开始逆走，先碰到的所走之牌所配的牌为体官，后碰到的为用官。以用官论结果，以体官论修饰细节。</p><p>牌门若配转官行，对官直断吉凶明。用带五并须留意，六合论之身不争。五并对官同用论，本牌吉凶自分清。</p><p>如果牌门配对了，则转官碰牌，以对宫直接论吉凶。需要注意的是，如果用神的转官带五并，那么此时用神转官的五并以六合论，不以身体论；而五并对宫的用神，直接以用神牌本身的吉凶论。</p><h2>论事主消息</h2><p>四并牌性最殊奇，万般无类可归之。占问来意凭转官，杂疑难断此中推。</p><p>四并这张牌很特殊，因为可以代表任意一件事情。所以在取用的时候，如果遇到不能归类的，可以去看四并。占来意，可以用四并转官。</p><p>三并消息号通神，细断用神宜共陈。神盘指向三并合，铁口直断不须询。若得两盘同兆吉，吉凶立判绝疑尘。但将此法存心印，百事分明指下真。</p><p>三并这张牌也很特殊，因为可以代表消息。因此在断某个用神的细节的时候，除了用中官神盘去断这个用神带什么事情，还可以参考三并补充信息。如果三并和中官指向一致，基本就可以铁口直断了。</p><h2>论发动</h2><p>事相关联牌自兴，中堂头脚岁时登。身父发用皆为动，莫信临神必显能。</p><p>任何跟事情有关的牌都会发动，只要是临在中堂、头顶脚踩、年月日时、身父（五并）发用的牌都是发动之神。需要注意的是，发动只代表牌跟占事产生关联，发动的牌不一定会发挥作用。</p><h2>论得用</h2><p>众能胜寡尊胜卑，层次高低首当推。高者优先得运用，数多亦占上风时。得用随占常迁变，临机活法莫迟疑。</p><p>按照层次论来，众胜寡，尊胜卑，先看层次，再看数量。层次更高的会优先得用，数量更多的会优先得用。得用会随着看卦的时候发生变化。</p><h2>论层次</h2><p>中官最下头脚次，四柱之上用身尊。层次分明尊胜卑，高先得用是根源。</p><p>中官的层次低于头顶脚踩，头顶脚踩的层次低于四柱，四柱的层次低于用神与身爻。</p><h2>论众寡</h2><p>中加头脚胜四柱，头脚加四胜用身。中官加四亦能胜，中间无杂力方纯。假令二四门不开，但从压顶辩凶吉。若逢层次有他碍，须得消除或同辰。</p><p>中官和头顶脚踩的力量加起来大于四柱，头顶脚踩的力量加上四柱、或中官的力量加上四柱大于用神和身爻。力量的相加需要两个层次之间不能有额外力量参与。比如中官的力量如果想要跟四柱产生关系，中间的头顶脚踩要么被消除，要么吉凶跟中官四柱一致。注：如果论两仪四象的时候有没配对的牌，则以上面压着的牌为吉凶之主。</p><h2>论消元</h2><p>吉凶同现一层中，两相抵消力自穷。头脚吉凶若互异，此层消除莫能雄。四柱相邻分吉凶，逢异则消例相同。吉吉凶吉累加算，末对消除余吉终。用神身交亦相灭，得用变化理斯通。</p><p>凡是出现吉凶两张牌同时出现在一个层次的时候，这两张牌就会被消除。头顶脚踩如果吉凶不同，这个层次就会被消除。四柱如果相邻的两个牌吉凶不同，这个层次就会被消除。比如吉吉凶吉，用加法，三加一减，整体为吉。最后一对日时的吉凶消了，用神的吉凶和身交的吉凶也会相互消除。</p><h2>五行生克辅助判断（新增）</h2><div class="callout"><div class="callout-title">重要</div>东北响马卦不看生克只是便捷玩法。实际在考虑四柱、用神、五并的时候，可以参考牌和宫位的五行生克。如果牌被克，那么牌就发挥不出作用。比如三并木本身是驿马为好，如果落到了乾兑宫，木就被金克，三并发挥不了作用。吉牌被克、凶牌被克，都无法发挥作用。<strong>但是需要注意的是，在看太极和两仪的时候不需要考虑生克。</strong></div><h2>墓库（新增）</h2><ul><li>水土墓在<strong>巽</strong></li><li>火墓在<strong>乾</strong></li><li>金墓在<strong>艮</strong></li><li>木墓在<strong>坤</strong></li></ul><p>如白花在乾，火入墓库。</p><h2>克应总诀</h2><p>占事应期离宫起，问近推近远从远。一年内事月为度，一月内事号当先。一日内事子时始，一时三刻细推近。流年若定推流月，流月起日理同前。流日起时依次第，周流往复法中传。</p><p>占事应期以离宫起，问近起近，问远起远。如占一年内事，以离宫起一月；一月内事，以离宫起一号；一天内事，以离宫起子时，一时分三刻。占流月流日流时，以流年为起点，流年起流月，流月起流日，流日起流时。</p>'},
+{id:'ne-5',title:'分类占精讲',html:'<h2>学习目标</h2><p>分类实战，掌握求财、桃花、学业、亡失、宅墓、流运等分类占法。</p><h2>求财歌诀</h2><p>占财八万用为尊，入中绝财外守门。空亡无吉亦无凶，应期八万五并论。三并白花信来报，小鱼流动一并官。二条偏财四横财，此法精微莫误传。</p><p><strong>现代文：</strong>占财以八万为用神。八万入中宫，绝财；八万在外，有财星继续分析（空亡卦无吉无凶）。应期：八万、五并时得财或不得财；三并白花时有信；小鱼坐中流动财；一并坐中官方财；二条偏财；四并横财。</p><h2>桃花歌诀</h2><p>桃花感情红花主，女问男时八万参。红花为眼媒婆位，克应花绽婚烟酣。动则桃花情发展，不成三并白花谈。中官生克定身位，顺从受克委屈含。受生得护我生疲，我克胁迫比和安。八万坐中责任心，小鱼童心酒肉欢。二并犹豫无主见，四并暴躁性如炎。</p><p><strong>现代文：</strong>占桃花、感情婚姻以红花为用神，有时以八万为用神（这是女问男的情况），媒婆看红花（眼）。应期：红花时成婚，动桃花，感情有发展；不成时，三并白花分手，有回复。中官与本身生克，断本身在这件事的地位：受克顺从屈服，也主受欺负、受委屈；受生顺从求测人，得到关照爱护；我生主动付出，呵护关心疲惫，没有回报；我克控制事态发展，胁迫威胁；比和互相扶持、帮助、尊重。八万坐中，责任心强，沉稳，执着，上进；小鱼坐中有童心，好玩，男人能吃肉能喝酒；二并坐中，犹犹豫豫，没有主见，依赖性强；四并，脾气暴躁。</p><h2>学业歌诀</h2><p>凡占学业用红花，朱雀走转依此循。择时当用红与鱼，文昌塔位雀处安。</p><p><strong>现代文：</strong>以红花为用神（朱雀星），红花又为文昌塔，红花方向为文昌塔方向（家中或孩子卧室），摆放时间以红花和小鱼推出应期为准。</p><h3>功名占例</h3><p>演讲顺利问何如，病符坐堂福顶居。脚踩蛇龙左右白，乾六巽红勾陈坤。艮驿雀用转六合，五并身官转雀初。推移流年蛇月福，日驿时虎四象储。</p><p><strong>现代文：</strong>假令占演讲是否顺利，病符坐堂，头顶福神，脚踩腾蛇，左青右白，乾六巽红，坤一艮马。演讲乃言语之占，以朱雀为用，转宫出六合，以五并为身，转宫出朱雀。推移流运，年占蛇，月占福，日占驿，时坐虎，四象备矣。</p><p>年腾蛇 月福神 日驿马 时白虎</p><p>朱雀 福神 勾陈青龙 病符 白虎驿马 腾蛇 六合</p><p>首观中官病符单，不消发动先用权。次层头脚吉凶异，彼此消除不得牵。病符依旧为得用，三层四柱岁时全。年凶月吉日时异，四柱消除复如前。病符仍占得用位，末层身用转官妍。吉神不消层次胜，终断为吉果昭然。年至蛇兮月值福，年月同坎象中伏。开首腾蛇主虚惊，根基病符因坎促。发挥失常惊作巢，终吉无妨此间录。</p><p><strong>现代文：</strong>看卦先看中堂立定主体。第一层，病符入中发动，不消除，病符得用。第二层，八万二条与之前的病符一起发动，头顶脚踩一个吉、一个凶，消除干净，不得用，所以病符仍然得用。第三层，年月日时、头顶脚踩、坐堂病符一起发用，年凶月吉，日吉时凶，四柱消除干净，不得用，所以病符仍然得用。最后一层，中堂、头顶脚踩、四柱、用神和身交一块发用，其中最高层用转官吉，身转官吉，又不消除，用神自身层次比中堂病符高，因此用神身交吉神得用，故结果最后为吉。若论细节，年见蛇，月见福，年月同坎，前面开头有一个凶神腾蛇主虚惊，故而开场有虚惊尔；腾蛇临坎，坎为根基，中宫病符，因根基不佳而发挥失常尔。</p><h2>亡失歌诀</h2><p>失物走失两般分，人畜红花物看鱼。方向落宫寻其位，对宫环境细推摹。</p><p><strong>现代文：</strong>占失物、走失、动物、人物看红花；遗失物品看小鱼。方向看用神落宫；环境看转宫。</p><h2>宅墓歌诀</h2><p>阳宅八万顶为尊，阴宅四并墓碑存。用神落宫并转位，坐向分明此中论。对宫应事兼外景，二条坑陷冷阴昏。中官屋内状为凭，对官屋外象相承。克官见则应事显，无克影响尚微轻。对官最重中次之，生克又次莫混争。风水不看四柱法，八门九宫一掌擎。</p><p><strong>现代文：</strong>用神以八万为阳宅（屋顶），四并为阴宅（墓碑）。用神的落宫和对宫是坐向。用神对宫代表应事和方位上的外景，如对宫二条为坑、凹陷、阴冷、有东西缠绕。占阳宅中宫代表屋里有什么、里面的状态，对宫是屋外的状态。外面一圈也可以结合牌和宫的生克，克宫的体现对应的问题，不克也可以看，但是影响不大。用神对宫大于中宫大于生克。风水卦不看四柱。</p><h2>流运歌诀</h2><p>流运歌诀流年起法出生月，月上起日时上结。无时离宫起虚岁，岁上落牌运数决。流月看牌落何宫，宫藏地支月应彻。流年起月月起日，日应时中落宫列。岁上落牌主全年，吉凶事件象中诠。若逢四并赤口破，不存钱财祸相缠。推流莫用一盘老，用完各宫重起占。周流往复方为妙，一岁一卦法自然。</p><p><strong>现代文：</strong>法以出生月起出生日，出生日起出生时辰，时辰上起虚岁；不知道出生时间离起虚岁，这个就是流年。怎么看流运在哪月应呢？就看这个牌落在哪个宫上，看那个宫的地支。流年起流月，流月起流日，断流月应某日、流日应某时都是看落宫。这个推出来的岁数上落的牌，既代表这个人的一年运势，也代表这个人今年会发生什么事，比如说今年流年占四并，那就代表这个人今年四并嘛，赤口，破财，不存钱。推流最好不要用一个盘一直看，每次用完了所有宫都要再次洗牌重新起卦变局。</p><h2>神煞歌诀（移入识牌章）</h2><p>四并白虎丧门煞，天刑牢狱官门枷。十恶大败天罗网，灾煞大耗碎天耳。二条勾绞吊客侵，地刑地网败太阴。丧车小耗皆凶煞，勾陈阴气绕身沉。二并病符六害星，小耗天目暗里行。三并驿马天金舆，动中求吉略通亨。五并六合与华盖，元神五鬼伴身灵。八万天喜福禄神，德星相助利功名。红花朱雀红鸾动，桃花亡神亦有刑。一并玄武官符至，人刑孤星劫煞并。烂桃官人兼将星，小鱼天乙青龙宁。迷惑之性须详辨，吉凶参半在心明。</p>'},
+{id:'ne-6',title:'进阶资料·理气内秘',html:'<h2>学习目标</h2><p>进入东北派进阶理气，掌握九星神项诀、流年九星、追官赶官、牌头朝向。</p><h2>起卦咒</h2><p>天清地灵，卦神有灵，我今叩问，速显通灵，明彰报应，诸事分明，我布九宫，人间万事，与我速知。等心平气和后让缘主洗净手后洗牌三次后方可摆牌。</p><h2>起卦方式</h2><p>将第一张牌放入中宫，之后从离卦开始顺时针摆两圈牌（注：此为西北派起法，东北派多作逆时针，以师传为准）。摆完外八门后在中宫放最后一张牌。让卦主从中宫的左右两张牌中选择一张来与局中其他的牌找对，只要牌的组合找回中宫，剩下的牌不管配没配齐都算作卦局起完，开始解卦。卦局中，配了几对又叫开了几门。</p><h2>开门的应用</h2><p>断任何事，只要有五门及以上没开，均主磁场紊乱。问事主不稳定，问人主在医院、火葬场、监狱等磁场不稳定之地，或心乱如麻。</p><h2>九星取用及类象</h2><table><tr><th>宫</th><th>牌名</th><th>核心象</th><th>神项</th></tr><tr><td>乾</td><td>八万</td><td>男贵人，官财，官人</td><td>道门</td></tr><tr><td>坤</td><td>二条</td><td>腾蛇，是非，坎坷</td><td>腾蛇外五路</td></tr><tr><td>艮</td><td>一并</td><td>小人，阻隔</td><td>兵马护法</td></tr><tr><td>巽</td><td>二并</td><td>病符，玄武，暧昧不明之事</td><td>香根</td></tr><tr><td>震</td><td>三并</td><td>信息，启动，发动</td><td>地府</td></tr><tr><td>兑</td><td>四并</td><td>白虎，是非，口舌</td><td>保家仙庙门</td></tr><tr><td>中</td><td>五并</td><td>本人</td><td>五路五鬼</td></tr><tr><td>离</td><td>红花（白花）</td><td>女贵人，朱雀，学业</td><td>花姐 佛门</td></tr><tr><td>坎</td><td>小鱼</td><td>男女贵人，青龙，顺，小孩</td><td>童子</td></tr></table><p>东北牌的取象中最重要的就是牌象。如白花为女性人物形象，所以主女贵人；八万为男性人物形象，所以为男贵人；二条为女小人、女鬼；二并为驿马星（因牌中有马）。吉凶上要讲究阴阳平衡，所以最好的方式是需要四张吉牌与四张凶牌互相对应。</p><h2>九星神项诀</h2><p>中宫八万道缘深，三清正祖护男身。八万压一武财供，关公黄仙护家翁。八万压二香炉旺，出马生财路通畅。八万压鱼真武缘，文财常伴胡家仙。八万压三医道兴，白事堂前显灵应。八万压五运财灵，玉皇坐镇中宫庭。八万压二阴牌佩，常蟒引财风水位。八万压四横财到，军医保家清风绕。八万红花女仙聚，无生老母泰山女。中宫红花佛缘长，斗母星宿夜生祥。红花压鱼文殊智，胡家女仙通玄机。红花压二常蟒女，外五行中藏仙侣。红花压鱼胡女缘，香火袅袅结善篇。红花压一黄女护，三并后土娘娘顾。红花压四保家安，五并佛缘通灵坛。红花压二普贤行，八万弥勒笑盈盈。中宫毛鱼龙宫缘，八仙催财水法玄。小鱼压五兵马聚，二条常蟒少年遇。小鱼压一黄仙近，二并青龙香火印。小鱼压三通幽冥，八万学道贵人临。小鱼红花佛缘深，贵人指引渡迷津。中宫三并幽冥通，地府教主显神通。三并压一黄气冲，二并香根病常逢。三并压五鬼缠身，四并保仙免病深。三并红花婚煞重，八万横死愿未送。中宫二条阴司路，天师常蟒邪身护。二条压五灾劫重，压一仇黄上门凶。二条压三地府债，压鱼婴灵狐仙害。二条八万男鬼随，红花女煞婚难遂。中宫五并通灵强，五路财神坐明堂。五并二条外五行，三并地府查事忙。五并八万男供仙，红花女修前世缘。五并压一黄护法，二并跑堂仙家讽。五并四转出马堂，压鱼胡仙镇坛强。中宫一并将星明，九幽轮回天兵临。一压四并仇仙拦，二并香炉路艰难。一压三并鬼差现，二条常蟒仇怨缠。一压五并小人扰，八万横死男劫消。一压红花女煞到，婚姻坎坷驳婚闹。中宫二并香炉缘，观音金母渡世艰。二并二条通鬼灵，一压黄仙查事明。二并三并地府行，五并跑堂仙风劲。二并压鱼胡家应，查事解厄显威灵。中官四并天罗网，保仙千亲可消殃。四压五并横祸生，八万男劫血光惊。四压红花女煞临，小鱼婴灵童子命。四压一仇黄难平，二条常蟒怨不宁。</p><h2>流年九星诀</h2><table><tr><th>年宫</th><th>断语</th></tr><tr><td>小鱼</td><td>流年青龙跃中庭，贵人引路财路亨。顺气创业皆如意，吉星高照祸不惊</td></tr><tr><td>红花</td><td>朱雀衔喜入龙德，吉兆频传好事多。贵人铺就通天路，鹏程万里奏凯歌</td></tr><tr><td>八万</td><td>财神坐镇事业隆，娶妻添丁运如虹。贵人化劫守基业，出门得财福禄重</td></tr><tr><td>二条</td><td>阴星照命口舌生，吊客缠身事不成。虚病暗河皆须避，鬼邪扰心莫硬争</td></tr><tr><td>五并</td><td>本命星耀戊己官，稳坐钓台自从容。无风无浪平波过，静守安然待岁终</td></tr><tr><td>四并</td><td>白虎张牙血光横，车前马后慎行踪。午时阳针破灾厄，谨防外伤免动刑</td></tr><tr><td>三并</td><td>驿马星动走西东，迁居换岗运如风。身若浮萍难驻脚，踏遍山河路自通</td></tr><tr><td>二并</td><td>病符压顶实疾沉，汤药难医费万金。纵使己身侥幸免，至亲亦恐病来侵</td></tr><tr><td>一并</td><td>小人暗箭官符星，白花染血刀斧刑。创业谨防背后剑，是非莫惹守心宁</td></tr></table><h2>基本名词释义</h2><h3>追官赶官</h3><p>用神的前一位叫追，用神的后一位叫赶。追官代表什么带来的这件事，或者主动找到这件事的因素；赶官代表这件事情中会遇到什么，或是这件事的运转中自己会遇到的因素。</p><ul><li>小鱼追五并：主祖辈供过仙，小鱼主祖辈</li><li>八万追五并：主三代以内男人供过仙</li><li>红花追五并：主三代以内女人供过仙</li><li>五并追八万：主家里供仙</li><li>一并追八万：主家宅不宁，阳宅后方有问题</li></ul><h3>牌头</h3><p>即牌面字头的方向。九星牌头应用：头朝外为阳，为远，为外部，为不认识的人，为出；头朝内为阴，为近，为内部，为认识的人，为入。如求贵人，如果见贵人头朝外主求的是远方的贵人，贵人头朝里求的是近处的贵人。再一个例子，如四柱见小人，如果见小人头朝里，主向远方躲；如果见小人头朝外，主在近处躲。</p><p>特殊格局：翻开就是一对，且头一张朝里一张朝外，特殊格局以上面那张为准，颠倒一般主不稳定，有变化，不属于吉。如求财，财星上面一张头向外，下面一张向内，代表财先进后出。断小人，一并一张向里，一张向外，主内外都有小人，多个小人先内后外主先好后坏；先外后内主先坏后好。</p><h2>断卦基本思路</h2><ol><li>一看主卦为当前状态，主卦坐四并、二条、一并、二并为衰；中宫坐五并、红花、八万、毛鱼、三并为旺。主卦不代表吉凶，只代表当前状态。五并占中：主动的事办事主自己走不动，不好走。</li><li>二看头顶脚踩为初步吉凶，头顶主事情的前一段状态，脚踩为事情的后一段状态，头顶脚踩全吉为旺，一吉一凶为平，双凶为衰。</li><li>三看用神上不上柱，用神坐四柱、头顶、脚踩、主卦为上柱，不坐为不上柱。</li><li>四看四柱卦势旺衰，旺为好，衰为坏，坐四并二条为空为不成，坐一并为小人拦路，坐二并为病气，坐小鱼八万红花三并为顺为好，坐五并为自己知道（无吉无凶）。</li></ol><p>问事主卦既是用神的情况下，一看头顶脚踩，二看年月日时，年月日时占的不好也代表结果不成。</p><h3>辅助判断</h3><p>中宫的牌也可以与用神牌生克：如用神牌克中宫牌为凶，自己被克住了不好办；反之自身克用神牌为吉，代表自己能压的住事；自身生用神牌为凶，代表自己劳心费力，要投入，要花钱；用神生自身牌为吉，代表事主动来找人；自身与用神比和吉，事来旺我。（生克仅作为辅助判断，不可用于判断结果，也不是特别重要。）</p><h2>流月流日与应期</h2><ol><li>流月以流年官为起始点，依次向下排，如流年官在离，正月也在离，五月在坎，十二月在乾以此类推，也可从流月上起流日、流日起流时，以流月所到的宫上的牌论断吉凶。</li><li>应期以时辰官为起始点，问几日内的事直起流日，不起流月；问几月内的事不起流年，只起流月，详推可从流月、流日官为起点往下数。一般问流月取流年官，问事取时辰官。</li></ol>'},
+{id:'ne-7',title:'实战入手思路',html:'<h2>学习目标</h2><p>综合实战，把中宫—头脚—四柱—用神—身交—消元一条线走通。</p><h2>断卦基本思路</h2><ol><li>一看主卦为当前状态。</li><li>二看头顶脚踩为初步吉凶。</li><li>三看用神上不上柱。</li><li>四看四柱卦势旺衰。</li></ol><h2>主卦旺衰</h2><ul><li>主卦坐四并、二条、一并、二并为<strong>衰</strong>。</li><li>中宫坐五并、红花、八万、毛鱼、三并为<strong>旺</strong>。</li><li>主卦不代表吉凶，只代表当前状态。</li></ul><h2>辅助判断</h2><ul><li>用神牌克中宫牌为凶，自己被克住，不好办。</li><li>自身克用神牌为吉，自己能压得住事。</li><li>自身生用神牌为凶，自己劳心费力，要投入花钱。</li><li>用神生自身牌为吉，事主动来找人。</li><li>自身与用神比和吉，事来旺我。</li></ul><div class="callout"><div class="callout-title">注意</div>太极、两仪不考虑生克；四柱、用神、五并层面可以参看五行生克与墓库。</div><h2>流月流日与应期</h2><ul><li>流月以流年官为起始点，依次向下排。</li><li>应期以时辰官为起始点，问几日内的事直起流日，不起流月；问几月内的事不起流年，只起流月。</li></ul>'},
+{id:'ne-8',title:'秘传流运卦思路',html:'<h2>学习目标</h2><p>掌握东北派秘传流运卦（流年盘/运盘/散断法）的推法，断一年十二个月的发展趋势。</p><h2>名称与定位</h2><p>东北派内部称为<strong>流年盘、运盘、散断法</strong>。与「卦盘」相对：卦盘用于占具体某事，三盘全（宫、牌、四柱流转），准确率高；运盘用于断一年十二个月的发展趋势，层次较少，纯属小六壬式的用法，断运较好，断具体事不如卦盘。</p><h2>起盘顺序</h2><ol><li>先放<strong>头顶</strong>（离宫一张）。</li><li>再放<strong>四柱</strong>（中宫四张，按年、月、日、时顺序）。</li><li>再放<strong>脚踩</strong>（坎宫一张）。</li><li>最后从<strong>乾宫</strong>开始，按十二地支顺序，顺时针放一圈十二张。</li></ol><p>简化摆法：离宫一张，中宫四张，坎宫一张，乾宫起顺时针十二张。</p><h2>盘面结构</h2><ul><li>中宫：四柱（年、月、日、时）。</li><li>头顶（离）、脚踩（坎）：上下两张。</li><li>周围十二宫：十二地支。</li><li>太岁：起盘时加上，相当于中宫，管一整年。太岁不看五行生克。</li></ul><h2>断法</h2><ol><li><strong>看太岁落宫</strong>：太岁所落之宫上面是什么牌。</li><li><strong>看中宫四柱</strong>：横看、纵看。</li><li><strong>看头顶脚踩</strong>：与四柱一起看，可能还有「消消乐」式的关系（同层吉凶相消）。</li><li><strong>看流月</strong>：以全盘为物，逐个读十二宫，结合四柱春夏秋冬，看某物趋势。</li><li><strong>看全年趋势</strong>：将周围十二宫的吉凶加起来，参看太岁。凶多则年运不佳，吉多则年运较顺。</li><li><strong>十二个月每张牌不看同级作用</strong>，默认全盘都用，看十二个月趋势。</li><li><strong>五行生克全盘都看</strong>，但<strong>头、脚、中宫不看</strong>。透出在头顶脚踩中宫的牌，不看五行，没有墓库；除非透出在四柱。</li><li><strong>用神</strong>：有则找用神；无用神则找三并断应期；再没有则找白花。</li><li><strong>离宫是起点。</strong></li></ol><h2>与卦盘的区别</h2><ul><li>卦盘：本命盘中宫、头顶脚踩、四柱、对宫取用；四柱流转、宫、牌三盘全。</li><li>运盘：中间四个牌代替流年四柱；不用流星赶月四柱时直接用中间四个；层次少，角度少，纯牌与牌联动，缺地盘。</li></ul><h2>人物读象</h2><ul><li>在下面的牌，当成死的东西，当物看。</li><li>在上面的牌，当成活的东西，当人看。</li><li>如刘唐在下面朝里，工作不好、不顺心；上面有毛鱼朝外，有贵人帮忙。事业先凶后吉。</li><li>线下好用，线上会错过不少信息。如刘唐线下见到年轻人，大概率是学业；线上就不能这么看。</li></ul><h2>可占事</h2><p>运盘也可以占具体事，就是正常算事那么用。但整体不如卦盘。</p>'}
+]},
+northwest:{title:'西北派',subtitle:'古法归宗',sections:[
+{id:'nw-1',title:'西北响马卦的选牌与识牌',html:'<h2>学习目标</h2><p>熟记西北九星、牌意、地盘九宫，掌握朝向与体用。</p><h2>西北九星</h2><table><tr><th>宫</th><th>牌名</th><th>核心象</th></tr><tr><td>乾</td><td>八万</td><td>本人、能力、时运</td></tr><tr><td>坎</td><td>毛鱼</td><td>女人、阴人、失物、桃花、玄武</td></tr><tr><td>离</td><td>刘唐</td><td>男人、官贵、文书、腿、方向、神佛</td></tr><tr><td>坤</td><td>二棍</td><td>路、小人、变动、仕途、缠绕</td></tr><tr><td>艮</td><td>一皮/林冲</td><td>阻碍、停止、靠山、棺材、墙</td></tr><tr><td>兑</td><td>二皮</td><td>眼目、信息、媒人、坑凹</td></tr><tr><td>震</td><td>三皮</td><td>财、信、喜、禄</td></tr><tr><td>巽</td><td>四皮</td><td>事情、喜事/是非、官司、病</td></tr><tr><td>中</td><td>五皮</td><td>亲朋、圆满、田宅</td></tr></table><h2>九星逐牌详解</h2><h3>八万（乾金）</h3><p>基本象义：主本人，头朝里主本人不顺，头朝外主本人有主意，走的开。</p><p>性格类象：头朝外主沉稳，靠得住，有主意，乾卦又主自尊心很强，做事果断，追求圆满；头朝里主沉不住气，遇事情没主见。</p><h3>二皮（兑金）</h3><p>基本象义：主眼目，眼前事，代表自己眼睛所能看见的，靠向，信息，坑凹之地。</p><p>性格类象：好说，能说，眼界宽，有主见，观察力强，但心直口快，心气比较高。</p><h3>五皮（中土）</h3><p>基本象义：主亲朋好友，家里人，又主圆满结果，也为能圆住，也是贵人。</p><p>性格类象：土主信，诚实守信，是个有信用的人，脾气好，有福之人，人缘不错，身边朋友比较多。</p><h3>四皮（巽木）</h3><p>基本象义：主事件、事情。喜事，喜神，官司的用神，落凶宫为凶事。四皮不管落在本宫还是对宫都需要看落宫判断是好事坏事，别的牌不需要论。</p><p>性格类象：忧郁寡断，有自尊心，比较敏感，办事右思右想的，但心细，责任心很强。</p><h3>三皮（震木）</h3><p>基本象义：主钱财，一切财运，贵重物品，金属器件。</p><p>性格类象：乐观开朗，积极向上，比较讲义气。胆子大，做事一往直前，有点倔，但比较勇敢。</p><h3>刘唐（离火）</h3><p>基本象义：头朝外主男小人，官讼，口舌。头朝里主贵人，功名，又主男人，工作，学业，问出行为腿，主方向。又为动物走失用神。这是因为刘唐这张牌带有人物，人物牌以向着自身为吉，不向着自身为凶。</p><p>性格类象：朝里主热情开朗，积极乐观，朝外主容易生气，耐心不足，脾气比较爆。</p><h3>毛鱼（坎水）</h3><p>基本象义：主女人，失物，头朝里主运势不顺，阴人（暗小人的意思），头朝外主顺利。</p><p>性格类象：毛鱼属坎水可方可圆、能随时而变，要根据朝向分辨善恶。毛鱼朝里有玄武象，城府很深，精于算计，朝外转为青龙象，比较聪明，能顾及别人的感受，心善，正直。</p><h3>二棍（坤土）</h3><p>基本象义：头朝里主小人，曲折，坎坷，头朝外主流通，渠道，顺利，二棍又名马星，在响马卦里主动，变动，因为有在路上求的象义。</p><p>性格类象：朝里有腾蛇象，心思多，比较多疑，八面玲珑，转变快，见什么人说什么话，喜欢玩阴的；朝外主闲不住总想动，有追求的人，对人多是你敬我一尺，我敬你一丈，不喜欢与人计较。</p><h3>一皮/林冲（艮土）</h3><p>基本象义：主阻碍，不旺不好，迟缓，不理想，也代表压力，问病主疾病位置。</p><p>性格类象：有勾陈象，主死板，脾气比较硬，固执，保守，钻牛角尖的性格，比较执，会让别人感到压力。</p><h2>九星体用</h2><p>九星的类象系统分体象与用象（又称静象与动象）：</p><ul><li><strong>体象</strong>：即本体之象，不随朝向转变（如八万为本人，刘唐为官人，毛鱼不会因朝向从玄武变为朱雀也不会从水性变为火性）。</li><li><strong>用象</strong>：即功用之象，功用会随朝向改变（如毛鱼朝内为女小人，朝外为女贵人，在这里女人是体，贵和小是女人对某件事的一个功能和作用）。</li><li>九星朝向以八万、二条、刘唐、毛鱼四张为准，林冲固定主静。</li></ul><h2>九星朝向的应用</h2><p>朝向什么时候以朝向哪里为吉，需要具体看求测人占问的事项：</p><ol><li><strong>（大多数情况）</strong>占问某件事的发展、吉凶时（动不动，顺和逆），以朝外为吉，朝内为凶。</li><li>占问某人物的心意所向、意愿时（来不来，向和背），以朝内为向心，朝外为离心。</li><li>空间上的出入（如失物的出和入，信息会不会流出），以朝内为入，朝外为出。</li></ol><h2>九星的定象</h2><p>响马卦的九星类象是从多个角度推导而出的，这导致了类象之间的重叠与单一张牌含义的过于冗杂。九星的定象法就是为了解决这个问题。定象法的逻辑是把不同层级的类象区分优先度，优先度最高的象义是牌象（一并山，二并眼，三并信，四并事，五并人，毛鱼顺，二棍路，刘唐腿，八万身），从高优先度层级推导出的象义会抵消低优先度层级推导出的象义，层级优先度如下：</p><p><strong>牌象 &gt; 阴阳 &gt; 六神 &gt; 八卦</strong></p><p>响马卦代表阴阳的牌在离和坎位，即刘唐和毛鱼（先天的乾坤位比后天更根本）。如三皮和八万均可主财（三皮在青龙位、八万在乾），但六神优先于八卦，故三皮主财，八万不主财。又例如三皮既可主动，又可主信，六神重于八卦，取信不取动。</p>'},
+{id:'nw-2',title:'西北响马卦的起卦',html:'<h2>学习目标</h2><p>掌握西北起卦、摆牌、开牌规则。</p><h2>起卦准备</h2><p>准备一盒毛鱼纸牌，从牌中选出一并（林冲）、二并、三并、四并、五并、刘唐、毛鱼、二棍（阮小二）、八万各两张为一组，共计九组十八张。</p><h2>摆牌规则</h2><ol><li>将十八张牌洗乱。</li><li>第一张牌背朝上放中宫左侧。</li><li>从离卦为起点，以<strong>顺时针</strong>方式在外八门摆牌两轮。</li><li>第一轮的牌要放在卦位的左边，第二轮放的牌要放在卦位的右边。</li><li>最后在中宫右侧放置最后一张牌。</li><li>开牌时按起卦顺序翻开，必须左右翻，不能上下翻。</li></ol>'},
+{id:'nw-3',title:'西北响马卦的取象规律',html:'<h2>学习目标</h2><p>掌握西北派的生成层次、取象层次、定象法与取用思路。</p><h2>一、无极—太极—两仪—四象—八卦</h2><h3>无极生太极</h3><ul><li>太极：中宫，墓库，人口，卦身，中心，人（五皮）。</li><li>乾位为八卦之起始（八万为卦体）。</li></ul><h3>太极生两仪</h3><ul><li>阳门：面子，前路，阳宅，过去。</li><li>阴门：底子，根基，阴宅，未来。</li></ul><h3>乾道成男，坤道成女</h3><ul><li>阳为尊长（长辈、官人、领导）——刘唐。</li><li>阴为卑小（小辈、下属、仆从）——毛鱼。</li></ul><h3>两仪生四象</h3><ul><li>朱雀：口舌，是非，诉讼，文书。</li><li>玄武：阴人，盗贼，淫泆，饮食。</li><li>白虎：伤病，官灾，缺损，传达。</li><li>青龙：财帛，事业，贵人，娱乐。</li></ul><h3>四象生六神</h3><ul><li>腾蛇：怪异，惊恐，纠缠，虚诈。</li><li>勾陈：勾连，争斗，田墓，官门。</li></ul><h3>四象生八卦</h3><ul><li>乾天门，天道运转不息，健，圆满，吉，升。</li><li>坎水门，险，陷，阴暗不明，抑郁。</li><li>艮山门，静止，不动，停滞，大安。</li><li>震雷门，发动，启动，发展。</li><li>巽风门，空亡，不定，落空，门户。</li><li>离火门，火烧，上火，灾厄，凶，亡。</li><li>坤地门，平稳，生发，发展，承载，吉，地。</li><li>兑泽门，缺损，口舌，损伤，坎坷，凶，缺。</li></ul><p>先天九星全图是响马卦的根源所在，主要有两个用途：其一是从一百零八张毛鱼牌里面选择用来占卜的两组十八张牌；其二是拿来取象，作为辅助锁定用神的工具。牌的选择顺序是从图外圈到内圈，逐层缩小范围：先看牌象两仪，再看四象六神，最后看八卦九宫。</p><h2>二、取象层次</h2><p><strong>牌象 &gt; 阴阳 &gt; 六神 &gt; 八卦</strong></p><ul><li>如三皮和八万均可主财，但六神优先于八卦，故三皮主财，八万不主财。</li><li>又例如三皮既可主动，又可主信，六神重于八卦，取信不取动。</li></ul><h2>三、定象法</h2><p>九星的定象法逻辑，是把不同层级的类象区分优先度。优先度最高的象义是牌象：一并山，二并眼，三并信，四并事，五并人，毛鱼顺，二棍路，刘唐腿，八万身。从高优先度层级推导出的象义，会抵消低优先度层级推导出的象义。</p><h2>四、取用思路</h2><ul><li>一个用神不一定是体象，一个体象一定是用神。</li><li>取用神，是为一个象找其归属，一个体用结合的法也可以有归属。</li><li>毛鱼属阴，刘唐属阳，小人与贵人这两个象可以归属于阴阳。</li><li>婚外情桃花可以取用为毛鱼，因为毛鱼内为玄武，玄武主阴暗、暧昧不明之事。</li></ul><h3>响马卦九星取用常用类象</h3><ul><li><strong>先天为体</strong>：一种形而上的力量，乾知大始，坤作成物。</li><li><strong>后天为用</strong>：阴阳的产物，物质世界。</li></ul><p><strong>毛鱼</strong>：女人，阴私，小人，盗贼，卫生间，桃花，婚外情，诈骗，色，下属，小儿，精怪，女小人，女贵人，阴贵人，走后门，暗中帮助，凶时主事情不干净，不公正，有暗箱操作，又主暗小人，暗中作对，上当受骗。</p><p><strong>刘唐</strong>：男人，光明，贵人，功名，厨房，文书，官人，领导，情，长辈，神，老师，婚姻，男小人，男贵人，明贵人，出面，露身，明着帮助，凶时主官非口舌，文书问题，又主明小人，明着作对，打压，欺凌。</p><p>注：刘唐主性，毛鱼主情，刘唐代表人的人性、佛性、高级追求、理性；毛鱼代表人的兽性、我执、低级欲望。感情大体以刘唐为高，毛鱼为低。毛鱼主吃喝玩乐，人心中遵循唯乐原则的部分，也主实际的性事、酒食。刘唐主追求，人心中遵循道德的部分，也主实际的事业、婚姻。</p><p><strong>八万</strong>：自我意识的主体，先天阴阳所生，父精母血二者的结合。本人，能力、时运。八万为后天乾，为一卦之开立端，因此为本人，如果本人不存在的话，这个卦就不会有存在的根基。</p><p><strong>三皮</strong>：财，信，喜，禄。</p><p><strong>二皮</strong>：眼睛，信息，媒人。</p><p><strong>一皮</strong>：休止，棺材板，老化。</p><p><strong>二条（二棍）</strong>：路，小人，谋算。</p><p><strong>五皮</strong>：亲朋好友，圆满，田宅。</p><p><strong>四皮</strong>：事，官司，病。四皮为归置牌，一切在其他八张牌取不出用神的事情均可参看四皮。</p><p>一张牌会通过它本身的性质对所问事产生影响，如毛鱼配三皮，毛鱼为玄武星，为阴暗不明，但财本身不会有阴暗不明的性质，财本身的性质由官位决定，配牌决定的是事情发展的方向，阴暗不明代表这张牌对财产生影响的方式是在暗中进行的。</p>'},
+{id:'nw-4',title:'西北响马卦的演绎象法',html:'<h2>学习目标</h2><p>九星逐一定位演绎，说明每张牌为什么落在那个宫位。</p><h2>八万身（定位：乾卦 —— 「我」的代表）</h2><p>八万对应乾卦，象征起卦者或被占者。在一个卦局里，「我」是最关键的部分。试想，如果卦里连这个「我」都不存在了，那么整个卦象的好坏吉凶又该以谁为标准来判定呢？并且，乾为初始之卦，而一卦中的妻财子禄等元素，不就是因为「我」的存在而得以产生吗？在实际占断中，无论发生什么事，最后判断吉凶好坏的根本依据，都得看它对「求测人」（也就是这个「我」）有什么样的影响。所以，用乾卦所代表的开创、初始、尊贵、核心的地位来比喻「我自己」，实在是再贴切不过了。</p><h2>二皮眼（定位：兑卦 —— 眼目与信息的象征）</h2><p>二皮定位在兑卦。不过，这里没有采用兑卦常被联想到的白虎凶星含义，而是抓住了兑卦的一个核心牌象「眼」。一是因为兑卦本身也有窟窿、眼的含义，这个眼本身并不是眼目的眼，但响马卦借这个眼隐喻眼目的眼，所以我们就借用兑卦隐喻的「眼目象」来解释二皮，把它理解为代表了眼目视力、观察力的象征。既然眼睛是获取信息的主要来源，那么从这个「眼目」象自然也就延伸出了它和「消息、信息」有关联的含义。</p><h2>五皮人（定位：中宫 —— 亲朋好友的代表）</h2><p>五皮定在九宫的中宫位置，它牌面上的五个点正好对应洛书里代表中央的数字「五」。这张牌象征的是亲朋好友。为什么这么对应？原因大致如下：中宫是整个卦局的中心点，中宫代表内在、核心，外面的八宫（门）代表外部、环境，因此，中宫就代表了跟自己关系特别近、最亲密的人，而外面的那些活动（八门）都是围绕着中宫这个中心在运转的。所以对应到人物上，它就象征着求测人自己心里珍视、看重的人（比如亲人、密友）。同时，五皮也可取象为车，因为五皮外面的四个圈可以对应四个车轮，中间的一个圈可以对应车的主体，又可取象为多人。</p><h2>四皮事（定位：巽卦 —— 代表事情的流动）</h2><p>四皮定位在巽卦，牌面上的四个点也与洛书的数字对应。巽卦代表风，风的特点是飘忽不定，能进能退，所以四皮本身没有固定的吉或凶含义。它主要象征着正在发生、变动发展的事情的状态，有时候也代表不确定的事物的用神（也就是用另外八张牌取不出用神事物的统一用神，如天气）。也正因为它自身没有固定吉凶，所以四皮在卦里的具体好坏，必须结合它落下的那个宫位（位置）和当时的环境来判断。当它表现出吉利的一面时，往往代表喜事、好消息；当它表现出凶的一面时，往往代表是非、口舌麻烦。</p><h2>三皮信（定位：震卦 —— 信息财禄的象征）</h2><p>三皮定位在震卦，它象征的含义主要来自震卦所对应的「青龙星」的特性（青龙星主管财运、喜事、爵禄）。因此，三皮带有获得钱财、收益的象征。这跟它的牌面图案也吻合：三个圆点（或圆圈）排成一串，像一串铜钱的样子。同时，这个形象也暗合了震卦本身象征着春天万物萌发、充满生机的特性，在人体又主肝胆神经。</p><h2>刘唐腿（定位：离卦 —— 文书官贵与阳人）</h2><p>刘唐定位在离卦，这张牌可以从多个角度分析。如从阴阳来说，刘唐所处的位置是离卦，居中宫之上，中宫为太极，太极动而生阳，静而生阴。清气上升，浊气下降，阳气上升在离位，故刘唐主阳，为阳性牌，所以以人物角度，一切属于阳性、或地位高于求测人的角色皆可取用刘唐，如男性，长辈，官人，领导，老师等。再进一步拓展，最为阳性、地位最高的就是神佛，所以刘唐也主神佛，阳性有开创的功能，又代表父亲。从人事角度来说，刘唐主性，毛鱼主情。刘唐对应人的人性、佛性、理性，也主高级追求，所以与人的追求有关的事情皆可参考刘唐，如学业，事业，官运仕途等。又以毛鱼为色，刘唐为情，刘唐主婚姻主爱，毛鱼主桃花主性。大体以刘唐主高，毛鱼主低，刘唐代表一组对立事物中对应高级的组成成分，如人的道德即可用刘唐代表，而毛鱼则对应欲望。又以刘唐对应人的道德心，心理学中的超我概念、智慧，或者具有高级地位的角色。</p><p>从刘唐归属的五行和六神来说，刘唐为朱雀，所以也主文书，又主口舌。有火性，所以也主厨房，又主电器。从人体上来说主头脑、心脑血管。最后从牌面来说，刘唐是响马卦九星中唯一画出靴子的牌，所以刘唐又主腿和靴子，是出行和寻人寻物的重要用神（寻人，寻有腿之物以刘唐为用神）。</p><h2>毛鱼顺（定位：坎卦 —— 隐现无常与阴人）</h2><p>毛鱼定位在坎卦，这张牌的意象可以理解为刘唐的反面。如依旧从阴阳的角度分析，毛鱼所处的位置是坎卦，居中宫之下，太极中的阴气下降在坎位，所以毛鱼主阴，为阴性牌，从人物角度来说，一切归于阴性、或地位低于求测人的角色皆可取用毛鱼，如女性、儿童、小辈、下属、宠物、学生等。再进一步扩展，最为阴性、六道轮回中福德低于人的即是鬼邪，所以毛鱼也主鬼邪，又主一切动物。阴性有成物的功能，又代表母亲，又主所有暗中行事的人，如第三者、盗贼等。从人事角度来说，毛鱼代表人的生理需求、低级欲望。所以和人的基本需求、享乐有关的事情皆可参考毛鱼，如实际的性事、吃喝玩乐、酒食等。毛鱼代表一组对立统一事物中对应低级的组成部分，如人性中的自私性即可用毛鱼代表，又以毛鱼对应人性的阴暗面、破坏性。心理学中的本我概念、欲望，或者具有低级地位的角色。从毛鱼归属的五行和六神来说，毛鱼为玄武，所以也主暗昧不明，也主欺骗。有水性，所以主一切液体相关，在家居上也主卫生间，或蓄水的地方，如鱼缸。在人体上来说主肾、泌尿系统、血液（包括经血）等。最后从牌面来说，毛鱼的牌面既然是一条鱼，那么占问钓鱼、出海有关的事情都可以参考毛鱼为用神。</p><h2>二棍路（定位：坤卦 —— 道路小人的象征）</h2><p>二棍这张牌定位在坤卦，它的象征含义主要来自坤卦对应的「腾蛇星」的特性（腾蛇星主虚惊怪异、缠绕不休、反复无常）。坤卦代表大地，有厚重、承载、但也可能暗藏晦气的意思。它的牌面图案一般是一条长棍（或杠、线条），形状像路或绳索。我们就取其勾连、缠绕的形象，来比喻被小人暗中纠缠、设下障碍、或者事情拖拖拉拉纠缠不清的象征意义，在人体又对应脾胃肠道，同时也主道路。</p><h2>林冲（一皮）山（定位：艮卦 —— 阻滞与事缓的象征）</h2><p>林冲牌（也就是一皮）定位在艮卦，它所象征的含义同样来自艮卦对应的「勾陈星」的特性（勾陈星主迟缓、阻滞），同时也结合了艮卦本身的特性（艮为山，代表停止、阻碍）。所以这张牌象征着事情发展缓慢、遇阻停滞不动，也因此有类似坟莹、棺材（代表静止不动的事物）的象征。它的牌面图案（通常画的像一面墙），取其坚固、不容易移动的特点，这很符合艮卦为山、厚重不动的本义。民间流传的一些占断口诀里有「一皮在坎，有船托渡」的说法（意思是如果一皮落在坎宫，就像在危险的水中得到了船来渡你，虽然遇阻但有依靠），也印证了它跟阻碍、支撑有关。总的来说，一皮主要代表了事情的「不动、缓慢」，按常理讲这常常是不太顺利甚至带点凶的征兆。但事情不动并不代表全凶，大体以占问需要、想要的事情时见林冲为凶；以占问不需要、不想要的事情时见林冲为吉。可以将林冲理解为空亡的含义，主事情不动，在人体主皮肤。</p>'},
+{id:'nw-5',title:'九宫象法',html:'<h2>学习目标</h2><p>熟记西北九宫的性质与断语。</p><h2>九宫性质</h2><table><tr><th>宫</th><th>性质</th><th>吉凶倾向</th></tr><tr><td>乾</td><td>天门、圆满、健</td><td>吉</td></tr><tr><td>坎</td><td>水门、险陷、坎坷</td><td>凶</td></tr><tr><td>艮</td><td>山门、止、静止</td><td>无吉无凶</td></tr><tr><td>震</td><td>雷门、动、发展</td><td>无吉无凶</td></tr><tr><td>巽</td><td>风门、不定、空亡</td><td>无吉无凶</td></tr><tr><td>离</td><td>火门、灾祸、口舌</td><td>凶</td></tr><tr><td>坤</td><td>地门、承载、平稳</td><td>吉</td></tr><tr><td>兑</td><td>泽门、缺损、口舌</td><td>凶</td></tr><tr><td>中</td><td>库门、入、静止</td><td>入库</td></tr></table><h2>九宫分野部</h2><h3>乾</h3><p>为天门，天道运转不息，取其健象，代表事情活络，乾为圆满，所以也代表事情向好的方向发展。断人代表这个人有活力，有行动力。配牌凶时主先好后坏。对于乾卦，卦谱还有一条很有意思的解释是刘唐在乾老翁不安，这是风水解法，实战中可以参考。</p><h3>坎</h3><p>为水门，取其险陷之核，所以有坎坷的含义。配牌吉时代表事有转机（卦谱中有一段是这么说的：一皮在坎，有船托渡。主亲人来助，事情有定向。就是指的凶事在坎宫逢林冲代表凶事平定，结果安稳。）</p><h3>艮</h3><p>为山门，山不动取其止象，为静，取其静象，代表事情不动，处于静止态。占人来否主不动，占坏事发展主停滞，艮宫吉凶不固定，以喜事落艮为喜事不动为凶解，如卦谱解：「八万在艮，财帛不动。」，以坏事落艮为坏事不动为吉解，如「四皮落艮，是非不沾，在山主事情不动。」</p><h3>震</h3><p>为雷门，为大动，取其动象，代表事态发展。卦谱以「三皮在震，朋友来敬」（主贵人援手），然又有「二棍在震，小人暗行」（主暗劫潜伏），证明其吉凶并非固定，需要参考所问之事是吉是凶，「四皮在震，有事吉祥。」是常理，可占问凶事时（如疾病）代表事情发展，疾病扩散，这时就不能说是好事了。</p><h3>巽</h3><p>为风门，风没有固定方向，取其进退不定之象，好事坏事落在巽的位置都代表事情不稳，处于虚浮状态。「二皮在巽，两眼不明。」，「八万在巽，财帛有损。」就是描写的这种情况。但卦谱中又有：「毛鱼在巽，顺气到门。主万事通顺，若见二棍，主车路有通。」的描述，因为只要把被影响的主体立为巽卦本身，这几段文字就是成立的。门户宫在实战中还是比较常用的。</p><h3>离</h3><p>为火门，一要取其丽象，但离卦外实内虚，表示虚假，如果问财运，落在离卦就可以代表金玉其外败絮其中。卦谱解：「八万在离，财帛难存。托人办事，多半为虚，主破财。」就是这个意思。「刘唐在离，火见火，没处躲」火旺则成灾，主不吉利。二要理解火虽然很漂亮，但也很危险，是一股无情的增长并摧毁一切的力量。所以民间卦师以火通祸，代表灾难，是非与口舌，卦谱解：「四皮在离，灾祸临身。主大事，灾祸、口舌相侵。」就是这个意思。</p><h3>坤</h3><p>地门之象（厚德大地），取其「厚重、承载、生养、静藏」之核。主事情稳定、包容、有滋养积累之势。牌落坤宫，事态都倾向于缓慢、持久、具备承载力。吉事主安稳得助、滋长收益，凶事则会逐渐平稳，因为大地的本性安稳，能滋养万物而不会害人。遇毛鱼则「旱地得雨」，主困境转顺；若与离宫呼应（走卦先离后坤），则火生土，虚浮之事终能落实。</p><h3>兑</h3><p>为泽门，外悦内险，其性为缺。兑为金卦，主口舌、破损，表象欢愉内藏肃杀，如泽水映月而易碎。「六唐在兑，路有坎坷」，「二皮在兑，眼目不宽。认事不明。差距很大，令人惊怪。」，「八万在兑，财帛难取。本人胆战心惊，祈求神灵，待机转化。」就是表达的这种情况。这里还有一个小技巧，祈求神灵这个象是哪来的呢？因兑为口，八万为神佛也。若问牲畜走失，当日可回。这点个人不赞同，牲畜在兑为张口发出声音，可并不代表一定能听到消息，且兑也为坑，坠入坑里该如何回归呢？</p><h3>中</h3><p>为库门，为入，为静止。中宫属土，主凝聚、归止，既是事态终结之所，亦为新一轮气机枢纽。一般来说事入中代表能够得到此事，如「八万在中央，财帛入库仓。主财不散。」但占出行不利，如「刘唐在中央，官司闹饥荒。出门有阻隔，千忙不动。」，「二棍在中央，提防小人诬。主事闭塞不通，求财道路不畅，小人搅扰，出门误车，耽误时间，多有阻滞。」就是这个意思。本人成对入中为伏吟卦，万事宜静不宜动，主动不吉。</p><h3>吉凶直断</h3><p>乾圆满，坤柔顺，在响马卦中是大吉的宫位，看到用神在这两个宫位就可以直断事情为吉。坎险陷，兑损折，离祸事，在响马卦中是明确凶的宫位，看到用神在这三个宫就可以直断事情为凶。震发动，快速，巽不定，艮静止，中入库，不动。这四个宫位在响马卦中无吉无凶，要根据所问事情决定，一般比较难理解的也就是这四个宫位。震代表事情有生气，比如说问能不能合作，震为发展，就代表可以合作；问财运，震在我们的体系中就代表能够得财，但问凶事时逢震则为凶。巽是一种不定性，其实等同于空亡，我自己叫巽为空宫。一般好的事情落在巽不，代表不稳定，一场空，坏的事情空亡反而为吉。艮为静止，是震的反象，以艮为静止，以震为落实，占人主不动，占坏事发展主停滞。中宫为入库，代表事情进家，好事吉坏事凶，本人进家为伏吟卦，可静不可动。</p><h2>响马卦的宫位取用技法</h2><p>九宫化人形：离为头顶阳宅，坎为脚踩阴宅，巽坤为肩，艮乾为腿，震兑为胳膊左帮右助。</p><p>九宫化人形一般用离和坎比较多（补解：响马卦以离宫、中宫、坎宫为三才，响马卦中宫为头张和尾张，象征着事情的开始与结果故最重视中宫，天宫和地宫仅做参考，但仍有一定作用。）离卦象征事情的开始状态（因为离是先天的乾位，象征着一切事物最初始的状态）离也为天时，外部环境影响，有时候也为能看见的影响，表面的状态，坎与离相反为地利，事物的内在状态，有时候代表看不见的影响，为根基，内里的状态，称为头顶脚踩其实只是借九宫代表的人体打个比方，归根结底还是以三才为应用。但实际上响马卦并不仅仅是使用离和坎这两个宫位，有一些宫位在需要的时候我们都可以应用。如巽为门户，其实就可以通过看巽宫知道会有什么登门，断这个人近期容易遇到什么事，巽上二棍加临，小人登门，近期易犯口舌是非，巽上刘唐向外，近期易走动出门以此类推。</p>'},
+{id:'nw-6',group:'后天卦',title:'后天枢要',html:'<h2>学习目标</h2><p>掌握西北派后天枢要的核心思路，为碰牌十法与分类占打下基础。</p><h2>后天为用</h2><p>西北派分先天卦与后天卦。先天卦为体，主因果、始终、信息、时间；后天卦为用，主过程、内情、变化、方位。</p><h2>具体占法</h2><ol><li>用神卦眼开，首先看中宫大体情况，为开始。</li><li>然后看用神落宫，为过程。</li><li>用神对宫为结果。</li><li>对宫不看地盘，只看牌意。</li><li>如用神卦眼不开，用走宫碰占断。</li></ol><p>如果用神开，但是用神的对宫不开，就以对宫走宫先见的人爻为过程，后见的天爻为结果，不看对宫地盘地爻。如求财，三皮对宫，人爻为毛鱼朝外，天爻为朝中宫刘唐，就是过程不顺，但结果有贵人帮助，最终还是能求得到财。</p><p>如果用神落中宫，就用头顶脚踩法断，离宫的牌为开始，坎宫的牌为过程，中宫为结果。在此技法中，如果二皮临坎宫，就叫落陷。因为是脚踩的位置，断事为脚迈不开、受困、限制等。如果二皮临离卦，就是好的，主消息明朗，眼界开阔。对宫这个东西，可以理解为六爻的动爻。</p>'},
+{id:'nw-7',group:'后天卦',title:'走卦名和落卦名的运用',html:'<h2>学习目标</h2><p>掌握走卦名、落卦名、伏吟的运用，并熟记走卦名与落卦名的完整对照表。</p><h2>走卦名</h2><p>走卦名是<strong>过程</strong>。以用神走，如夫妻反目，以三皮走是财事引起，以五皮走是家里人、朋友导致，以此类推。</p><p><strong>规则：</strong>第一张牌走不来卦名，最后一张也走不来卦名，只看落宫。牌不开不看卦名，看叠牌与落宫。直接成一对的只看落宫。</p><h3>走卦名对照表</h3><table><tr><th>起宫 \\ 至宫</th><th>乾</th><th>坎</th><th>艮</th><th>震</th><th>巽</th><th>离</th><th>坤</th><th>兑</th></tr><tr><td><strong>乾</strong></td><td>—</td><td>二人争路</td><td>浓云闭日</td><td>天雷无安</td><td>他乡遇友</td><td>仙人指路</td><td>虎落陷坑</td><td>又来救人</td></tr><tr><td><strong>坎</strong></td><td>明珠出土</td><td>—</td><td>雪雨卡道</td><td>乱线一团</td><td>枯井升泉</td><td>金榜题名</td><td>船得顺风</td><td>斩将封神</td></tr><tr><td><strong>艮</strong></td><td>山天大阵式得开</td><td>小鬼偷钱</td><td>—</td><td>渭水访仙</td><td>山风鼓决心大</td><td>山火崩</td><td>山地薄</td><td>山泽损</td></tr><tr><td><strong>震</strong></td><td>公私得目</td><td>秦琼五关脱难</td><td>抢过独木桥</td><td>—</td><td>鱼来撞网</td><td>雷火煞</td><td>青龙夺位</td><td>条木求鱼</td></tr><tr><td><strong>巽</strong></td><td>浓云不雨</td><td>隔河望金</td><td>风山洞</td><td>枯树开花</td><td>—</td><td>风火家人</td><td>旱碰汾河</td><td>行走落冰</td></tr><tr><td><strong>离</strong></td><td>砍树摸雀</td><td>水火不容</td><td>火山族（旅）</td><td>饿虎得食</td><td>火风钉</td><td>—</td><td>耕地得金</td><td>贩卖猪羊</td></tr><tr><td><strong>坤</strong></td><td>地天泰喜气三缘</td><td>马到成功</td><td>二人分金</td><td>夫妻反目</td><td>指日高照</td><td>过河拆桥不义气</td><td>—</td><td>为人发志</td></tr><tr><td><strong>兑</strong></td><td>游风脱网</td><td>拽杆抽梯</td><td>泽山仙藤芽出土</td><td>推车靠崖</td><td>泽风大过</td><td>旱苗得雨</td><td>鲤鱼化龙</td><td>—</td></tr></table><p><strong>读法：</strong>以用神所走之宫为「起宫」，以第二张同牌所落之宫为「至宫」，交叉查出卦名。如用神刘唐先落乾宫、后落艮宫，即查「乾 → 艮」＝<strong>浓云闭日</strong>，主事情压抑、不见天日。</p><h2>落卦名</h2><p>落卦名是<strong>结果</strong>。用神最终落在哪一宫、配哪一张牌，就按落卦名表直读结果。</p><h3>落卦名对照表</h3><table><tr><th>宫位</th><th>一皮</th><th>二皮</th><th>三皮</th><th>四皮</th><th>五皮</th><th>毛鱼</th><th>二棍</th><th>八万</th><th>刘唐</th></tr><tr><td><strong>乾</strong></td><td>乌云遮天</td><td>日月高悬</td><td>发大横财</td><td>有喜事</td><td>自己高迁</td><td>喜气连天</td><td>出路好</td><td>运势高</td><td>有照管</td></tr><tr><td><strong>坎</strong></td><td>官滞</td><td>泪眼涟涟</td><td>满财</td><td>事情缓</td><td>当家人为难</td><td>万事和缓</td><td>困难重重</td><td>男人为难</td><td>万事难办</td></tr><tr><td><strong>艮</strong></td><td>墙高难进</td><td>登高望进，好亲照应</td><td>朋友扶升</td><td>将有喜事</td><td>亲人靠不住</td><td>女人为难</td><td>做事无成</td><td>男人受大罪</td><td>走路办事费劲</td></tr><tr><td><strong>震</strong></td><td>官心短</td><td>有眼认不清</td><td>财运不佳</td><td>是非走进</td><td>暂有亲人照应</td><td>婚姻不定</td><td>不顺事快完了</td><td>当官掌印</td><td>贵人帮忙</td></tr><tr><td><strong>巽</strong></td><td>办事无成</td><td>有眼认不真</td><td>很一般</td><td>事不定</td><td>当家人替受罪</td><td>女人受罪</td><td>不顺事走了</td><td>男人受罪</td><td>贵人靠不住</td></tr><tr><td><strong>离</strong></td><td>官胆大</td><td>眼下起火</td><td>钱财失离</td><td>有很着急的事</td><td>朋友梳义</td><td>女人说了算</td><td>小鬼挡道</td><td>火烧自己</td><td>火见火没处躲</td></tr><tr><td><strong>坤</strong></td><td>官也敢干</td><td>办事天照应</td><td>财动平平</td><td>定有喜事</td><td>亲人有福</td><td>清闲自在</td><td>没有不说的事（路安稳）</td><td>逍遥自在</td><td>失物没不了</td></tr><tr><td><strong>兑</strong></td><td>官走下坡路</td><td>谁也靠不住</td><td>求财无望</td><td>谋事无成</td><td>长辈有难</td><td>女人有灾</td><td>陷入黑窟</td><td>男人有难</td><td>迈不开腿</td></tr><tr><td><strong>中</strong></td><td>怀抱金盆满吉祥</td><td>和合家道昌</td><td>财进门</td><td>家有是非</td><td>家有好亲照应</td><td>家中主顺当</td><td>家里不顺</td><td>闭财入库房</td><td>不宜出外乡</td></tr></table><h2>陈香传响马卦笔记（走卦名部分）</h2><p>一皮：官、天。二皮：眼、气。三皮：财。四皮：事情。五皮：亲人、（长辈）朋友。八万：男人（男来问本人）。毛鱼：女人、顺当、阴人（女来问本人）。刘唐：贵人、小人（男）。二棍：出路、（仕途）小人。</p><p>陈香云：牌开不看不卦名，看叠牌与落宫。直接成一对的只看落宫，走卦名是过程，落卦名是结果，配对的第一张走不来卦名，最后一张也走不来卦名，只看落宫，如走兑代表走下坡路。以用神走，如夫妻反目，以三皮走是财事引起，以五皮走是家里人、朋友导致，以此类推，又分九种情况。</p><p>姜注：辅助取象更好用，也可以人盘跑宫的时候用。</p><h2>问答</h2><p>问：第一张牌与最后一张牌如何走卦名？<br>答：第一张走不来卦名，最后一张也走不来卦名，只看落宫，如走兑代表走下坡路。</p><p>问：是否看对宫？<br>答：不看。</p><p>问：牌不开是否看走卦名？<br>答：牌不开不看卦名，看叠牌与落宫。</p><p>问：走卦名如何使用？<br>答：以用神走，如夫妻反目，以三皮走是财事引起，以五皮走是家里人、朋友导致，以此类推，又分九种情况。</p><p>问：走卦名与落卦名，谁主谁次？<br>答：走卦名是过程，落卦名是结果。</p><p>问：是否有重卦？<br>答：无，直接成一对的只看落宫。</p>'},
+{id:'nw-8',group:'先天卦',title:'碰牌十法',html:'<h2>学习目标</h2><p>掌握西北核心断法：碰牌十式、二次走官。</p><h2>碰牌十式</h2><ul><li>走宫碰、转宫碰、翻宫碰、落宫碰、跑宫碰</li><li>追宫碰、赶宫碰、跨宫碰、反吟碰、伏吟碰</li></ul><h2>走宫碰</h2><p>走宫顺序从中宫开始，顺时针先从艮开始数外面八宫，最后回归中宫。先按照前面的顺序查出所占事物的用神，然后再顺时针数到第二张用神的宫位。以用神正逆为所占事项的顺逆，以同宫的牌和宫位来断修饰事情的吉凶细节。走宫有两个看法，一个是用神为主爻，配牌为主爻受到的影响，拿来看吉凶；一个是以按照顺时针两张牌的顺序去论谁碰到谁（走宫精确到牌），拿来看顺序上的细节。假设占病，那么第一个宫位论病的形状（同宫牌和落宫合论，比如本人刘唐到艮就是心脑血管的毛病）和新旧（病碰身为新，身碰病为旧），严不严重（落宫），第二个论吉凶（看变宫主爻的配牌吉凶来确定死没死），有没有并发症。</p><p>走宫的时候，负责链接两个宫的牌（一般是取用的）我们称之为主爻，与主爻同宫的另外一张牌被称为配牌，第一个主爻所落宫位被称为本宫，第二个主爻所落的宫被称为变宫。所以有本宫配牌和变宫配牌。</p><p>需要注意的是要仔细看所占类神牌的朝向变化（如果是论朝向的牌），可以作为一个事情当下的状态。</p><p><strong>附：</strong>如果用神落中宫，则从中宫走到外面一圈。假设用神刘唐，则从中宫走到右边兑宫。用神卦眼不开则紧扣中宫以凶论。断中宫顺序的时候以左边的牌碰右边的牌论。如果所占事物事件跨度大且跟自身关联性高，除了类神，还要另走一个五并以供参考（见透出）。</p><h2>转宫碰</h2><p>转宫就是对宫，假设主宫在乾，对宫就是巽。对宫在先天卦（不跑宫配对的）只代表走宫时主用神的细节，不代表吉凶。但是在后天卦（跑宫配对的）里，如果牌已经被配对上了，那么吉凶就要看转宫，反之没配对上就依旧用走宫论。</p><h2>翻宫碰</h2><p>翻宫碰如果想找一个配牌的原因、来历，那么直接找配牌地盘本宫所落的两张牌，用落宫碰里面不加宫位进行判断。假设要看财，走出卦来，配牌为二并眼，为看到的信息，这时候本宫配牌没有显示更详细的信息，那么就去二并的本家兑宫，看兑宫所落的两张牌是什么意思。</p><h2>落宫碰</h2><p>落宫碰单宫的论法，顺序是主爻—宫位—配牌。主爻看事情本身的状态，宫位看事情发展的趋势，配牌断这个宫位最后发展出的结果。假设按顺序分别是吉凶吉，那么可能这个事情本身的状态是比较好的，只不过在过程中出了岔子，导致比较曲折，但是最后的结果是好的，没有半途而废。宫位在断象的时候也是可以修饰主爻的，只不过关联性比转宫更强，落宫是附加氛围气质，转宫是信息修饰。</p><h2>跑宫碰</h2><p>如果中宫卦眼开了（两张牌不同），那么就从中宫左边开始，找到周围八宫里面相应的牌，逐步配对（可以移动牌，也可以目移）。假设中宫左边的第一张牌为毛鱼，那么就在周围的宫位里面找到有毛鱼的宫位，卦气就会走到那个宫位（注意如果两个牌朝向不同，那么以跑过去那个宫位里面的牌的朝向为最后的方向）。</p><p>然后以走到的那个宫位里面另一张牌，走到下一个宫位。直到跑回中宫为止。每走到一个宫位就是开了一个门。跑宫的时候，跑宫的过程（串宫位时候的顺序以及最后归中的牌）为人盘，配对完了之后的卦为后天卦（地盘）。</p><h2>追宫碰，赶宫碰，跨宫碰</h2><p>走宫的时候，本宫前一宫叫追宫，代表所测事情开始前发生的事物；本宫到变宫之间的叫跨宫，为本宫发展为变宫的过程；变宫后一宫为赶宫，代表事情结束后的后续。假设乾宫，兑宫为前一位代表过去，假设走到艮宫，艮宫乾宫中间坎宫就是过程，艮后一位震就是未来。</p><h2>反吟碰</h2><p>卦落在对冲宫位上，比如毛鱼（坎）落在离宫。为不吉，泄气，大多主变动不宁，事情反复出现变动之类。</p><h2>伏吟碰</h2><p>两张牌同时出现在一个官位的时候，这对牌所主的事物为有，中性牌为好。三皮见三皮，消息兄弟来。四皮见四皮，喜上又加喜。五皮见五皮，善果又为喜。（注：三四五相见大多为吉。五并也可以是财喜，三并好消息），二皮见二皮，心里都明白。（注：主心里有）一皮见一皮，阻碍并靠山。毛鱼见毛鱼，阴私与顺利。刘唐见刘唐，腿上又是腿。八万见八万，财帛堆成山。二棍见二棍，反弓玉带腰。（注：一并，毛鱼，刘唐，八万，二棍这几张有朝向的看宫内第二张（如走宫一段所论），第二张朝内就动不起来。比如两张二棍堆叠（碰到的第二张是朝外则是玉带环腰，朝内是反弓煞），同时要看进出。）</p><h2>响马卦的二次走官技法</h2><p>比方说我们用这一卦算事业，从中宫开始数宫，第一张刘唐在乾，第二张刘唐在艮，两张刘唐均搭配三皮，八万第一张搭配二棍，第二张搭配毛鱼。八万开始配二棍为有小人打搅，后八万配毛鱼，毛鱼为女贵人主贵人扶持，这是基础类象。但如果求测人进一步问，这一卦里的女贵人是什么样的女贵人？这一卦里的小人又是什么样的小人时，我们就需要用到二次走卦的技法来拓展意象。二次走卦的方式就是以配牌所落的官位为起点，顺数到第二张配牌所落的官位上。比如说离宫八万搭配的二棍，就以离宫为起点向下寻找，第二张二棍在中，中宫为家宅为近，就可以取象为亲朋好友、熟人在卦中拦路；巽宫八万搭配了小鱼，就以巽宫为起点向下寻找，第二张毛鱼在坎，如果问这个女贵人什么样？就可以说一年龄中等（坎为中女），二肤色较黑（坎为黑），脑子灵活，暗精，很聪明（坎主智）以此类推。</p>'},
+{id:'nw-9',group:'先天卦',title:'换太极法',html:'<h2>学习目标</h2><p>掌握换太极法，从一个用神切换到另一个用神的断法。透出即换太极。</p><h2>换太极的含义</h2><p>换太极就是从一个用神切换到另一个用神的断法。在响马卦中，换太极与「透出」是同一件事。</p><h2>具体步骤</h2><ol><li>先确定当前太极点（用神）。</li><li>换太极时，以另一张牌为新的中心，重新看其本宫、对宫、配牌。</li><li>原用神可作为新用神的配牌参考。</li></ol><h2>透出论（即换太极）</h2><p>如果八万（身交）出现在两张用神牌的本宫和对宫，就是透出。凡占卦，若无八万透出，则看八万走卦为自身最后结果结果。透出一个，则从透出的八万立太极点，以第二张八万为结果。如果两张用神都透出八万，则只需要看用神来决定结果。论头顶脚踩的时候本宫对宫见到八万不论透出，透出只有走宫碰的时候才论。</p><p>五并碰用并转宫，卦身透出是其名。不透走五全透用，透一则看第二身。</p><h2>透出论（旁透易景枢）</h2><p>《玉真集》云：「五并碰用并转官，卦身透出是其名。不透走五全透用，透一则看第二身。」透出为何？乃是与事关联之象，出现于用神走宫之本宫变宫及其转宫之中，即本宫，本宫之对宫，变宫之对宫，变宫。</p><p>凡透出之星，如为旁参另看之用，则需要二次走宫论其吉凶，如为修饰之象，则直读为象。</p><p>读象顺序之法，先看本宫何象，次看本宫之转宫，再看变宫之转宫，最后看变宫，转宫读象，参《玉真集》之独参全象部，碰星定象部。</p><p>凡读象，先需明了取用之象、功用之象之分。取用之象为何？盖入手断式，先需定位，参宗首生成之层次，定明动主事之用神，故而为取用之象。功用之象为何？盖定位已备，宾主既分，则需以配牌之功用，定主爻之变化，如此而论，斯象既全。</p><p>九星功用诀：逢一既止（见了就停住），逢二入眼（获取了某种消息，心里清楚，见到的机遇或者问题被发现），逢三催动（推动宫或事情发展，乾坤圆满，不喜催动），逢四事变（发生事情，事情发生变化），逢五比劫（帮助，竞争，手足，人手），二棍偏路（道路，途径，偏门），八万元神（遇到自己或我主动去找），毛鱼顺逆（事物运行的顺逆），刘唐主动，出入践行（主动的行动，腿脚，跑动，功名）。</p><p>附：八万的功能类似世爻（正，主，人元，卦主），二棍的功能类似应爻（偏，客，地分，环境）。</p>'},
+{id:'nw-10',group:'先天卦',title:'单宫定象法',html:'<h2>学习目标</h2><p>掌握单宫定象法，直接以一个宫位的两张牌断象。</p><h2>单宫读法</h2><p>顺序是主爻—宫位—配牌。主爻看事情本身的状态，宫位看事情发展的趋势，配牌断这个宫位最后发展出的结果。</p><h2>独参全象部</h2><p>如果不锁定主父（比如占阳宅，整个卦都代表阳宅八方的景物），那么就要使用无用神占法直接定象，全象的牌就是需要看朝向的牌，正位的时候，他代表人或者事，逆位的时候，他代表状态。半象的牌，一般代表一个状态，两张牌组合成象参考以下图表。</p><table><tr><th>类型组合</th><th>看法</th></tr><tr><td>半象配半象</td><td>按照单宫走卦顺序读</td></tr><tr><td>半象配状态</td><td>状态修饰半象</td></tr><tr><td>半象配人事</td><td>半象修饰人事</td></tr><tr><td>状态配人事</td><td>状态修饰人事</td></tr><tr><td>状态配状态</td><td>上下并列分开读</td></tr><tr><td>人事配人事</td><td>按照上下顺序读</td></tr></table><p>如风水读象思路：朝外的为主定事物，半象为主，如果两个都是半象，两个都朝里，上面是状态，下面是事物，除了五并定成人或者堆积的东西，其他的半象都要当全象用。</p><p>断事物：看风水比如说刘唐在乾火烧天门，那个地方有可能有什么厨房啊电器啊，具体是什么，可以看什么压着他，压着他那张牌是刘唐这张牌的细化，比如说有个八万，还有大的铁器，那不就是厨房。</p><p>看风水纯属物象组合：林冲在底下上面是四并，看阴宅你怎么说？山上长着树木，四并就是小的花草树木呗，三并大的，刘唐朝外配二棍朝里，基本上是电器，因为刘唐代表一种电器二棍这里表示一种缠绕的状态。坤位二棍朝里配林冲朝里，为啥缺角？二棍朝里代表一种缺林冲朝里也是一种缺失，林冲朝里压二并，破损的镜子，玻璃之类。</p><h3>占宅内景法</h3><ul><li>一并山，朝外是实在的东西，门墙，床，沙发，朝里的话就是一种状态，老旧，破损，后墙，垃圾桶。</li><li>二并眼，金属窗户镜子猫眼，装首饰的东西。</li><li>三并信，木本植物，木器文书，门槛，鞋架子，拖鞋，地球仪，地图，日历。</li><li>四并事，正门，吹风机，电扇，空调，衣柜。</li><li>五并身，自身，堆积的杂物，卧室。</li><li>毛鱼顺，洗衣机厕所洗手池卫生间洗菜池，跟饭菜有关的，床。</li><li>刘唐腿，朝外灯，电器，窗花，炉灶，神像，朝里的话孤坟，有一定毁灭的含义。</li><li>二棍路，缺口，电线，管道，晾衣架。</li><li>八万才，朝外金属器物，铁器，保险箱，锅，存钱的地方，朝里无力。</li></ul>'},
+{id:'nw-11',group:'先天卦',title:'秘传活八门九星八神之法',html:'<h2>学习目标</h2><p>掌握活八门、活九星、活八神，以及关于活八门九星搭配先天天盘的用法。</p><h2>活八门法（用于后天卦）</h2><p>活八门是时辰起，看中宫左右，阳时用中宫左牌卦象所代表的八门（如左边刘唐为离卦，离为景门）在时辰所落宫位上（如亥时落乾宫）起八门，阴时用中宫右牌八门在时辰上起八门，五并寄坤。八门阳顺阴逆，阴阳通有两种定法，一个是节气定，一个是昼夜定，一般用节气。</p><p>活八门是对后天卦里面事物的修饰描述，八门要看和地盘的生克，发生门迫的话吉门不吉，凶门不凶。八门不与别的发生生克，但是因为八门为事物的修饰，无论之后怎么变，性质都不变，比如卖土豆，八门就是土豆，牌就是买卖。你卖土豆得财和卖玉石得财是两回事，因此卦好门不好，容易虚喜。比如说对宫二棍朝里，三皮景门临艮。三皮景门代表财上有前景，有发展。这时候二棍朝里代表有事掩盖了这个发展，没门路了，停住了。活八门找方向用处很大，别的用处一般（姜注：后天反用于先天的思路，但是个人的想法是，飞而看伏，所以八门还是用于后天辅助定吉凶吧）。</p><h3>八门逐门详解</h3><p><strong>开门</strong>：事业钱财，开始，发展：公开、暴露、舒展、宽广、开放、开创、开始、开明、公开、开朗、打开、手术、驾驶、顺利、通畅、经营、经济、升迁、出行、学业、婚嫁、贸易、庆典、谋求。主开始之意。临开门，首先有一个基础面，即这个事情马上要做了或已经开始做了，或者说公开了。开门有动态的信息，临开门都是有些事情要行为了，但这并不是说临开门就能做好。如果开门门迫、入墓，只能是开始了，并不一定做得好。而且开门利客不利主，代表积极的、主动的信息，要主动的寻求最佳的时机。</p><p><strong>休门</strong>：休养生息，也主不动：休闲、懒散、旅游、休息、漫不经心、调养、调理、整理、美容、美发、死亡。主从容、稳定、休闲、清闲，还有持之以恒的意思，不能中断。只要不断的寻求最佳的行为和方法就能成功。休门并不代表不积极，而是不急不躁、始终如一的做一件事，就能成功。临休门的人，主清闲，富贵。休门代表政府中人，琐碎的事情缠身，政府部门的事务与水一样不会平息。</p><p><strong>生门</strong>：为生发：延续、靠山、利润、利息、效益、学习、工作、经商、生意、生活、生产、生存、生长、活着。利于见官求官、求财经商、嫁娶迁移、出行旅游、修造建屋、利于搞房地产开发、种养殖业、田产交易。但不利于埋葬治丧、求问阴宅风水。用神、算命临生门财名双利、财运超脱。代表生长、生活、有生长生活的强烈愿望、生孩子、钱的含义、利润、生产、动的含义、生机勃勃、哺育、生活的场所、房子、生活的空间、有人在的地方、希望、家庭美满、财力旺盛、勤恳、山的含义、乳汁。</p><p><strong>伤门</strong>：打斗伤灾，口舌是非，有车象，出门象：损害、消耗、妨碍、受伤、伤心、伤痛、抓捕、索取、赌博、戏耍、挑逗、收敛财货、渔猎。伤门代表公安捕盗、讨债人、竞争对手、汽车船只、司机、驾驶员、身体受伤部位、砸伤、心、忧伤、伤感、伤灾、肿块、硬物、难度、阻隔、别人或他人受伤、公检法系统、军队、痕、捕猎、船、喜好运动、车祸、骑车人（摩托车）、打架、赌博、收购、挑逗、猎人、火车、斗牛、搏斗、木棒、疤痕、伤人的动物狼、乐器、勤奋、多动少静、容易对对方造成伤害、性子急、武器、凶器、运动员、逮捕证。</p><p><strong>杜门</strong>：不动反复：阻塞、阻止、困难、限制、闭塞、隐藏、覆盖、遮掩、关闭、断绝、技术、艺技、体会到的、感觉到的、意识到的、想象到的。是空间、环境方面来说明影响事物的因素。杜门为堵住的意思。画地为牢。引申为现在的公检法司等限制人身自由的部门；也代表消息不灵，保密，闭塞，阻塞等。古人讲：「杜门无事好逃藏」。杜门也代表技术。也代表房屋，楼房，桥梁，隧道。杜字就是土木工程。</p><p><strong>景门</strong>：前景：文化、文书、漂亮、火光、流血、风景、旅游、远景、前程。多主血光、口舌、流血事件，但亦为小吉，宜建议献策、选用人才、获取信息、宣传、广告、探寻市场、扩大声名、饮酒游乐、朋友聚会。景门表示信息、计划、渠道、宣传；遇到景门要多沟通才比较好。自己的能力达不到，哪怕这个人无用，也要想尽办法与人沟通。遇到景门要多沟通、多宣传、多自我表现。景门景色宜人。也代表血光。景门，代表通讯，音讯，消息，信息传递的所有东西，旅游。景门如果落在巽、坤、艮三个宫，最容易出现血光之灾。景门不可旺，旺则有血光。因为这三个位置，都能发挥景门凶的作用。奇门遁甲中景门所代表娱乐场所、繁华地带、电影、电视、电话、电子产品、手机、图画、文书、书籍、美容院、酒店、通信设施、起诉书、考卷，测人为漂亮爱说、能歌善舞、从事文艺之人。</p><p><strong>死门</strong>：阻力伤灾血光：执着、不灵活、没有变化、丧失生命、没有生命、不可调和、固定不变、不可周转、断了念头、鬼神。为凶门，不利吉事，只宜吊死送丧，刑杀征战，捕猎杀牲。难以生存之意。也有闭塞的意思。死门临白虎，来测命（不是测事），则命上有凶丧孝服之事，有亲人去世。凶门都有两种性质。死门，也代表没有希望，缺少生机，也代表神佛，死人。释迦牟尼也临死门。死门也代表神秘信息。</p><p><strong>惊门</strong>：意料之外，口舌是非：惊恐、奇怪、刺激、吃惊、诧异、惊慌、恐慌、声音、官非、口舌是非、抖讼、忧疑、音乐、响声。如官鬼交待世一样，再有把握的事情，也难免惊恐不安、犹豫，忐忑不安。惊门主口舌是非、害怕、担心，主争讼、议论纷纷。人逢惊门心不安。惊门主争讼、惊恐、担心、犹疑、创伤、官非口舌，忐忑不安之事，适宜斗讼官司、掩捕盗贼、蛊惑乱众、设疑伏兵、赌博游戏，其余事不可为。惊门代表官司口舌是非缠绕，诉讼律师，教师、歌星、唱歌、演说。</p><h2>活九星法</h2><p>为日家奇门九星，只用来辅助先天卦取象断细节，不参与最终吉凶判断，九星不决定吉凶，只是主事件类型。顺序：太摄轩招符，龙咸池阴天。</p><p>一法以中宫的两张牌论，是时辰起，看中宫左右，阳时用中宫右牌卦象所代表的九星（如右边刘唐为离卦，离为天乙）在时辰所落宫位上（如亥时落乾宫）起活九星，阴时用中宫左牌九星在时辰上起九星，五并寄坤。九星用飞宫，阳遁顺飞，阴遁逆飞，看地理的时候则专门以景门落宫起九星，也可以再多准备九张牌分别代表九星然后洗乱了从坎宫飞随机排布九星。</p><p>又一法以时辰旬首起，辅助择日，阳顺阴逆。九星落局按冬至后阳遁、夏至后阴遁进行，一日一宫而行。阳遁按八、九、一、二、三、四、五、六、七的次序给各宫配入九星；阴遁按二、一、九、八、七、六、五、四、三的宫次配入九星。</p><h3>九星逐星详解</h3><p><strong>太乙</strong>：女人，贵，顺，水神。门中见太乙，星曜号贪狼。博奕钱财众，婚姻大吉昌。出门无阻滞，参谒见贤良。</p><p><strong>青龙</strong>：男人，钱财，喜事，金神。门内见青龙，求财喜重重。每遂茶酒事，博奕定见赢。相生钱财旺，休言克破刑。接贵安营寨，万事喜和同。</p><p><strong>轩辕</strong>：雷劈，贵罚，木神。出入遇轩辕，作事必牵缠。相生灾侵慢，相克必忧煎。远行逢屯颤，博奕定输钱。</p><p><strong>招摇</strong>：同四并好事坏事，木神。招摇号木神，当门百事成。相克行人阻，阴人口舌迎。白梦多惊恐，屋响釜自鸣。阴阳消息事，作事不容情。</p><p><strong>摄提</strong>：小人，是非，土神。远行遭羁绊，耕地损牛犁。相生又问可，相克见灾危。死门并相见，老妇哭悲啼。求财并嫁娶，万事不相宜。主隐匿遁藏。</p><p><strong>太阴</strong>：发展，活口，土神。当门见太阴，百祸不能侵。方行六七里，知交有觅寻。妙法牢收取，回军引马前。有伏兵截路，慎不可轻行。</p><p><strong>天乙</strong>：前景，火神。门迎天乙星，相生百事成。动用皆和顺，茶酒自相迎。求婚行嫁娶，相会自天成。出军交兵阵，一见定胜赢。</p><p><strong>咸池</strong>：破损，损伤，缺口，口舌，金神。吾将号咸池，当门事不宜。相生皆无破，相克有灾危。博奕相输脱，求财空手归。神仙真妙诀，愚人要与知。军事须进退，反复逆风吹。</p><p><strong>天符</strong>：病，气，土神。五鬼是天符，当门阴女谋。相克无好事，言客在程迟。走天难得见，吊客惹成孤。此星当门值，切记有灾途。</p><p>风水来定：八门阳九星阴；动静来定：九星阳八门阴；八门后天，九星先天。</p><h2>活八神法</h2><p>从时辰开始，飞布八神，略过中宫，不分顺逆，象意同奇门，专门用来断细节，但需要注意的是中宫没有，所以没有八门九星常用，比较鸡肋。</p><h2>关于活八门九星搭配先天天盘的用法</h2><p>九星修饰主父，八门修饰配牌，地盘修饰用神。宫位修饰用神，代表一个方位和用神的象，门是发展趋势和细节，星是吉凶趋势和细节。本宫是个发展趋势，对宫是个外环境，所以本宫的配牌一般不读做事，都是读作主父事物的状态。</p>'},
+{id:'nw-12',group:'先天卦',title:'一卦多占与六亲分宫法',html:'<h2>学习目标</h2><p>掌握一卦多占、六亲分宫、客次法、活六亲。十二宫飞星的详细内容见终身卦模块。</p><h2>一卦多占</h2><p>第一个来问的用中宫为卦山，第二个用艮宫，顺时针走一圈，最多测九个然后就得换局。一卦多测没法取用神，他的思路就是锁单宫，比如说问财，离宫二棍朝里加八万，那就是有发展，但是发展被压住了，小人打搅走不通。尽量不要一卦测特别多的事，一个局九个都随便你测，还可以参考生肖报数啊啥的，反正你乐意想测多少测多少。</p><h2>六亲分宫</h2><p>以八万本宫官位八卦的五行为卦官，取用变官配牌为客定牌六亲。假设八万落乾，那么一皮二条为父母，二皮为兄弟，三四皮为妻财，毛鱼为子孙，刘唐为官鬼。一般用在官位上，不怎么用在牌上。</p><h2>客次法</h2><p>见上「一卦多占」。</p><h2>活六亲</h2><p>可以用着玩，不过有没有那个位置是个问题。也可以用六亲辅助象，看是有情还是无情。相生有情，相克无情。比方说你疾厄宫犯凶，见官鬼了，如果跟命宫有情那可能就是官司，体现官的管束惩罚性质；如果无情那可能就是病灾横祸了。</p><h2>十二宫飞星</h2><p>十二宫飞星以命宫为起点，飞布十二宫，用于终身卦与流年流运的推演。详细内容见「十二宫终身卦思路」。</p>'},
+{id:'nw-13',group:'先天卦',title:'分类占的基本思路',html:'<h2>学习目标</h2><p>分类实战与三盘运筹。</p><h2>占感情</h2><ul><li>男占用毛鱼，女占用刘唐，同性恋相反。</li><li>中宫为当前状态。</li><li>占卜感情，要先问有没有对象，有没有追求者或心仪的对象。</li><li>比如一皮林冲就是有阻碍，感情有问题，找对象难找。</li><li>占卜感情、关系、合作、贵人等时，需要看用神星和八万的朝向，朝向卦山是吉利、主动的；朝向外是不主动、被动的。用神头朝外不代表一定不成，只是代表别人不主动，需要你多费劲，代表别人主动帮忙少。</li><li>男人问女人，中宫刘唐朝下，或毛鱼对宫，刘唐朝外，可能是女人犯桃花，有外遇。女人问男人，中宫毛鱼朝下，或刘唐对宫，毛鱼朝里，可能是男人犯桃花，有外遇。同性恋同理，只是相反。如果是有追求的人的情况，就可能是有情敌。</li></ul><h2>看性格</h2><p>用神落宫代表一半，对宫的牌代表一半。如果用神落中宫，离宫的牌代表外在的，坎宫的牌代表内在的。</p><h2>失物占</h2><ol><li>一看用神，二看方向，三看所属环境，四看能否找到，以及什么时候能找到。</li><li>人走失，男看刘唐，女看毛鱼。动物走失，看刘唐。东西物品，看毛鱼，因为有玄武象。</li><li>方位：看用神所落八卦宫位。</li><li>环境：看用神对宫的牌，除了四皮之外不看落宫。</li><li>能否找回：看对宫的牌是正位还是逆位。朝中宫好找，朝外不好找。</li></ol><h2>占学业、考试</h2><p>中宫为现状，用神为过程，对宫为结果。此事刘唐的朝向不代表结果，可以参考这段时间学习的容不容易，有没有压力。朝中宫容易，朝外吃力。</p><h2>占财</h2><ul><li>能否得到某一笔具体的财，需要同时参考三皮和八万。</li><li>断某一段时间的财运，以三皮为用神，不参考八万。</li><li>三皮落震，财运不错，有发展。落艮主财不动。落坎财运不顺，水上漂财易失财。落巽平平，不进财。落离财上有闹心之事。落坤主财路广。落兑主破财。落乾财路广。</li></ul><h3>八卦所代表财的性质</h3><ul><li><strong>乾卦</strong>：大格局之财、开创性财富、权力资源。如高管收入、重大投资、企业股权、跨国贸易等高端资产，需凭魄力争取。</li><li><strong>坤卦</strong>：稳健积累之财、土地资源、民生基础产业。如房地产、农业、仓储物流等实物资产。重长期稳定，忌投机冒进。</li><li><strong>震卦</strong>：动态增长之财、新兴领域机会、风险收益。如股票、科技创业、新兴市场等波动性收益，需敏捷应对变化。</li><li><strong>巽卦</strong>：流通周转之财、人际网络资源、灵活获利。如贸易、中介、资讯传播等依赖渠道与协调能力的财富，贵在顺势而为。</li><li><strong>坎卦</strong>：暗流资源之财、危机中机遇、专业技术价值。如航运、能源、研发等高风险高回报领域，需智慧化解险中求财。</li><li><strong>离卦</strong>：虚名显达之财、文化传播产业、视觉经济。如广告、艺术、互联网等依赖影响力与创意的财富，重口碑与传播力。</li><li><strong>艮卦</strong>：固定资产、保守型收益、资源垄断。如矿产、基础设施、长期租赁等，宜守成节制，忌贪求速富。</li><li><strong>兑卦</strong>：流动交易之财、服务型收入、人际关系变现。如金融、娱乐、咨询等依赖口才与服务的财富，贵在诚信互惠。</li></ul><h2>占官司</h2><p>占是否会占官司以四皮为用神，结合八万为本人能力。占是否会被警察上门以刘唐为用神，刘唐朝内为入宅，为会被上门；刘唐朝外为出宅，主不会被上门。</p><h2>占疾病</h2><p>占疾病吉凶以四皮为用神，但并没有特地的某一张牌代表疾病的位置，八卦都可以代表疾病，中官代表疾病的总体程度。林冲，二棍凶时代表老病，林冲也表示气淤，二棍也表示慢性病。刘唐凶时代表火气大，有炎症。毛鱼凶时表示湿气，积水。二并配什么一般代表自己已经感受到的问题，如震卦林冲压二皮，就是自己清楚的肝部气淤的问题。三皮为喜，为顺畅，被压制为不喜，原本好的现在不好了，乐极生悲。四皮凶时代表事上有灾，有时候表示体内有风邪走窜。</p><h3>八卦对应人体</h3><ul><li><strong>乾卦</strong>：头、脑、骨、肺、大肠、胸脯、右足、右下腹、男性生殖器。</li><li><strong>坤卦</strong>：腹部、脾、肌肉、胃、消化系统、右肩。</li><li><strong>震卦</strong>：足、肝、头发、声音、左肋、神经、筋、右肩臂。</li><li><strong>巽卦</strong>：头发、神经、呼吸器官、食道、肠道、左肩、淋巴系统、血管、大腿。</li><li><strong>坎卦</strong>：耳、肾、泌尿系统、性器官、血液、腰、背、脊骨。</li><li><strong>离卦</strong>：目、心、头面部、喉、小肠、红血球。</li><li><strong>艮卦</strong>：手指、鼻、背、关节（手指/膝盖/肘）、左足、乳房、脾、皮肤、脚背。</li><li><strong>兑卦</strong>：舌、口、喉、肺、牙齿、胸脯、右肋、右肩、肛门。</li></ul><p>四皮代表身体这些疾病的总体走势向吉向凶。四皮在坎，拖泥带水不吉；在离主病重；在兑主凶；在乾为吉；在艮主病停止发展；在震主病动，病动不吉利。</p><h2>占出行</h2><p>出行以刘唐、二条、八万为用神。刘唐为腿，主腿上是否有阻拦，也主行动能力的强弱；二条为路，主路是否通畅；八万为自身做事的意愿。</p><h2>占风水环境</h2><p>假如说我们要断这个人的室外风水，中宫就是这个人的室内环境，刘唐如果取做一个事，就可以说他家家里不是很明亮，比较暗。东北二棍加八万，取物品的静象，就是高楼比较多，有一条大路，正东边有派出所、政府部门或学校，头朝里离得比较近，而且附近有银行和市场，也可以说他家正东边经济原本发展挺好的，现在不太景气了（三皮配刘唐）。西南土上事，配三皮，可以说现在是西南边经济发展比较好，在搞建设。南边同样也是有路。也可以说四皮是市场。一般断风水就是事件和物品的静象同时参考，混合起来看，这属于比较江湖的用法，其实实战用处并没有大家想的那么高，但也可以学习一下。</p><h2>取数技法</h2><p>首先需要知道不同官位对应的数字：</p><ul><li>坎宫：1为九宫数、6为水数</li><li>坤宫：5和10为土数、8为先天八卦数、2为后天八卦数</li><li>震宫：3为后天八卦数和木数、8为木数、4为先天八卦数</li><li>巽宫：3和8为木数、4为九宫数、5为先天八卦数</li><li>中宫：5和10为五行数</li><li>乾宫：1为先天八卦数、6为后天八卦数、4和9为金数</li><li>兑宫：4和9为金数、2为先天八卦数、7为九宫数</li><li>艮宫：5和10为土数、7为先天八卦数、8为九宫数</li><li>离宫：2和7为火数、3为先天八卦数、9为九宫数</li></ul><p>世间万物皆有数。数术的数字最多，较难掌握，但大体要根据事物的旺衰确定数字大小（在响马卦里，就是要参考中宫）。</p>'},
+{id:'nw-14',group:'先天卦',title:'应期思路',html:'<h2>学习目标</h2><p>掌握西北派应期的推法。</p><h2>应期总法</h2><p>把当天的地支代进去，比如说午日，数到用神宫位，或者本人宫位的地支上，如果问事情什么时候应，就有可能在那几天应。断月份就代月份，断年就代年。</p><h2>顺推法</h2><p>从中宫开始，走到艮宫，顺时针推九宫。看日从初一开始推，看月从正月开始推，看年从出生年开始推到类神。响马卦看应期一般也是用流日，中宫起初一，艮为初二顺行八宫，数到对应的类神为日期。不过需要注意如果该宫位的对宫有朝外的二棍，那么就以对宫对应的日子为应期。</p><h2>流日法</h2><p>见上顺推法。</p><h2>流月法</h2><ul><li>以艮宫为正月。</li><li>凡四正宫的两张牌，上张为上半月，下张为下半月；四维宫的两张牌，上张为上月，下张为下月。但艮宫的上张为正月，下张为十二月。</li><li>比如说刘唐朝里压八万朝外在震宫，二月前半月运气好，后半月有口舌以此类推。</li></ul><h2>数宫应期</h2><p>以用神所落宫，和对宫所落宫判断。比如问工作，四月兑宫刘唐，对宫八月震宫毛鱼朝外，就是四月工作不顺，八月会好会顺。</p><h2>五行生克与运势</h2><p>以卦山的牌的五行为主，类似于月令。以卦山的牌和用神的牌的五行生克定旺衰。卦山生用神或同用神，就是旺。如果用神生卦山或克卦山，就是不旺。如果卦山克用神，就是死气，非常衰弱。用神在中宫为旺，相当于当令。旺相就力量大，休囚死力量小。</p><p>测运需要参考对宫，一般对宫的力量比本宫要大，因为临的牌没有冲的牌力量大。除了四皮要参考地盘，其他的不需要。如测运遇不开，以上面的卦为主，下面的卦是一种暗中的状态。如三皮，对宫八万朝里，就代表本月有财事，但在钱财上自己不顺，自己花钱。如八万朝里，对宫三皮，就是虽然自己不顺，但能挣得到钱。但是单纯测发生什么事情还是正常断法，需要看地盘。</p>'},
+{id:'nw-15',title:'三盘合参',html:'<h2>学习目标</h2><p>掌握三盘的运筹与化解、择方、择日、趋避。</p><h2>三盘论</h2><ul><li>先天天盘：指卦刚起出来没配对的状态，一般用来断事情、风水、应期、流运，为伏藏。</li><li>中天人盘：指先天卦从中宫左牌开始配对一直到配回到中宫的状态，可以辅助通灵断或者补充过程上的细节，搭配卦辞用。</li><li>后天地盘：指先天卦配对结束后的后天卦，一般用来断方位、运筹、择日、择方，为飞神。</li></ul><p>先天为体，后天为用，先天为显，后天为隐，故而先天盘主因果、始终、信息、时间，而后天盘主过程、内情、变化、方位。</p><h2>三盘运筹</h2><p>三盘各有克应发动之期，天盘之变官为归计之应，天盘本宫、人盘二并、后天对官为运筹之应。</p><p>运筹之法，先定运筹之象，后定运筹之期。凡定运筹之象，需三盘分看，假令天盘见二棍朝里，门路不顺，则需于此处避开关联二棍之象，如条纹衣物，条状之物，门路之类。三盘各看其象，辩用神喜忌，见喜催喜，见忌避忌，而后分别择吉日运筹。</p><p>凡先天卦择运筹吉时看本宫变官地盘藏支，人盘看二皮（消息）落官地盘藏支，后天卦看用神本宫对官地盘藏支，分出次序，按顺序进行运筹。（用三盘，那么不同时候就要配不同的化解，因为在事情的不同阶段，那么什么时候配什么样的化解呢？就要看应期。然后各自配化解，单盘断一个去配化解就行。这个三盘断应期，他不是断的事情结束的应期，是开始的应期，所以三个盘都要看，断事情结束的应期，只看天盘）。假令天盘刘唐在艮，纳丑寅，代表这一阶段开始在丑寅日；人盘中宫是五皮，二皮在坤，未申，代表这一阶段开始在未申日；地盘的刘唐在兑，酉，代表这一阶段可能开始在酉日，最后回到天盘，就是事情出结果的应期，然后这个三个时间，如果好的就催旺，坏的就避开类似的牌象。</p><p>如何确定范围？论流年化解，天盘、人盘、地盘分别管四个月。论单独事件化解，先参人事迅速，再论阴阳顺逆，参应期之法。</p><h2>应期之法</h2><p>流星赶月法，先问得卦主生月日时，中宫上起月，月上起日，日上起时，时上起虚岁得年宫，年上起问事之月，月上起日，日上起时。</p><p>地支为细致之应，流宫为大致之应，朝向为迅速之论，主官配牌，三元既分（一个月的上，中，下）。</p><h2>选择思路</h2><h3>择方</h3><p>中宫为当前所在地。方位看地盘，落宫的对宫定吉凶。对宫的力量大。如果不开，那个方位最好不要去，因为能量紊乱。就算是好牌也容易出岔子。</p><h3>择日</h3><p>结合十二建星。十二建星以看事时辰或日子，或月份起青龙，按顺时针循序排满外八宫。一种直接按时辰直接起青龙，另一种按日支推时辰，或者月支推日子，子午卯酉起申寅，寅申已亥子午寻，辰戌丑未辰戌临。青龙明堂与天刑，朱雀金匮天德同，白虎玉堂与天牢，玄武司命与勾陈。建除满、平定执、破危成、收开闭。一般是看哪天就从地支上找他对应的建星是什么建星，以官位牌的组合为主，但如果星不好就算不上大吉大利了。</p><h3>趋避</h3><p>如是趋避，看所避神内外，假设趋避官灾，看刘唐内外，朝内为官入，则远行逃避；朝外为官出，则内地避匿。假设审犯人，先配对起出后天卦局，但看刘唐：刘唐朝内，择刘唐本官为法官坐，对官为原告被告坐；刘唐朝外，以对官为法官坐，本官为原告被告坐；在中官则此日不宜审。</p><h2>占宅内景法</h2><p>见「单宫定象法」。</p><h2>九宫分野部</h2><p>见「九宫象法」。</p>'},
+{id:'nw-16',title:'十二宫终身卦思路',html:'<h2>学习目标</h2><p>掌握西北派终身卦的思路与断法，包括命宫起法、十二宫、大运十二宫、流年十二宫。</p><h2>起盘法</h2><p>从寅宫开始，顺布外盘，然后放下上面的归置牌（命宫），然后从左到右放下四柱，然后放下面的归置牌（身宫）。外盘一圈，中间横过来的两张牌是归置牌，放的时候先放上面的一张，然后中间四张根苗花果从左到右为四柱，最后放下面的八万。</p><p>若从先天卦变盘，则以先天卦中宫的两张牌为归置牌，左牌为命宫，右牌为身宫，朝向不变。然后按照走卦顺序，分别抽走震、离、兑、坎四宫中后碰到的牌（变化象）作为根苗花果，朝向不变。</p><h2>命宫起法（新法）</h2><ol><li>先取此人<strong>阴历生日的生肖</strong>（即生年地支）。</li><li>从生肖上<strong>起月</strong>：从生肖所在宫起正月，数到出生月份。</li><li>从月上<strong>起日</strong>：从月所在宫起初一，数到出生日。</li><li>数到日之后：<strong>男顺四位</strong>（乾造），<strong>女逆四位</strong>（坤造），即得命宫。</li><li>举例：乾造男子，生肖起到日为「子」，从「子」顺数四位，即<strong>卯</strong>，卯就是命宫。</li></ol><h3>十二宫排布</h3><p>命宫既定，按下列顺序排布十二宫：命宫、财帛、兄弟、田宅、男女、仆役、夫妻、疾厄、迁移、官禄、福德、相貌。排布方向：<strong>男顺女逆</strong>。排布方式类似小六壬：在十二地支盘上，从命宫开始，按男顺女逆的方向，依次落入十二宫。</p><p><strong>举例：</strong>乾造男子，命宫在卯。男顺排布：卯=命宫，辰=财帛，巳=兄弟，午=田宅，未=男女，申=仆役，酉=夫妻，戌=疾厄，亥=迁移，子=官禄，丑=福德，寅=相貌。坤造女子，命宫在卯。女逆排布：卯=命宫，寅=财帛，丑=兄弟，子=田宅，亥=男女，戌=仆役，酉=夫妻，申=疾厄，未=迁移，午=官禄，巳=福德，辰=相貌。</p><h2>入手看法</h2><p>归置牌为命宫和身宫，一般是看旺衰和人的性格，辅助看这个人一生的大体，作用类似四柱的年月日时宫（假设上归置牌为二皮、八万，四柱前两张里面又有八万，那就是利财，这里可以看到是和归置牌比和或者是相生为妙）。</p><p><strong>四柱：</strong>年柱1-16岁父母祖上；月柱16-32岁兄弟姐妹；日柱32-48岁本人；时柱48岁后子女。</p><p>四柱是看人生历程，一个十八年，周而复始，也就是说如果最后一个断完了可以回到开头继续断，只不过这种情况的话没什么意义。外面男女都从寅宫顺行起大运，大运一个十年，小运在所值大运上起，男顺女逆，一个管一年。（如一并朝内坐命，主小时候生活环境压抑导致性格稳重抑郁。）在这里面性情各以八卦牌意论，假设二饼旺就是有些眼高。需要注意四柱里面比较弱的那个五行，四柱五行里面必然有最弱的，四个五行不相同，三个相生，一个被克。两个五行相同，剩下不同，取被两个五行克的；三个牌五行相同取这个五行为用，为太旺。假设土弱，断脾胃、皮肤有问题。第一步大运为童运，不喜欢一并二棍之类的凶神入卦。</p><h2>十二宫与其主星</h2><table><tr><th>宫</th><th>主星</th></tr><tr><td>命宫</td><td>自己、本身、大事；宫主八万</td></tr><tr><td>财帛宫</td><td>钱财、收入、支出；宫主三皮</td></tr><tr><td>兄弟宫</td><td>兄弟姐妹、朋友、同辈；宫主五皮八万</td></tr><tr><td>田宅宫</td><td>房屋里、储蓄、祖业，父母；宫主刘唐</td></tr><tr><td>子女宫</td><td>子女、娱乐、客户、泛泛之交、一般人际；宫主毛鱼</td></tr><tr><td>奴仆宫</td><td>同事、下属、朋友群体、较远关系；宫主五皮二皮</td></tr><tr><td>夫妻宫</td><td>一对一关系、感情、配偶、死敌；宫主刘唐或小鱼</td></tr><tr><td>疾厄宫</td><td>身体、疾病、灾病；宫主二棍</td></tr><tr><td>迁移宫</td><td>奔走、志向、地点变化；宫主二棍刘唐</td></tr><tr><td>官禄宫</td><td>宫门，工作、事业、学业；宫主刘唐</td></tr><tr><td>福德宫</td><td>心理状态、福气、因果、天灾；宫主二皮刘唐</td></tr><tr><td>相貌宫</td><td>精神、外貌、父母遗传、思想状态；宫主八万二皮</td></tr></table><p>先定宫（以一掌经命宫为起点，逆时针起十二宫），再取具体象。流年十二宫以大运为命宫再起十二宫配合流年与小运、牌星、神煞之类论断，注意参考地盘所藏地支关系以及牌象生克顺逆，可以配合一掌经或八字使用。</p><p>如：流年临大运财帛宫遇到刘唐朝里，刘唐是迁移、官禄、夫妻、田宅宫主，小运行三皮为青龙，引动官禄象，但是因为迁移朝里，有不利，主因为事业上的不顺导致破财。</p><h2>十二宫飞星显照变化论</h2><h3>命主星与身主星</h3><p>四柱上下的，上牌和下牌，你可以改一下，叫命主星和身主星，实际上和命宫和身宫是两个概念。</p><p>紫微是用大运为命宫，再立十二宫。响马存在的一个问题是他的大运是定死的，体用结合，都是寅起。</p><h3>大运十二宫</h3><p>其实最有搞的是大运十二宫，紫微那种。以大运为命宫，再立十二宫。</p><h3>命卦合一</h3><p>命卦合一：先天是刘唐朝上在财帛宫，命卦合一。二条朝下在疾厄宫，那你说哪个受损比较严重？肯定是疾厄宫。再一个二条朝下本身是病的象，所以主大病，财的影响就轻。</p><p>流年上的牌，相当于你原命所有宫的配牌。那么就代表今年财运不好，身体还可以。事业上发展看情况，如果先天好代表阻滞，先天也差就糟糕得很了，一点发展都没有。</p><p>但是你也可以试试从流年起十二宫，这样的话后天财帛宫做先天财帛宫的配牌，类似于北派紫微斗数那样。就比如原局事业宫二棍朝外，流年一皮，那么这个人事业上门路不少，但是今年出问题了；明年带毛鱼朝外，那就是明年又找到新出路了。</p><h3>岁杀串入</h3><p>还可以给岁杀串进去加点细节，岁杀要用，必须要用，不过是辅助。用不用流年纳音？可以用着参考。</p><h3>生克的使用</h3><p>生克主要为辅助，主体还是象法。生克是辅助参考，不能独立断吉凶，他是你作为断卦验证的一个依据。但是响马卦一直都是象数体系的。</p><h3>疾厄宫不宜见二并</h3><p>疾厄宫不宜见二并，因为二并在断有无的时候代表有，代表出现。疾厄是凶宫，不宜见二并。适合见林冲。二并在别的宫位就比较好，比如说在财帛宫，在官禄宫，因为代表看见财、看见官，不适合见林冲。</p><p>二并有个先后顺序，眼见灾和灾入眼：一个是意识到了，属于中平之卦；一个是大凶。因为一个是你发现的，另外一个属于是突脸了。一个是体一个是用。</p><h3>体用与小人占</h3><p>你去测小人。这个人他就是小人，用是固定的，我们测的是他的先天，是体。对于这个人的用我们没疑问，我们只对体有疑问，那么这时候见二并，我们就代表看见这个人，看到这个人还在。如果换一种情况，说看这个人给我带来的影响是什么，是好是坏，对体我们没疑问，我们是对这个人的功用有疑问，测这个人的后天，这时候落离，见二并，就代表眼看着这个人给自己带来火事。这就是区别。</p><p>如果占这个人，已经知道是小人，见二皮就是提示现状。看命理十二宫，就是前者，因为十二宫的含义是固定的，我们只是看宫的体，有没有，旺衰强弱。反过来不知道这个人是小人，那么二皮就是告诉我见到这个人的行为。</p><h3>三方四正</h3><p>可以和策天十八飞星配合。三方四正，准确率更高。原理上完全可以。单宫终归还是比较简化了点。三方四正更多还是南派内容，十八飞星基本都是直接看庙旺落陷，可以参考。这玩意跟流星盘有点像，配合八字用，添加细节。不过传承里是单宫为主。</p><h3>串流煞与地福诀</h3><p>命卦合一：比如你遇到了一个二皮，那你可以怎么增加细节呢？一个是串一下流煞，一个是定位这个牌的八卦，然后用地福诀定位回先天卦，这样子你这一张牌上又能带两张牌。</p><h3>先后天配合与刑冲破害合</h3><p>我们门派是先后天打配合，套宫。我老师2024年九月份给我讲了先后天配合，就是中间那四个是先天，你年月日时推出来的是后天。后天有啥用呢？起大运、起命宫，还有刑冲破害合，类似于太公奇门的辅助。</p><p>原命就是后天四柱。响马卦的根苗花果不是不配地支吗？因为先天四柱，中间那四张牌是不带地支的，只有你年月日时推出来那个才有地支。先天看的是牌，后天看的是地支。一个管星，一个管地支，然后后天管十二宫、大运、大小运。</p><p>比如你一掌经起原局：寅巳申亥。那么你就给寅巳申亥给安到中间四个牌上。后天就是你起的年月日时，别套到中间四个牌上，中间那四个牌是先天，后天是独立的，你写出来放在那以后，管刑冲破害。</p><p>断某流年：先看牌组合，然后看当年走的行运太岁啥的跟原局的作用。牌如果好，对，原局作用不好，这个就是后天，所以在牌之后起作用，辅助。那么事情是好事，只不过中间波折。</p><p>比如说今年的流年财帛宫是三皮入宫，如果牌不好，路好，原命财帛宫是刘唐朝上，哎呀，那就很吊，对吧，刘唐朝上配三皮，太吊了。但是如果原命四柱带财帛宫，刑到了，那么事情就是小凶，这就代表打折扣，在原本的吉上打折扣，而且过程不好，波折。他是后天，如果路不好，牌不好，他是牌看完了才看，那么就要出事，他没有先天的力量大。</p><p>如果大运连带着也不好，后天没有牌组合力量大，知道这个就行。太岁可以管小运，管大运。那可能就得犯两院灾，重病了。小运刑原命，太岁合小运，ok那刑不动，因为合住了，贪合忘刑。大运刑原命，小运合大运，代表今年比较好，给灾合住了，长久以来的苦闷在今年会缓解。</p><p>这是刑冲破害的地支系统和天星系统打配合，一个是先天一个是后天，一个为主一个为客，一个为静一个为动。</p><p>牌组合为先，然后看地支系统。当然了，你要是满盘刑害，牌组合吉也没用，那是特殊情况，对吧，单个的刑冲破害还是没有牌主要，毕竟牌是先天。先看牌好坏，然后看小运好坏，如果不好可以看太岁有没有救，然后看大运好坏，可以看太岁小运有没有救。地支是后天，一明一暗。</p><p>层次论：主要是太岁最大，太岁管小运和大运，小运管大运。小运大运太岁都能同时刑冲破害，但是区别在于大运会被小运和太岁管，小运会被太岁管。只要大运被小运和太岁的任何一个合，那就凶事不起了。小运大运组合都不好，太岁小运组合都不好，这种情况下就算牌好也不顶用，或者说不是不顶用，是地支系统力量太大了。如果连带着牌也不好，这多半要有性命之忧吧。看在哪，你要是在命宫，那肯定拉胯了，爆缸了；如果在财帛宫，大破财，破大财。所以响马卦算命系统也比较精巧，毕竟是天地先后天配合。</p><p>流卦如果看一生凶灾，比如几岁有牢狱灾、车灾、两院灾、病灾，首先要看疾厄是肯定的，疾厄不好那就肯定有隐患，再一个四柱不好，那到了不好的流年和大运就会引动，毕竟四柱是全部十二宫的配牌。</p><p>直接看宫，疾厄宫二条朝下，不是重病缠身就是牢狱之灾、路灾，反正肯定带灾。到了四柱不好的时候，就会引动。</p><p>还可以用活六亲，看是有情还是无情，相生有情，相克无情。比方说你疾厄宫犯凶，见官鬼了，如果跟命宫有情那可能就是官司，体现官的管束惩罚性质；如果无情那可能就是病灾横祸了。</p>'},
+{id:'nw-17',group:'补充资料',title:'牌谱四种',html:'<h2>学习目标</h2><p>研读西北派牌谱四种，掌握落宫断语、牌伏吟、陈香传笔记与家传讲解。</p><h2>落宫断语总表（牌谱其一至其四整合）</h2><table><tr><th>宫位</th><th>一皮</th><th>二皮</th><th>三皮</th><th>四皮</th><th>五皮</th><th>毛鱼</th><th>二棍</th><th>八万</th><th>刘唐</th></tr><tr><td><strong>乾</strong></td><td>乌云遮天，黑暗无边</td><td>日月高悬，贵人出现</td><td>发大横财，万事通达</td><td>有喜事，是非远离</td><td>自己高迁，开运</td><td>旱地得雨，运顺</td><td>出路好，出入无忧</td><td>运势高，财帛稳固</td><td>有照管，登高望远</td></tr><tr><td><strong>坎</strong></td><td>官滞，万事不通</td><td>泪眼涟涟，有哭声</td><td>满财，鬼眉六眼</td><td>事情缓，暂时稳定</td><td>当家人为难，自身不利</td><td>万事和缓，困龙得水</td><td>困难重重，小人来</td><td>男人为难，财帛退散</td><td>万事难办，拖泥带水</td></tr><tr><td><strong>艮</strong></td><td>墙高难进，身不动</td><td>登高望进，好亲照应</td><td>朋友扶升，朋友坐我家</td><td>将有喜事，是非颇多</td><td>亲人靠不住，本身高升</td><td>女人为难，办事无望</td><td>做事无成，小人暗行</td><td>男人受大罪，财帛不动</td><td>走路办事费劲，贵人扶持</td></tr><tr><td><strong>震</strong></td><td>官心短，棺坟要动</td><td>有眼认不清，眼目明亮</td><td>财运不佳，朋友来敬</td><td>是非走进，有事吉祥</td><td>暂有亲人照应，本身心忙</td><td>婚姻不定，出门大吉</td><td>不顺事快完了，小人暗行</td><td>当官掌印，财帛难得</td><td>贵人帮忙，快马往行</td></tr><tr><td><strong>巽</strong></td><td>办事无成，无是无非</td><td>有眼认不真，两眼不明</td><td>很一般，朋友到门</td><td>事不定，一帆风顺</td><td>当家人替受罪，身要出门</td><td>女人受罪，顺气到门</td><td>不顺事走了，小人临门</td><td>男人走了，财帛有损</td><td>贵人靠不住，哑子到门</td></tr><tr><td><strong>离</strong></td><td>官胆大，祸害横生</td><td>眼下起火，有眼起祸</td><td>钱财失离，朋友勤来</td><td>有很着急的事，灾祸临身</td><td>朋友梳义，引火烧身</td><td>女人说了算，酒食相逢</td><td>小鬼挡道，小人打搅</td><td>火烧自己，财帛难存</td><td>火见火没处躲，是非难躲</td></tr><tr><td><strong>坤</strong></td><td>官也敢干，事无起伏</td><td>办事天照应，两眼无光</td><td>财动平平，朋友进门</td><td>定有喜事，是非不起</td><td>亲人有福，本人无事</td><td>清闲自在，阴人暗起</td><td>没有不说的事，自身不动</td><td>逍遥自在，财源广进</td><td>失物没不了，贵人相助</td></tr><tr><td><strong>兑</strong></td><td>官走下坡路，事皮在路</td><td>谁也靠不住，眼目不宽</td><td>求财无望，友行不远</td><td>谋事无成，路有是非</td><td>长辈有难，吉庆临门</td><td>女人有灾，恐怕人欺</td><td>陷入黑窟，小人不远</td><td>男人有难，财帛难取</td><td>迈不开腿，路有坎坷</td></tr><tr><td><strong>中</strong></td><td>怀抱金盆满吉祥</td><td>和合家道昌</td><td>财进门</td><td>家有是非</td><td>家有好亲照应</td><td>家中主顺当</td><td>家里不顺</td><td>闭财入库房</td><td>不宜出外乡</td></tr></table><h2>牌谱其一逐宫原文</h2><h3>临乾宫</h3><p>一皮在天黑暗无光，皮而无路不吉祥。二皮在天眼目光辉，做事和合大吉昌。三皮在天朋友远，做事不随是阴人。四皮在天大吉昌，婚姻主顺嫁官方。五皮在天身在堂，得时军人反不祥。毛鱼在天天行顺，做事无阻路通畅。二棍在天天道通，做事海走天涯。八万在天财如水，官宾亲朋多好求。靴子在天腿不开，天地无门不出行。</p><h3>临坎宫</h3><p>一皮在坎宫，万事不通顺，做事和合辟，出行暂不动身。二皮在坎宫，合谋必通顺，交际人员广，眼目四方顺。三皮在坎宫，亲朋来相供，速为已办事，运势得贵人。四皮在坎宫，办事不起尘，做事多和合，万事皆主享。五皮在坎宫，水路甚难行，冬季方可为，提防险来惊。毛鱼在坎宫，鲤鱼跳龙门，喜庆大吉祥，万事临贵人。二棍在坎宫，水润土则生，小人不起事，一般主平顺。八万在坎宫，遇水财帛丰，虽是吉祥事，暂时仍不能。靴子在坎宫，险路较难行，有事不出门，辟在家门中。</p><h3>临艮宫</h3><p>一皮在艮宫，主人身不动，万事都和合，得令方可行。二皮在艮宫，位高眼目清，做事有远见，待时方称心。三皮在艮宫，找支方能行，地势多高远，生意如水连。四皮在艮宫，做事一场空，事重泰山石，从犯主官讼。五皮在艮宫，本身做事享，各地皆无事，中平而通顺。毛鱼在艮宫，无水身自困，做事受人欺，提防自身命。二棍在艮宫，小人身不动，提防阴人害，得令受苦刑。八万在艮宫，财帛不破损，丢者多不失，反败又取胜。靴子在艮宫，腿顺无阻挡，进山步步高，世代称英豪。</p><h3>临震宫</h3><p>一皮在震宫，和合吉祥顺，行路无阻隔，百事主吉庆。二皮在震宫，目下不通顺，问病人有难，立时办归程。三皮在震宫，行人得归程，失物多不失，病者喜气生。四皮在震宫，办事大享通，万事好商量，出行都是强。五皮在震宫，出行要登程，占者无破损，到终都吉庆。毛鱼在震宫，小人来相拱，有事多为吉，百般事能成。二棍在震宫，做事要小心，问人暗中来，提示成中横。八万在震宫，无路财要行，西南多吉庆，财帛多主享。靴子在震宫，快马路中行，办事多急速，一路多顺风。</p><h3>临巽宫</h3><p>一皮在巽宫，事情不起尘，有难能避过，凶事化成祥。二皮在巽宫，风目不识人，亲朋不帮助，两眼直瞪瞪。三皮在巽宫，亲朋到宅中，做事贵人助，平安一溜风。四皮在巽宫，寻人有音信，朋友多支援，终来主吉庆。五皮在巽宫，内外都平顺，在家有人助，在外贵人扶。毛鱼在巽宫，水本来相生，进入多无害，出行主安顺。二棍在巽宫，小人来挑混，是非朝朝有，做事有干扰。八万在巽宫，财帛流进门，经营多得利，万事皆亨通。靴子在巽宫，动腿外主顺，事在家中，百事顺人心。</p><h3>临离宫</h3><p>一皮在离宫，办事不称心，提示灾祸至，祸害不离身。二皮在离宫，亲朋不相逢，火眼来看人，反目事无情。三皮在离宫，亲朋都有情，交往人缘厚，到头事主顺。四皮在离宫，做事有祸根，立时有灾祸，犯上主凶中。五皮在离宫，似火来烧身，心乱意又乱，万般不成功。毛鱼在离宫，设席聚宾朋，招得四方客，人情意称心。二棍在离宫，小人力不存，火烧如灰迹，办事要小心。八万在离宫，提示财帛损，火门定不开，千万要操心。靴子在离宫，本身动不成，虽是火急事，三思而后行。</p><h3>临坤宫</h3><p>一皮在坤宫，有事主能成，放心大胆做，万般主通顺。二皮在坤宫，亲朋不相逢，双眼神不明，何能进前程。三皮在坤宫，找寻在本宫，不必远方去，多劳也无功。四皮在坤宫，它与本宫刑，做事多不顺，办事它是空。五皮在坤宫，本人不动身，问女多平安，老者是母亲。毛鱼在坤宫，一双也主顺，办事多吉利，婚姻定可成。二棍在坤宫，阴人口舌争，虽是不吉利，皮住不可动。八万在坤宫，财帛皆主享，虽是财乡地，也得去找寻。靴子在坤宫，自身不动行，虽是心中急，待时方可能。</p><h3>临兑宫</h3><p>一皮在兑宫，作事必用心，皮在路旁办，细致也能成。二皮在兑宫，两眼无光明，办事多不成，烦乱主不顺。三皮在兑宫，办事找亲朋，马上去寻找，待慢方败生。四皮在兑宫，绊脚不能行，办事多琐碎，提防自身损。五皮在兑宫，自身不远行，近处贵人助，远去不安宁。毛鱼在兑宫，喜气福临门，出外有好事，吉祥又称心。二棍在兑宫，阴人路中行，提示远方去，近者遇贵人。八万在兑宫，求神也不行，财帛怕破损，徒劳一场空。靴子在兑宫，路中有克星，提防破财帛，也主腿有病。</p><h3>临中宫</h3><p>一皮在中央，怀抱金盆大吉祥，万事方是吉，宅中和合顺当。二皮在中央，添喜进人丁，寻找外来信，不必为病慌。三皮在中央，卦意心气升，亲朋多随意，左右必助身。四皮在中央，事中宅内生，办事少讲话，犯者多损伤。五皮在中央，不可强出门，暂避一时事，待时方可行。毛鱼在中央，婚姻门庭上，家中喜气来，亲朋也帮财。二棍在中央，宅中口舌侵，阴人来犯身，饥荒事不祥。八万在中央，财帛进仓箱，如同流水样，永是大吉昌。靴子在中央，外出得安康，远行也无事，得时必生光。</p><h2>牌谱其四逐宫原文</h2><h3>临乾宫</h3><p>一皮在乾，乌云遮天。二皮在乾，日月高悬。三皮在乾，发大横财。四皮在乾，定有喜事。五皮在乾，自己高迁。毛鱼在乾，喜气连天。二棍在乾，出路好。八万在乾，运势高。刘唐在乾，有照管。</p><h3>临坎宫</h3><p>一皮在坎，宫迟滞。二皮在坎，泪眼连连。三皮在坎，满财。四皮在坎，事情缓。五皮在坎，当家人为难。毛鱼在坎，万事和缓。二棍在坎，困难重重。八万在坎，男人为难。刘唐在坎，万事难办。</p><h3>临艮宫</h3><p>一皮在艮，墙高难进。二皮在艮，登高望进（好亲照应）。三皮在艮，朋友扶升。四皮在艮，将有喜事。五皮在艮，亲人靠不住。毛鱼在艮，女人为难（顶门棍）。二棍在艮，做事无成。八万在艮，男人受大罪。刘唐在艮，走路办事费劲。</p><h3>临震宫</h3><p>一皮在震，官财想尽（官心短）。二皮在震，有眼认不清。三皮在震，财运不佳。四皮在震，是非走尽。五皮在震，暂有亲人照应（不久）。毛鱼在震，婚姻难定。二棍在震，不顺事快完了。八万在震，当官掌印。靴子在震，贵人帮忙。</p><h3>临巽宫</h3><p>一皮在巽，办事无成。二皮在巽，有眼认不真。三皮在巽，很一般。四皮在巽，事不定。五皮在巽，当家人替受罪。毛鱼在巽，女人受罪。二棍在巽，不顺事走了。八万在巽，男人走了。刘唐在巽，有贵人。</p><h3>临离宫</h3><p>一皮在离，当官胆大。二皮在离，火眼金睛（有怒气）。三皮在离，朋友疏义（不讲义气）。四皮在离，有很着急的事。五皮在离，火烧自己。毛鱼在离，女人说了算。二棍在离，小鬼挡道。八万在离，钱财失移。刘唐在离，火见火没处躲。</p><h3>临坤宫</h3><p>一皮在坤，官也敢干。二皮在坤，谁也靠不住。三皮在坤，财运平平。四皮在坤，定有喜事。五皮在坤，亲人有福。毛鱼在坤，清闲自在。二棍在坤，没有不顺之事。八万在坤，逍遥自在。刘唐在坤，失物没不了。</p><h3>临兑宫</h3><p>一皮在兑，有官帮忙。二皮在兑，办事天照应。三皮在兑，求财无望。四皮在兑，谋事无成。五皮在兑宫，长辈有难。毛鱼在兑，女人有灾。二棍在兑，陷入黑窟。八万在兑，男人有难。刘唐在兑，迈不开腿。</p><h3>临中宫</h3><p>一皮在中央，怀抱金盆。二皮在中央，和合家道昌。三皮在中，财进门。四皮在中，家生事非。五皮在中，家有好亲照应。毛鱼在中，家中主顺当。二棍在中，家中不顺当。八万在中，抱财入库仓。刘唐在中，不宜出外乡。</p><h2>牌伏吟</h2><ul><li>一皮见一皮，亲的见面喜。</li><li>二皮见二皮，朋友来访你。</li><li>三皮见三皮，喜上又加喜。</li><li>四皮见四皮，必定起是非。</li><li>五皮见五皮，兄弟见面喜。</li><li>毛鱼见毛鱼，事速又顺当。</li><li>二棍见二棍，旱苗得雨喜。</li><li>八万见八万，财帛堆成山。</li><li>刘唐见刘唐，全家一心眼。</li></ul><h2>陈香传响马卦笔记</h2><h3>九星指代</h3><p>一皮：官、天。二皮：眼、气。三皮：财。四皮：事情。五皮：亲人、（长辈）朋友。八万：男人（男来问本人）。毛鱼：女人、顺当、阴人（女来问本人）。刘唐：贵人、小人（男）。二棍：出路、（仕途）小人。</p><h3>方位图</h3><p>乾（天）西北，坎（水）北方，艮（山）东北，震（雷）东方，巽（风）东南，离（火）南方，坤（地）西南，兑（泽）西方。</p><p>先天八卦数：乾一、兑二、离三、震四、巽五、坎六、艮七、坤八。</p><p>后天八卦图：乾、坎、艮、震、巽、离、坤、兑（顺时针方向）。</p><h2>家传响马卦讲解</h2><p>2023.7.13 由林彦青整理。</p><h3>一、九星指代</h3><p>一皮小人，二皮眼前，三皮朋友，四皮喜，五皮本人，刘唐贵人，毛鱼女人，二棍门路，八万财。</p><h3>二、动态月份指代（九宫格）</h3><table><tr><th>巽五月</th><th>离六月</th><th>坤七月</th></tr><tr><td>震四月、腊月</td><td>军营</td><td>兑八月</td></tr><tr><td>艮三月、冬月</td><td>坎十月、二月</td><td>乾九月、一月</td></tr></table><h3>三、起卦后配对</h3><p>首先要捡对子，两张一样的要放到一起，直到中间那两张一样就停了，八门在本派基本不用。</p><h3>四、地盘的取象和指代分析</h3><p>比如：坎代表水，代表陷，水中月镜中花，人生有一难过的坎。艮代表山，代表止，停止，高山，看得见够不着。巽代表风，代表入，一帆风顺，不固定的财，外财。依次类推。</p><h3>五、解卦思路</h3><p>如果两张「喜」牌能配对就是吉卦，如果两张「喜」牌不能配对就是凶卦。「四饼」代表「喜」。配对就是有喜事，为吉。分开就代表有事非，凶卦。最后看喜落在哪个官位，再细解！</p><h3>六、三吉三凶两平官</h3><p>乾震巽吉，离艮兑凶，坎坤平。八个官位分为三吉三凶两平，断吉凶，主要看「喜」（即四皮，是非）能不能配对。如果能配对，定为吉卦。落在乾震巽（金中喜、木中喜）是大吉（金中财，木中财也是大吉），离艮兑宫是中吉，其他两位是小吉。也就是火中喜，水中喜，火中财，水中财为空喜空财！如果不能配对，「喜」的含义变为「事非」，落在乾宫、震宫、巽宫是大凶，落在离宫、艮宫、兑宫是中凶，其他两宫位是小凶。</p><h3>七、用神的选取</h3><p>不管判断啥事先看「喜」能否生成配对，先定吉凶。接下来根据事体分析选用哪张或哪几张牌。比如婚姻（或感情）看「朋友」落哪宫。工作事业看「财」和「贵人」，「小人」落哪宫，结合五行生克。</p><h3>八、五行生克运用</h3><p>五行是指乾兑为金，坎为水，中为土，艮为土，震巽为木，离为火，坤为土，以此类推。地盘论生克，天盘论对应的事的关系。举例：地盘乾金克巽木，如果地盘乾位的牌是小人，巽宫上的牌是财，就是小人克财。以此例推。</p>'}
+]},
+compare:{title:'两派对照',subtitle:'同源异流 · 选学指南',sections:[
+{id:'cp-1',title:'两派关键差异对照',html:'<h2>学习目标</h2><p>系统对照东北、西北两派的牌名、起卦方向、断法重心，避免混用。</p><h2>牌名与六神对照</h2><table><tr><th>维度</th><th>东北篇</th><th>西北篇</th></tr><tr><td>离宫</td><td>白花 / 朱雀</td><td>刘唐 / 朱雀</td></tr><tr><td>坎宫</td><td>小鱼 / 青龙</td><td>毛鱼 / 玄武（朝外转青龙）</td></tr><tr><td>坤宫</td><td>二条 / 腾蛇</td><td>二棍 / 腾蛇</td></tr><tr><td>艮宫</td><td>一并 / 勾陈</td><td>一皮（林冲）/ 勾陈</td></tr><tr><td>兑宫</td><td>四并 / 白虎</td><td>二皮 / 眼目</td></tr><tr><td>震宫</td><td>三并 / 驿马</td><td>三皮 / 财信</td></tr><tr><td>巽宫</td><td>二并 / 病符</td><td>四皮 / 事</td></tr><tr><td>中宫</td><td>五并 / 六合</td><td>五皮 / 人</td></tr></table><h2>起卦与断法对照</h2><table><tr><th>维度</th><th>东北篇</th><th>西北篇</th></tr><tr><td>起卦方向</td><td>多作逆时针</td><td>顺时针</td></tr><tr><td>断法重心</td><td>中宫—头脚—四柱—层次消元—身交用神</td><td>中宫—用神落宫—对宫—走宫碰—朝向—三盘</td></tr><tr><td>特殊技法</td><td>流星赶月、九星神项、卦眼不开、一门独发</td><td>碰牌十式、透出、活八门九星、十二宫飞星</td></tr></table><h2>牌名对照表（东北 ↔ 西北）</h2><table><tr><th>东北篇</th><th>西北篇</th><th>说明</th></tr><tr><td>一并</td><td>一皮 / 林冲</td><td>同一张</td></tr><tr><td>二并</td><td>二皮</td><td>同一张</td></tr><tr><td>三并</td><td>三皮</td><td>同一张</td></tr><tr><td>四并</td><td>四皮</td><td>同一张</td></tr><tr><td>五并</td><td>五皮</td><td>同一张</td></tr><tr><td>二条</td><td>二棍 / 阮小二 / 二贡</td><td>同一张</td></tr><tr><td>白花</td><td>刘唐 / 笃驴</td><td>离宫牌</td></tr><tr><td>小鱼</td><td>毛鱼</td><td>坎宫牌</td></tr><tr><td>八万</td><td>八万</td><td>同名</td></tr></table><div class="callout"><div class="callout-title">术语纠正</div>六神只有六个：青龙、白虎、朱雀、玄武、腾蛇、勾陈。东北篇原表格「六神」列实为混合称名，应改称「星名」或「牌象」。活六神主要用在西北牌体系，东北牌以九星牌象为主。「并」就是「皮」，「二条」就是「二棍」，只是地方叫法不同。</div>'},
+{id:'cp-2',title:'选学建议与学习路径',html:'<h2>学习目标</h2><p>根据自身需求选择入门派系，制定学习路径。</p><h2>选学原则</h2><ul><li>先定一派为骨架，另一派只作对照补充。</li><li>初期不可混用牌名、方向与用神取法。</li><li>实操以师传与实占校验为准。</li></ul><h2>路径建议</h2><table><tr><th>需求</th><th>建议</th></tr><tr><td>重命理流年、四柱层次</td><td>先学东北篇</td></tr><tr><td>重占事、方位、寻物、风水、择方</td><td>先学西北篇</td></tr><tr><td>两派都想掌握</td><td>东北派入门 → 西北派后天卦 → 西北派先天卦 → 三盘合参与运筹 → 终身卦</td></tr></table><h2>学习顺序图</h2><ol><li><strong>东北派入门</strong>：识牌 → 起卦 → 整体结构 → 占断思路 → 分类占 → 进阶资料·理气内秘 → 实战 → 流运。</li><li><strong>西北派后天卦</strong>：识牌 → 起卦 → 取象 → 后天枢要 → 走卦名落卦名。</li><li><strong>西北派先天卦</strong>：碰牌十式 → 换太极 → 单宫定象 → 活八门九星 → 一卦多占 → 分类占 → 应期。</li><li><strong>三盘合参与运筹</strong>：选择思路 → 三盘合参 → 运筹。</li><li><strong>十二宫终身卦</strong>：终身盘结构 → 命宫起法 → 断法 → 大运十二宫。</li></ol>'}
+]}
+};
+var QUIZZES = [
+{id:'quiz-ne-1',title:'东北派 · 选牌与识牌',desc:'九星牌名、牌象、八门、九宫',questions:[
+{q:'东北篇乾宫对应牌？',a:'八万',opts:['八万','一并','白花']},
+{q:'东北篇离宫对应牌？',a:'白花',opts:['白花','小鱼','二条']},
+{q:'东北篇坎宫对应牌？',a:'小鱼',opts:['小鱼','白花','二条']},
+{q:'东北篇坤宫对应牌？',a:'二条',opts:['二条','一并','二并']},
+{q:'东北篇艮宫对应牌？',a:'一并',opts:['一并','二并','三并']},
+{q:'东北篇巽宫对应牌？',a:'二并',opts:['二并','三并','四并']},
+{q:'东北篇震宫对应牌？',a:'三并',opts:['三并','二并','四并']},
+{q:'东北篇兑宫对应牌？',a:'四并',opts:['四并','三并','五并']},
+{q:'东北篇中宫对应牌？',a:'五并',opts:['五并','四并','八万']},
+{q:'东北篇牌组共几张？',a:'十八张',opts:['十八张','十六张','二十张']}]},
+{id:'quiz-ne-2',title:'东北派 · 起卦与行持',desc:'摆牌、开门、特殊格局',questions:[
+{q:'东北摆牌方向？',a:'逆时针',opts:['逆时针','顺时针','先顺后逆']},
+{q:'第一张牌放哪？',a:'中宫',opts:['中宫','离宫','坎宫']},
+{q:'摆牌从哪个宫起？',a:'离宫',opts:['离宫','中宫','乾宫']},
+{q:'摆几轮？',a:'两轮',opts:['两轮','一轮','三轮']},
+{q:'开牌方式？',a:'左右翻',opts:['左右翻','上下翻','任意翻']},
+{q:'最后一张放哪？',a:'中宫右侧',opts:['中宫右侧','中宫左侧','离宫']},
+{q:'五门以上未开称？',a:'卦眼不开',opts:['卦眼不开','一门独发','缺牌']},
+{q:'中宫两张相同、外配不上称？',a:'一门独发',opts:['一门独发','卦眼不开','飞牌']},
+{q:'整局被风吹散代表？',a:'凡占不成',opts:['凡占不成','事可成','吉兆']},
+{q:'起卦前需？',a:'静心净手问生辰',opts:['静心净手问生辰','沐浴更衣','焚香三日']}]},
+{id:'quiz-ne-3',title:'东北派 · 整体结构',desc:'中宫、头脚、四柱、四盘',questions:[
+{q:'东北中宫又叫？',a:'卦眼、坐堂、神盘',opts:['卦眼、坐堂、神盘','用神、身交','天盘、地盘']},
+{q:'离宫为？',a:'头顶、天覆、前路',opts:['头顶、天覆、前路','脚踩、地载、后路','中宫、卦眼']},
+{q:'坎宫为？',a:'脚踩、地载、后路',opts:['脚踩、地载、后路','头顶、天覆、前路','中宫、卦眼']},
+{q:'四柱年宫对应？',a:'根',opts:['根','苗','花']},
+{q:'四柱月宫对应？',a:'苗',opts:['苗','根','果']},
+{q:'四柱日宫对应？',a:'花',opts:['花','果','根']},
+{q:'四柱时宫对应？',a:'果',opts:['果','花','苗']},
+{q:'四盘为？',a:'天盘九星、地盘九宫、人盘八门、神盘中宫',opts:['天盘九星、地盘九宫、人盘八门、神盘中宫','天地玄黄、宇宙洪荒','四柱、头脚、中宫']},
+{q:'流星赶月节点？',a:'1、9、17、25',opts:['1、9、17、25','2、4、6、8','1、5、9、13']},
+{q:'头顶凶称？',a:'盖头',opts:['盖头','截脚','落陷']}]},
+{id:'quiz-ne-4',title:'东北派 · 基本占断思路',desc:'层次、消元、用神、生克、墓库',questions:[
+{q:'层次由高到低？',a:'用神身交 > 四柱 > 头脚 > 中宫',opts:['用神身交 > 四柱 > 头脚 > 中宫','中宫 > 头脚 > 四柱 > 用神身交','四柱 > 中宫 > 头脚 > 用神身交']},
+{q:'占财用神？',a:'八万',opts:['八万','白花','二并']},
+{q:'占学业用神？',a:'白花',opts:['白花','二并','三并']},
+{q:'占病用神？',a:'二并',opts:['二并','三并','四并']},
+{q:'占合作出行信息用神？',a:'三并',opts:['三并','二并','五并']},
+{q:'占惊恐纠缠口舌阳宅用神？',a:'二条',opts:['二条','一并','二并']},
+{q:'占争斗小人阴宅官方用神？',a:'一并',opts:['一并','二条','四并']},
+{q:'消元原则？',a:'同层吉凶相消',opts:['同层吉凶相消','同层吉凶相加','同层吉凶互略']},
+{q:'五行生克在东北卦中？',a:'辅助判断',opts:['辅助判断','决定吉凶','完全不用']},
+{q:'看太极和两仪时？',a:'不考虑生克',opts:['不考虑生克','考虑生克','只看生']}]},
+{id:'quiz-ne-5',title:'东北派 · 分类占精讲',desc:'求财、桃花、学业、亡失、宅墓、流运',questions:[
+{q:'占财八万入中？',a:'绝财',opts:['绝财','得财','财旺']},
+{q:'占财八万在外？',a:'有财星继续分析',opts:['有财星继续分析','一定破财','无财']},
+{q:'应期八万五并时？',a:'得财或不得财',opts:['得财或不得财','一定得财','一定破财']},
+{q:'桃花用神？',a:'红花',opts:['红花','八万','二并']},
+{q:'女问男桃花用神？',a:'八万',opts:['八万','红花','三并']},
+{q:'亡失歌诀中，人畜看？',a:'红花',opts:['红花','小鱼','二条']},
+{q:'亡失歌诀中，物品看？',a:'小鱼',opts:['小鱼','红花','一并']},
+{q:'阳宅用神？',a:'八万',opts:['八万','四并','二条']},
+{q:'阴宅用神？',a:'四并',opts:['四并','八万','一并']},
+{q:'风水不看？',a:'四柱',opts:['四柱','八门','九宫']}]},
+{id:'quiz-ne-6',title:'东北派 · 进阶·理气内秘',desc:'流年九星、追官赶官、牌头、断卦思路',questions:[
+{q:'年宫小鱼断语？',a:'青龙跃中庭，贵人引路',opts:['青龙跃中庭，贵人引路','朱雀衔喜','财神坐镇']},
+{q:'年宫红花断语？',a:'朱雀衔喜入龙德',opts:['朱雀衔喜入龙德','青龙跃中庭','阴星照命']},
+{q:'年宫八万断语？',a:'财神坐镇事业隆',opts:['财神坐镇事业隆','阴星照命','青龙跃中庭']},
+{q:'年宫二条断语？',a:'阴星照命口舌生',opts:['阴星照命口舌生','财神坐镇','贵人引路']},
+{q:'追官指？',a:'用神前一位',opts:['用神前一位','用神后一位','用神本宫']},
+{q:'赶官指？',a:'用神后一位',opts:['用神后一位','用神前一位','用神对宫']},
+{q:'牌头朝外？',a:'为阳、为远、为出',opts:['为阳、为远、为出','为阴、为近、为入','为静']},
+{q:'牌头朝内？',a:'为阴、为近、为入',opts:['为阴、为近、为入','为阳、为远、为出','为动']},
+{q:'流星赶月起点？',a:'离宫',opts:['离宫','中宫','乾宫']},
+{q:'流年九星诀，年月日时？',a:'知变化',opts:['知变化','只看年','只看月']}]},
+{id:'quiz-ne-7',title:'东北派 · 实战入手思路',desc:'主卦、头脚、生克辅助、流月流日',questions:[
+{q:'第一看主卦为？',a:'当前状态',opts:['当前状态','最终结果','用神落宫']},
+{q:'第二看？',a:'头顶脚踩为初步吉凶',opts:['头顶脚踩为初步吉凶','四柱','流月']},
+{q:'主卦坐四并、二条、一并、二并为？',a:'衰',opts:['衰','旺','平']},
+{q:'中宫坐五并、红花、八万为？',a:'旺',opts:['旺','衰','平']},
+{q:'用神克中宫为？',a:'凶',opts:['凶','吉','平']},
+{q:'自身克用神为？',a:'吉',opts:['吉','凶','平']},
+{q:'自身生用神为？',a:'凶',opts:['凶','吉','平']},
+{q:'用神生自身为？',a:'吉',opts:['吉','凶','平']},
+{q:'自身与用神比和为？',a:'吉',opts:['吉','凶','平']},
+{q:'主卦坐三并为？',a:'旺',opts:['旺','衰','平']}]},
+{id:'quiz-ne-8',title:'东北派 · 秘传流运卦思路',desc:'流年盘、运盘、散断法',questions:[
+{q:'流运盘又叫？',a:'运盘、散断法',opts:['运盘、散断法','卦盘','命盘']},
+{q:'起盘顺序第一？',a:'头顶（离宫一张）',opts:['头顶（离宫一张）','四柱','十二宫']},
+{q:'起盘顺序第二？',a:'四柱（中宫四张）',opts:['四柱（中宫四张）','头顶','脚踩']},
+{q:'起盘顺序第三？',a:'脚踩（坎宫一张）',opts:['脚踩（坎宫一张）','十二宫','太岁']},
+{q:'十二宫从哪个宫开始放？',a:'乾宫',opts:['乾宫','离宫','坎宫']},
+{q:'太岁落宫代表？',a:'管一整年',opts:['管一整年','只管一月','不管']},
+{q:'头脚中宫透出看五行吗？',a:'不看',opts:['不看','看','只看吉凶']},
+{q:'四柱透出看五行吗？',a:'看',opts:['看','不看','只看吉凶']},
+{q:'有则找用神，无则找？',a:'三并断应期',opts:['三并断应期','白花','二并']},
+{q:'三并也没有找？',a:'白花',opts:['白花','二并','四并']}]},
+{id:'quiz-nw-1',title:'西北派 · 选牌与识牌',desc:'九星定位、牌意、体用、朝向',questions:[
+{q:'西北篇乾宫对应牌？',a:'八万',opts:['八万','刘唐','毛鱼']},
+{q:'西北篇离宫对应牌？',a:'刘唐',opts:['刘唐','毛鱼','八万']},
+{q:'西北篇坎宫对应牌？',a:'毛鱼',opts:['毛鱼','刘唐','一皮']},
+{q:'西北篇坤宫对应牌？',a:'二棍',opts:['二棍','一皮','二皮']},
+{q:'西北篇艮宫对应牌？',a:'一皮/林冲',opts:['一皮/林冲','二皮','三皮']},
+{q:'西北篇兑宫对应牌？',a:'二皮',opts:['二皮','三皮','四皮']},
+{q:'西北篇震宫对应牌？',a:'三皮',opts:['三皮','二皮','五皮']},
+{q:'西北篇巽宫对应牌？',a:'四皮',opts:['四皮','五皮','二皮']},
+{q:'西北篇中宫对应牌？',a:'五皮',opts:['五皮','八万','四皮']},
+{q:'西北篇牌象优先于？',a:'阴阳、六神、八卦',opts:['阴阳、六神、八卦','八卦、六神、阴阳','六神、八卦、阴阳']}]},
+{id:'quiz-nw-2',title:'西北派 · 起卦',desc:'摆牌、开门',questions:[
+{q:'起卦准备几组牌？',a:'九组十八张',opts:['九组十八张','八组十六张','十组二十张']},
+{q:'摆牌方向？',a:'顺时针',opts:['顺时针','逆时针','先顺后逆']},
+{q:'第一张牌放哪？',a:'中宫左侧',opts:['中宫左侧','中宫右侧','离宫']},
+{q:'摆牌从哪个宫起？',a:'离宫',opts:['离宫','中宫','乾宫']},
+{q:'摆几轮？',a:'两轮',opts:['两轮','一轮','三轮']},
+{q:'第一轮放卦位哪边？',a:'左边',opts:['左边','右边','上边']},
+{q:'第二轮放卦位哪边？',a:'右边',opts:['右边','左边','下边']},
+{q:'最后一张放哪？',a:'中宫右侧',opts:['中宫右侧','中宫左侧','坎宫']},
+{q:'开牌方向？',a:'左右翻',opts:['左右翻','上下翻','任意翻']},
+{q:'西北与东北起卦方向区别？',a:'顺逆之别',opts:['顺逆之别','无区别','只需开牌区别']}]},
+{id:'quiz-nw-3',title:'西北派 · 取象规律',desc:'生成层次、取象层次、定象法、取用',questions:[
+{q:'取象层次？',a:'牌象 > 阴阳 > 六神 > 八卦',opts:['牌象 > 阴阳 > 六神 > 八卦','八卦 > 六神 > 阴阳 > 牌象','六神 > 阴阳 > 八卦 > 牌象']},
+{q:'三皮和八万均主财，取？',a:'三皮主财',opts:['三皮主财','八万主财','两者皆主']},
+{q:'定象法优先度最高？',a:'牌象',opts:['牌象','阴阳','六神']},
+{q:'六神只包括？',a:'青龙白虎朱雀玄武腾蛇勾陈',opts:['青龙白虎朱雀玄武腾蛇勾陈','福神病符驿马六合','青龙福神病符驿马']},
+{q:'一个体象一定是？',a:'用神',opts:['用神','用神以外的','配牌']},
+{q:'婚外情桃花取用？',a:'毛鱼',opts:['毛鱼','刘唐','三皮']},
+{q:'小人与贵人归属？',a:'阴阳',opts:['阴阳','六神','八卦']},
+{q:'太极指？',a:'中宫、卦身、人（五皮）',opts:['中宫、卦身、人（五皮）','离宫','坎宫']},
+{q:'两仪是？',a:'阳门、阴门',opts:['阳门、阴门','天、地','日、月']},
+{q:'四象是？',a:'朱雀、玄武、白虎、青龙',opts:['朱雀、玄武、白虎、青龙','六神','八卦']}]},
+{id:'quiz-nw-4',title:'西北派 · 演绎象法',desc:'九星逐一定位',questions:[
+{q:'八万对应？',a:'乾卦、我',opts:['乾卦、我','兑卦','艮卦']},
+{q:'二皮对应？',a:'兑卦、眼目',opts:['兑卦、眼目','艮卦','巽卦']},
+{q:'五皮对应？',a:'中宫、亲朋',opts:['中宫、亲朋','乾卦','坤卦']},
+{q:'四皮对应？',a:'巽卦、事情',opts:['巽卦、事情','震卦','兑卦']},
+{q:'三皮对应？',a:'震卦、财信',opts:['震卦、财信','兑卦','艮卦']},
+{q:'刘唐对应？',a:'离卦、男人',opts:['离卦、男人','坎卦','兑卦']},
+{q:'毛鱼对应？',a:'坎卦、女人',opts:['坎卦、女人','离卦','坤卦']},
+{q:'二棍对应？',a:'坤卦、路',opts:['坤卦、路','艮卦','震卦']},
+{q:'林冲（一皮）对应？',a:'艮卦、阻滞',opts:['艮卦、阻滞','巽卦','兑卦']},
+{q:'刘唐为？',a:'朱雀、文书',opts:['朱雀、文书','玄武','青龙']}]},
+{id:'quiz-nw-5',title:'西北派 · 九宫象法',desc:'九宫性质与吉凶',questions:[
+{q:'乾为？',a:'天门、圆满、吉',opts:['天门、圆满、吉','水门、险陷、凶','火门、灾']},
+{q:'坎为？',a:'水门、险陷、凶',opts:['水门、险陷、凶','天门、吉','地门、吉']},
+{q:'艮为？',a:'山门、止、静止',opts:['山门、止、静止','雷门、动','风门、空亡']},
+{q:'震为？',a:'雷门、动、发展',opts:['雷门、动、发展','风门、空亡','火门、灾']},
+{q:'巽为？',a:'风门、空亡、不定',opts:['风门、空亡、不定','火门、灾','地门、承载']},
+{q:'离为？',a:'火门、灾祸、凶',opts:['火门、灾祸、凶','地门、承载、吉','天门、圆满']},
+{q:'坤为？',a:'地门、承载、吉',opts:['地门、承载、吉','天门、圆满','水门、险陷']},
+{q:'兑为？',a:'泽门、缺损、凶',opts:['泽门、缺损、凶','水门、险陷','天门、吉']},
+{q:'中宫为？',a:'库门、入、静止',opts:['库门、入、静止','火门、灾','雷门、动']},
+{q:'九宫化人形，离为？',a:'头',opts:['头','脚','肩']}]},
+{id:'quiz-nw-6',title:'西北派 · 后天卦',desc:'后天枢要、走卦名落卦名',questions:[
+{q:'用神卦眼开，先看中宫为？',a:'开始',opts:['开始','结果','修饰']},
+{q:'用神落宫为？',a:'过程',opts:['过程','结果','修饰']},
+{q:'用神对宫为？',a:'结果',opts:['结果','过程','修饰']},
+{q:'对宫看？',a:'牌意',opts:['牌意','地盘','宫位']},
+{q:'用神卦眼不开，用？',a:'走宫碰',opts:['走宫碰','走卦名','落卦名']},
+{q:'落陷指？',a:'二皮临坎宫',opts:['二皮临坎宫','二皮临离宫','一皮临坎宫']},
+{q:'走卦名是？',a:'过程',opts:['过程','结果','修饰']},
+{q:'落卦名是？',a:'结果',opts:['结果','过程','修饰']},
+{q:'第一张牌？',a:'走不来卦名',opts:['走不来卦名','可以走卦名','只走卦名']},
+{q:'伏吟指？',a:'同牌同宫',opts:['同牌同宫','反吟','对冲']}]},
+{id:'quiz-nw-7',title:'西北派 · 先天卦',desc:'碰牌、换太极、单宫、活八门九星、一卦多占、分类占、应期',questions:[
+{q:'碰牌十式包括？',a:'走宫碰、转宫碰、翻宫碰、落宫碰、跑宫碰',opts:['走宫碰、转宫碰、翻宫碰、落宫碰、跑宫碰','看宫、看牌、看卦','上碰、下碰、左碰']},
+{q:'走宫顺序从中宫开始，顺时针从？',a:'艮',opts:['艮','乾','坎']},
+{q:'透出论，八万出现在用神？',a:'本宫和对宫',opts:['本宫和对宫','中宫','四柱']},
+{q:'换太极即？',a:'透出',opts:['透出','碰牌','落宫']},
+{q:'单宫读法顺序？',a:'主爻—宫位—配牌',opts:['主爻—宫位—配牌','宫位—主爻—配牌','配牌—宫位—主爻']},
+{q:'活八门法五并寄？',a:'坤',opts:['坤','乾','艮']},
+{q:'活八门法阳时用？',a:'中宫左牌',opts:['中宫左牌','中宫右牌','中宫上牌']},
+{q:'一卦多占中，六亲分宫以？',a:'八万本宫',opts:['八万本宫','中宫','离宫']},
+{q:'客次法第一个来问用？',a:'中宫',opts:['中宫','艮宫','乾宫']},
+{q:'应期中，流月起于？',a:'正月',opts:['正月','子时','甲子']}]},
+{id:'quiz-nw-8',title:'西北派 · 三盘合参',desc:'择方、择日、运筹',questions:[
+{q:'三盘指？',a:'先天天盘、中天人盘、后天地盘',opts:['先天天盘、中天人盘、后天地盘','天、地、人','上、中、下']},
+{q:'择方中，中宫为？',a:'当前所在地',opts:['当前所在地','目的地','起点']},
+{q:'落宫对宫定？',a:'吉凶',opts:['吉凶','应期','修饰']},
+{q:'择日结合？',a:'十二建星',opts:['十二建星','二十八宿','六十甲子']},
+{q:'三盘运筹，天盘之变宫为？',a:'归计之应',opts:['归计之应','过程之应','修饰之应']},
+{q:'运筹三盘分看，见喜？',a:'催喜',opts:['催喜','避喜','略喜']},
+{q:'见忌？',a:'避忌',opts:['避忌','催忌','略忌']},
+{q:'应期之法，先问？',a:'卦主生月日时',opts:['卦主生月日时','卦主姓名','卦主籍贯']},
+{q:'先天为？',a:'体',opts:['体','用','修饰']},
+{q:'后天为？',a:'用',opts:['用','体','修饰']}]},
+{id:'quiz-nw-9',title:'西北派 · 十二宫终身卦思路',desc:'终身盘、命宫起法、大运十二宫',questions:[
+{q:'终身盘命宫位于？',a:'中宫',opts:['中宫','乾宫','离宫']},
+{q:'终身盘命宫排盘先取？',a:'此人阴历生日生肖',opts:['此人阴历生日生肖','此人姓名','起卦时间']},
+{q:'十二宫包括？',a:'命宫、财帛、兄弟、田宅、男女、仆役、夫妻、疾厄、迁移、官禄、福德、相貌',opts:['命宫、财帛、兄弟、田宅、男女、仆役、夫妻、疾厄、迁移、官禄、福德、相貌','天地人三才','乾坤震巽']},
+{q:'断法：归置牌为命宫和身宫，一般看？',a:'旺衰和人的性格',opts:['旺衰和人的性格','财官','应期']},
+{q:'四柱看人生历程，一个多少年？',a:'十八年',opts:['十八年','十年','十二年']},
+{q:'大运一个？',a:'十年',opts:['十年','十八年','十二年']},
+{q:'小运在所值大运上起，男顺女？',a:'逆',opts:['逆','顺','同']},
+{q:'四柱五行最弱断？',a:'脾胃、皮肤',opts:['脾胃、皮肤','肝胆','心脑']},
+{q:'第一步大运为？',a:'童运',opts:['童运','老运','中年运']},
+{q:'流年十二宫以？',a:'大运为命宫',opts:['大运为命宫','中宫为命宫','离宫为命宫']}]},
+{id:'quiz-cp-1',title:'综合 · 两派对照',desc:'两派牌名、起卦方向、断法差异',questions:[
+{q:'东北篇离宫牌名？',a:'白花',opts:['白花','刘唐','毛鱼']},
+{q:'西北篇离宫牌名？',a:'刘唐',opts:['刘唐','白花','毛鱼']},
+{q:'东北篇坎宫牌名？',a:'小鱼',opts:['小鱼','毛鱼','刘唐']},
+{q:'西北篇坎宫牌名？',a:'毛鱼',opts:['毛鱼','小鱼','刘唐']},
+{q:'东北篇坤宫牌名？',a:'二条',opts:['二条','二棍','二皮']},
+{q:'西北篇坤宫牌名？',a:'二棍',opts:['二棍','二条','二并']},
+{q:'「并」与「皮」的关系？',a:'同一张牌，地方叫法不同',opts:['同一张牌，地方叫法不同','完全不同','是一对']},
+{q:'「二条」与「二棍」的关系？',a:'同一张牌，地方叫法不同',opts:['同一张牌，地方叫法不同','完全不同','是一对']},
+{q:'东北起卦方向多作？',a:'逆时针',opts:['逆时针','顺时针','先顺后逆']},
+{q:'西北起卦方向为？',a:'顺时针',opts:['顺时针','逆时针','先顺后逆']}]},
+{id:'quiz-supp-1',title:'补充 · 牌谱四种',desc:'落宫断语、伏吟',questions:[
+{q:'临乾宫，一皮在乾？',a:'乌云遮天',opts:['乌云遮天','日月高悬','发大横财']},
+{q:'临乾宫，二皮在乾？',a:'日月高悬',opts:['日月高悬','乌云遮天','定有喜事']},
+{q:'临乾宫，三皮在乾？',a:'发大横财',opts:['发大横财','定有喜事','自己高迁']},
+{q:'临坎宫，一皮在坎？',a:'官滞',opts:['官滞','满财','泪眼涟涟']},
+{q:'临坎宫，二皮在坎？',a:'泪眼涟涟',opts:['泪眼涟涟','乌云遮天','满财']},
+{q:'临坎宫，三皮在坎？',a:'满财',opts:['满财','官滞','事情缓']},
+{q:'临艮宫，一皮在艮？',a:'墙高难进',opts:['墙高难进','喜事','亲人靠不住']},
+{q:'临震宫，四皮在震？',a:'是非走尽',opts:['是非走尽','喜事','贵人帮忙']},
+{q:'牌伏吟，一皮见一皮？',a:'亲的见面喜',opts:['亲的见面喜','必定起是非','兄弟见面喜']},
+{q:'牌伏吟，四皮见四皮？',a:'必定起是非',opts:['必定起是非','亲的见面喜','兄弟见面喜']}]}
+];
+var state = {page:'welcome',currentModule:null,currentQuiz:null,quizScores:{},quizAnswers:{}};
+function isDark(){return document.body.classList.contains('dark');}
+function updateThemeBtn(){var b=document.getElementById('theme-toggle');if(b)b.textContent=isDark()?'☀':'🌙';}
+(function initTheme(){var saved=null;try{saved=localStorage.getItem('xiangma-learn-theme');}catch(e){}var prefersDark=false;try{prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;}catch(e){}var useDark=saved==='dark'||(saved!=='light'&&prefersDark);if(useDark)document.body.classList.add('dark');updateThemeBtn();document.getElementById('theme-toggle').addEventListener('click',function(){document.body.classList.toggle('dark');try{localStorage.setItem('xiangma-learn-theme',isDark()?'dark':'light');}catch(e){}updateThemeBtn();syncPanTheme();});})();
+
+function loadPanApp(){
+  var tmpl = document.getElementById('pan-app-template');
+  var host = document.getElementById('pan-host');
+  if(!tmpl || !host) return;
+  var html = tmpl.textContent;
+  html = html.replace(/<\\\/script>/g, '<' + '/script>');
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(html, 'text/html');
+  host.innerHTML = '';
+  while(host.firstChild) host.removeChild(host.firstChild);
+  var shadow = host.attachShadow({mode:'open'});
+  var styles = doc.querySelectorAll('style');
+  for(var i = 0; i < styles.length; i++){
+    var cssText = styles[i].textContent;
+    cssText = cssText.replace(/\bbody\.dark\b/g, ':host(.dark)');
+    cssText = cssText.replace(/\bbody(?=[\s,{])/g, ':host');
+    var s = document.createElement('style');
+    s.textContent = cssText;
+    shadow.appendChild(s);
+  }
+  var bodyChildren = Array.prototype.slice.call(doc.body.children);
+  bodyChildren.forEach(function(el){
+    if(el.tagName === 'SCRIPT') return;
+    shadow.appendChild(el);
+  });
+  var proxy = {
+    getElementById: function(id){ return shadow.getElementById(id); },
+    querySelector: function(sel){ return shadow.querySelector(sel); },
+    querySelectorAll: function(sel){ return shadow.querySelectorAll(sel); },
+    createElement: function(tag){ return document.createElement(tag); },
+    createElementNS: function(ns, tag){ return document.createElementNS(ns, tag); },
+    createTextNode: function(txt){ return document.createTextNode(txt); },
+    createDocumentFragment: function(){ return document.createDocumentFragment(); },
+    body: document.body,
+    documentElement: document.documentElement,
+    head: document.head,
+    execCommand: function(cmd){ return document.execCommand(cmd); },
+    addEventListener: function(t, fn){ return document.addEventListener(t, fn); },
+    removeEventListener: function(t, fn){ return document.removeEventListener(t, fn); }
+  };
+  var scripts = doc.querySelectorAll('script');
+  for(var k = 0; k < scripts.length; k++){
+    var txt = scripts[k].textContent;
+    txt = txt.replace(/\bdocument\b/g, '__panDoc__');
+    try {
+      var fn = new Function('__panDoc__', txt);
+      fn(proxy);
+    } catch(e) {
+      console.error('排盘软件脚本执行失败', e);
+    }
+  }
+  syncPanTheme();
+}
+function syncPanTheme(){
+  var host = document.getElementById('pan-host');
+  if(!host) return;
+  if(isDark()) host.classList.add('dark');
+  else host.classList.remove('dark');
+}
+function buildMobileNav(){var nav=document.getElementById('mobile-nav');nav.innerHTML='';if(state.page==='modules'){Object.keys(MODULES).forEach(function(pai){var data=MODULES[pai];var gt=document.createElement('div');gt.className='mobile-nav-group-title';gt.textContent=data.title;nav.appendChild(gt);var curGroupName=undefined;var curList=null;data.sections.forEach(function(s){var gn=s.group||null;if(gn!==curGroupName||!curList){curGroupName=gn;if(gn){var st=document.createElement('div');st.className='mobile-nav-subgroup-title';st.textContent=gn;nav.appendChild(st);}curList=document.createElement('div');}var btn=document.createElement('button');btn.className='mobile-nav-item';btn.textContent=s.title;if(state.currentModule&&state.currentModule.pai===pai&&state.currentModule.id===s.id)btn.classList.add('active');btn.addEventListener('click',function(){loadModule(pai,s.id);nav.classList.remove('open');document.getElementById('hamburger').classList.remove('open');});nav.appendChild(btn);});});var divider=document.createElement('div');divider.className='mobile-nav-divider';nav.appendChild(divider);var pl=document.createElement('div');pl.className='mobile-nav-page-label';pl.textContent='返回其他页面';nav.appendChild(pl);}var pages=[{page:'welcome',label:'欢迎页面'},{page:'modules',label:'学习模块'},{page:'quizzes',label:'快速检测'},{page:'pan',label:'排盘软件'}];pages.forEach(function(p){var btn=document.createElement('button');btn.className='mobile-nav-item';btn.textContent=p.label;if(state.page===p.page)btn.classList.add('active');btn.addEventListener('click',function(){goPage(p.page);nav.classList.remove('open');document.getElementById('hamburger').classList.remove('open');});nav.appendChild(btn);});}
+function goPage(page){state.page=page;document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});var el=document.getElementById('page-'+page);if(el)el.classList.add('active');document.querySelectorAll('.navbar button').forEach(function(b){b.classList.toggle('active',b.dataset.page===page);});document.getElementById('mobile-nav').classList.remove('open');document.getElementById('hamburger').classList.remove('open');if(page==='modules'&&!state.currentModule){var first=MODULES.northeast.sections[0];loadModule('northeast',first.id);}if(page==='quizzes'&&!state.currentQuiz)renderQuizHome();if(page==='pan'){setTimeout(syncPanTheme,50);}}
+document.querySelectorAll('.navbar button').forEach(function(b){b.addEventListener('click',function(){goPage(b.dataset.page);});});
+document.getElementById('start-learning').addEventListener('click',function(){goPage('modules');});
+document.getElementById('hamburger').addEventListener('click',function(e){e.stopPropagation();var nav=document.getElementById('mobile-nav');var hb=document.getElementById('hamburger');if(nav.classList.contains('open')){nav.classList.remove('open');hb.classList.remove('open');}else{buildMobileNav();nav.classList.add('open');hb.classList.add('open');}});
+document.addEventListener('click',function(e){var nav=document.getElementById('mobile-nav');var hb=document.getElementById('hamburger');if(!nav.classList.contains('open'))return;if(nav.contains(e.target)||hb.contains(e.target))return;nav.classList.remove('open');hb.classList.remove('open');});
+var lastW=window.innerWidth;
+window.addEventListener('resize',function(){var w=window.innerWidth;if(w>820&&lastW<=820){document.getElementById('mobile-nav').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}lastW=w;});
+function renderSidebarGroups(filter){
+var wrap=document.getElementById('sidebar-groups');
+if(!wrap)return;
+wrap.innerHTML='';
+var kw=(filter||'').trim().toLowerCase();
+Object.keys(MODULES).forEach(function(pai){
+var data=MODULES[pai];
+var sections=data.sections.filter(function(s){return !kw||s.title.toLowerCase().indexOf(kw)>=0||s.html.toLowerCase().indexOf(kw)>=0;});
+if(sections.length===0)return;
+var group=document.createElement('div');group.className='sidebar-group';
+var title=document.createElement('div');title.className='sidebar-group-title';
+title.innerHTML='<span>'+data.title+'</span><span class="arrow">▼</span>';
+title.addEventListener('click',function(){group.classList.toggle('collapsed');});
+var body=document.createElement('div');body.className='sidebar-group-body';
+var curGroupName=undefined;var curList=null;
+sections.forEach(function(s){
+var gn=s.group||null;
+if(gn!==curGroupName||!curList){
+curGroupName=gn;
+if(gn){var st=document.createElement('div');st.className='sidebar-subgroup-title';st.textContent=gn;body.appendChild(st);}
+curList=document.createElement('ul');curList.className='sidebar-list';body.appendChild(curList);
+}
+var li=document.createElement('li');
+var idx=data.sections.indexOf(s)+1;
+li.innerHTML='<span class="num">'+String(idx).padStart(2,'0')+'</span>'+s.title;
+li.dataset.id=s.id;li.dataset.pai=pai;
+li.addEventListener('click',function(){loadModule(pai,s.id);});
+curList.appendChild(li);
+});
+group.appendChild(title);group.appendChild(body);wrap.appendChild(group);
+});
+}
+function loadModule(pai,id){
+var data=MODULES[pai];
+var section=data.sections.find(function(s){return s.id===id;});
+if(!section)return;
+state.currentModule={pai:pai,id:id};
+document.querySelectorAll('.sidebar-list li').forEach(function(li){li.classList.toggle('active',li.dataset.id===id&&li.dataset.pai===pai);});
+var content=document.getElementById('module-content');
+var idx=data.sections.findIndex(function(s){return s.id===id;});
+var prev=idx>0?data.sections[idx-1]:null;
+var next=idx<data.sections.length-1?data.sections[idx+1]:null;
+content.innerHTML='<h1>'+section.title+'</h1><div class="module-sub">'+data.title+' · '+data.subtitle+(section.group?' · '+section.group:'')+'</div>'+section.html+'<div class="module-nav"><button id="nav-prev" '+(prev?'':'disabled')+'>← '+(prev?prev.title:'已是第一个')+'</button><button id="nav-next" '+(next?'':'disabled')+'>'+(next?next.title:'已是最后一个')+' →</button></div>';
+if(prev)document.getElementById('nav-prev').addEventListener('click',function(){loadModule(pai,prev.id);});
+if(next)document.getElementById('nav-next').addEventListener('click',function(){loadModule(pai,next.id);});
+var outline=document.getElementById('outline-list');outline.innerHTML='';
+content.querySelectorAll('h2,h3').forEach(function(h){var li=document.createElement('li');li.className=h.tagName==='H3'?'h3':'';li.textContent=h.textContent;li.addEventListener('click',function(){h.scrollIntoView({behavior:'smooth',block:'start'});});outline.appendChild(li);});
+renderGraph(pai,id);
+content.scrollTop=0;
+}
+document.getElementById('module-search').addEventListener('input',function(e){renderSidebarGroups(e.target.value);});
+function renderGraph(pai,activeId){
+var svg=document.getElementById('graph-svg');if(!svg)return;
+var W=280,H=360;svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.innerHTML='';
+var paiData=MODULES[pai];var sections=paiData.sections;
+var cx=W/2;var topY=30;var botY=H-30;var colGap=W/2;var centerX=cx;var centerY=H/2;
+var positions=sections.map(function(s,i){var isLeft=i%2===0;var x=isLeft?cx-colGap/2-10:cx+colGap/2+10;var y=topY+(botY-topY)*(i/Math.max(1,sections.length-1));return{x:x,y:y};});
+for(var i=0;i<sections.length-1;i++){var a=positions[i],b=positions[i+1];var path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d','M'+a.x+','+a.y+' C'+cx+','+((a.y+b.y)/2)+' '+cx+','+((a.y+b.y)/2)+' '+b.x+','+b.y);path.setAttribute('class','graph-edge'+(sections[i].id===activeId||sections[i+1].id===activeId?' active':''));svg.appendChild(path);}
+var centerG=document.createElementNS('http://www.w3.org/2000/svg','g');centerG.setAttribute('class','graph-node');
+var centerCircle=document.createElementNS('http://www.w3.org/2000/svg','circle');centerCircle.setAttribute('cx',centerX);centerCircle.setAttribute('cy',centerY);centerCircle.setAttribute('r',22);
+var centerText=document.createElementNS('http://www.w3.org/2000/svg','text');centerText.setAttribute('x',centerX);centerText.setAttribute('y',centerY);centerText.textContent=paiData.title;
+centerG.appendChild(centerCircle);centerG.appendChild(centerText);svg.appendChild(centerG);
+sections.forEach(function(s,i){var pos=positions[i];var g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','graph-node'+(s.id===activeId?' active':''));var circle=document.createElementNS('http://www.w3.org/2000/svg','circle');circle.setAttribute('cx',pos.x);circle.setAttribute('cy',pos.y);circle.setAttribute('r',18);var text=document.createElementNS('http://www.w3.org/2000/svg','text');text.setAttribute('x',pos.x);text.setAttribute('y',pos.y);text.textContent=s.title.slice(0,5);g.appendChild(circle);g.appendChild(text);g.addEventListener('click',function(){loadModule(pai,s.id);});svg.appendChild(g);});
+}
+function renderQuizSidebar(){var list=document.getElementById('quiz-sidebar');if(!list)return;list.innerHTML='';QUIZZES.forEach(function(q){var li=document.createElement('li');li.textContent=q.title;li.dataset.id=q.id;li.addEventListener('click',function(){openQuiz(q.id);});list.appendChild(li);});}
+function renderQuizHome(){var main=document.getElementById('quiz-main');var html='<h1>快速检测</h1><div class="quiz-sub">选择一个单元开始小测，答案提交后即可看到得分</div><div class="quiz-card-list">';QUIZZES.forEach(function(q){var sc=state.quizScores[q.id];html+='<div class="quiz-card" data-id="'+q.id+'"><div class="quiz-card-main"><div class="quiz-card-title">'+q.title+'</div><div class="quiz-card-meta"><span>范围：'+q.desc+'</span><span>题数：'+q.questions.length+'</span></div></div><div class="quiz-card-status '+(sc?'done':'')+'">'+(sc?sc.correct+'/'+sc.total:'未完成')+'</div></div>';});html+='</div>';main.innerHTML=html;main.querySelectorAll('.quiz-card').forEach(function(card){card.addEventListener('click',function(){openQuiz(card.dataset.id);});});state.currentQuiz=null;updateScorePanel();}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function openQuiz(id){var quiz=QUIZZES.find(function(q){return q.id===id;});if(!quiz)return;state.currentQuiz=id;document.querySelectorAll('#quiz-sidebar li').forEach(function(li){li.classList.toggle('active',li.dataset.id===id);});var main=document.getElementById('quiz-main');var questions=quiz.questions.map(function(q,qi){var correct=q.a;var opts=shuffle(q.opts);return{qi:qi,q:q.q,correct:correct,opts:opts,selected:null};});var html='<h1>'+quiz.title+'</h1><div class="quiz-sub">'+quiz.desc+' · 共 '+questions.length+' 题</div><div id="quiz-body">';questions.forEach(function(item,i){html+='<div class="quiz-question" data-q="'+i+'"><div class="quiz-q-text"><span class="quiz-q-num">'+String(i+1).padStart(2,'0')+'</span>'+item.q+'</div><ul class="quiz-options">';item.opts.forEach(function(o,oi){html+='<li data-opt="'+o+'" data-q="'+i+'"><span class="opt-letter">'+String.fromCharCode(65+oi)+'</span><span>'+o+'</span></li>';});html+='</ul></div>';});html+='</div><div class="quiz-actions"><button class="btn" id="quiz-submit">提交答案</button><button class="btn ghost" id="quiz-back">返回小测列表</button></div><div id="quiz-result"></div>';main.innerHTML=html;main.querySelectorAll('.quiz-options li').forEach(function(li){li.addEventListener('click',function(){var qi=parseInt(li.dataset.q,10);if(state.quizAnswers[quiz.id])return;var parent=li.parentElement;parent.querySelectorAll('li').forEach(function(x){x.classList.remove('selected');});li.classList.add('selected');questions[qi].selected=li.dataset.opt;});});document.getElementById('quiz-submit').addEventListener('click',function(){submitQuiz(quiz,questions);});document.getElementById('quiz-back').addEventListener('click',function(){renderQuizHome();document.querySelectorAll('#quiz-sidebar li').forEach(function(li){li.classList.remove('active');});});}
+function submitQuiz(quiz,questions){var correct=0;var unanswered=questions.filter(function(q){return q.selected===null;}).length;if(unanswered>0&&!confirm('还有 '+unanswered+' 题未作答，确定提交吗？'))return;questions.forEach(function(item,i){var box=document.querySelector('.quiz-question[data-q="'+i+'"]');if(!box)return;box.querySelectorAll('.quiz-options li').forEach(function(li){var opt=li.dataset.opt;if(opt===item.correct)li.classList.add('correct');else if(opt===item.selected)li.classList.add('wrong');li.style.cursor='default';});if(item.selected===item.correct)correct++;});state.quizScores[quiz.id]={correct:correct,total:questions.length};state.quizAnswers[quiz.id]=true;var pct=Math.round(correct/questions.length*100);document.getElementById('quiz-result').innerHTML='<div class="quiz-result">本次得分：<span class="score">'+correct+' / '+questions.length+'</span>（'+pct+'%）</div>';document.getElementById('quiz-submit').disabled=true;document.getElementById('quiz-submit').style.opacity='0.5';updateScorePanel();}
+function updateScorePanel(){var total=QUIZZES.length;var done=Object.keys(state.quizScores).length;var pct=total===0?0:Math.round(done/total*100);var ring=document.getElementById('score-ring-fill');var pctEl=document.getElementById('score-pct');var statsEl=document.getElementById('score-stats');if(!ring)return;var circumference=2*Math.PI*66;ring.setAttribute('stroke-dasharray',circumference.toFixed(1));ring.setAttribute('stroke-dashoffset',(circumference*(1-pct/100)).toFixed(1));pctEl.textContent=pct+'%';var tc=0,tq=0;Object.values(state.quizScores).forEach(function(s){tc+=s.correct;tq+=s.total;});var acc=tq===0?0:Math.round(tc/tq*100);statsEl.innerHTML='已完成 <strong>'+done+'</strong> / '+total+' 个小测<br>累计正确率 <strong>'+acc+'%</strong>';}
+renderSidebarGroups('');
+renderQuizSidebar();
+updateScorePanel();
+renderGraph('northeast','ne-1');
+loadPanApp();
+</script>
+</body>
+</html>
