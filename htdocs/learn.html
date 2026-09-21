@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学习模块 · 响马卦</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/learn.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+      <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+      <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+    </svg>
+    <div class="brand">响马卦</div>
+  </div>
+  <nav class="navbar">
+    <a href="index.html">欢迎页面</a>
+    <a href="learn.html" class="active">学习模块</a>
+    <a href="test.html">快速检测</a>
+    <a href="paipan.html">排盘软件</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+    <button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+<section class="page active" id="page-modules">
+  <div class="module-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-search-wrap">
+        <input type="text" class="sidebar-search" id="module-search" placeholder="搜索模块…">
+      </div>
+      <div class="sidebar-tree" id="sidebar-tree"></div>
+    </aside>
+
+    <div class="content-area" id="module-content">
+      <h1>学习模块</h1>
+      <p class="module-sub">请从左侧目录选择模块开始学习</p>
+      <p style="color:var(--text-3);line-height:2;">
+        本系统将东北、西北两派学习路径分别拆解为若干阶段。<br>
+        东北派重中宫、头脚、四柱、层次消元与身交用神；<br>
+        西北派重中宫、用神落宫、对宫、走宫碰与朝向。
+      </p>
+    </div>
+
+    <aside class="right-panel">
+      <div class="panel-block graph-block">
+        <div class="panel-title">知识图谱</div>
+        <div class="graph-canvas-wrap">
+          <svg class="graph-svg" id="graph-svg" viewBox="0 0 280 280"></svg>
+        </div>
+      </div>
+      <div class="panel-block outline-block">
+        <div class="panel-title">本页内容</div>
+        <div class="outline-scroll">
+          <ul class="outline-list" id="outline-list">
+            <li class="empty-tip">请选择模块</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</section>
+</main>
+
+<footer>响马卦学习系统 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script src="js/common.js"></script>
+<script src="js/learn.js"></script>
+</body>
+</html>

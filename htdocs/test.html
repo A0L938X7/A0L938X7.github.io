@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>快速检测 · 响马卦</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/learn.css"><!-- 复用 sidebar / tree 样式 -->
+<link rel="stylesheet" href="css/test.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+      <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+      <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+    </svg>
+    <div class="brand">响马卦</div>
+  </div>
+  <nav class="navbar">
+    <a href="index.html">欢迎页面</a>
+    <a href="learn.html">学习模块</a>
+    <a href="test.html" class="active">快速检测</a>
+    <a href="paipan.html">排盘软件</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+    <button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+<section class="page active" id="page-quizzes">
+  <div class="quiz-layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-tree" id="sidebar-tree"></div>
+    </aside>
+
+    <div class="quiz-main" id="quiz-main"></div>
+
+    <aside class="score-panel">
+      <div class="panel-title">目前总成绩</div>
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 160 160">
+          <circle class="track" cx="80" cy="80" r="66"></circle>
+          <circle class="fill" id="score-ring-fill" cx="80" cy="80" r="66"
+                  stroke-dasharray="414.7" stroke-dashoffset="414.7"></circle>
+          <text class="pct" id="score-pct" x="80" y="76">0%</text>
+          <text class="pct-label" x="80" y="98">完成度</text>
+        </svg>
+      </div>
+      <div class="score-stats" id="score-stats">已完成 <strong>0</strong> / 0 个小测</div>
+    </aside>
+
+  </div>
+</section>
+</main>
+
+<footer>响马卦学习系统 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script src="js/common.js"></script>
+<script src="js/test.js"></script>
+</body>
+</html>

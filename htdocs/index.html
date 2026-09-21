@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>响马卦两大主要派系的研究与实践</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+      <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+      <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+    </svg>
+    <div class="brand">响马卦</div>
+  </div>
+  <nav class="navbar">
+    <a href="index.html" class="active">欢迎页面</a>
+    <a href="learn.html">学习模块</a>
+    <a href="test.html">快速检测</a>
+    <a href="paipan.html">排盘软件</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+    <button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+<section class="page active" id="page-welcome">
+  <div class="welcome-wrap">
+
+    <div class="welcome-hero">
+      <h1>响马卦两大主要派系的研究与实践</h1>
+      <div class="sub">东北 · 西北 · 传承与实操</div>
+      <div class="divider"></div>
+      <div class="tagline">
+        响马牌卦，源流西北，脱胎奇门，自有发明。法用十八张，牌演九星，天地人神，变动不居。<br>
+        本系列课程将东北、西北两派知识传承分别整理，配以小测与排盘工具，供学生循序研习。
+      </div>
+    </div>
+
+    <div class="welcome-grid">
+      <div class="welcome-intro">
+        <h2>欢迎来到：响马卦两大主要派系的研究与实践</h2>
+        <p>响马卦，民间又称响马牌卦，以十八张牌为体，脱胎于奇门遁甲，融合九星、八门、八神、九宫。此法多在东北、西北一带口耳相传，故名声不显，然其理法简易，举重若轻，四盘备立，遍推八门。</p>
+        <p>东北派重中宫、头顶脚踩、四柱、层次消元与身交用神；西北派以刘唐、毛鱼、二棍、八万等牌为主，重中宫、用神落宫、对宫、走宫碰与朝向。两派同源异流，各有侧重。</p>
+        <p>本课程将两派学习路径分别拆解为若干阶段，从识牌、起卦、盘层、用神，到分类占、进阶技法、牌谱与实战，逐层推进。每阶段配有小测，便于自检；排盘工具已内嵌于本系统，方便实占验证。</p>
+        <div class="callout">
+          <div class="callout-title">学习提示</div>
+          初学者不要同时混用两派牌名与起卦方向，建议先选定一派作为起点，待熟练后，再学习另外一派。需注意：「并」即「皮」，「二条」即「二棍」，只是地方叫法不同。
+        </div>
+      </div>
+      <div class="instructor-card">
+        <img class="instructor-avatar" src="img/jiang.jpg" alt="姜玄衣"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="instructor-avatar-fallback" style="display:none;">姜</div>
+        <div class="instructor-name">姜玄衣</div>
+        <div class="instructor-role">讲师 · 响马卦传承人</div>
+        <div class="instructor-desc">自癸卯始习响马卦，遍览前贤诸篇，后承明华师传，遍历东北西北两家民间诸派所传。删繁就简，理气定规，使统系自洽。今汇两派真传歌诀、秘图与个人传习手记，纂为系列课程，以俟后学。</div>
+      </div>
+    </div>
+
+    <div class="welcome-toc">
+      <h2>课程目录</h2>
+      <div id="toc-container"></div>
+    </div>
+
+    <div class="welcome-path">
+      <h2>推荐学习方式</h2>
+      <div class="path-grid" style="grid-template-columns:1fr;">
+        <div class="path-card">
+          <h3>学习路径建议</h3>
+          <p style="color:var(--text-2);font-size:14px;line-height:2;margin-bottom:12px;">建议新手先学习东北派，或者西北派的后天卦。</p>
+          <ul style="list-style:none;padding-left:0;color:var(--text-2);font-size:14px;line-height:2;">
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>选择东北派入门</strong>：先学完东北派，再跳转到西北派的后天卦；学完后，再学西北派的先天卦。两派都掌握之后，学习三盘合参与运筹，最后学终身卦。
+            </li>
+            <li style="padding:6px 0;">
+              <strong>选择西北派入门</strong>：按照西北派路线循序渐进；学完之后，再回头学习东北派即可。
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="start-btn-wrap">
+      <button class="btn" id="start-learning">开始学习 →</button>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer>响马卦学习系统 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script src="js/common.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

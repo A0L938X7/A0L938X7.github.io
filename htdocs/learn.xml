@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site title="响马卦两大主要派系的研究与实践" author="姜玄衣">
+  <catalog>
+    <folder name="东北派" subtitle="理气妙论">
+      <note id="ne-1" title="东北响马卦的选牌与识牌" path="learning_notes/东北派/选牌与识牌.md"
+            related="ne-2,ne-4,nw-1,cp-1"/>
+      <note id="ne-2" title="东北响马卦的起卦与行持" path="learning_notes/东北派/起卦与行持.md"
+            related="ne-1,ne-3,ne-4"/>
+      <note id="ne-3" title="东北响马卦的整体结构" path="learning_notes/东北派/整体结构.md"
+            related="ne-2,ne-4,ne-5"/>
+      <note id="ne-4" title="东北响马卦的基本占断思路" path="learning_notes/东北派/基本占断思路.md"
+            related="ne-3,ne-5,ne-6"/>
+      <note id="ne-5" title="分类占精讲" path="learning_notes/东北派/分类占精讲.md"
+            related="ne-4,ne-6,ne-7"/>
+      <note id="ne-6" title="进阶资料·理气内秘" path="learning_notes/东北派/进阶资料理气内秘.md"
+            related="ne-4,ne-5,ne-7"/>
+      <note id="ne-7" title="实战入手思路" path="learning_notes/东北派/实战入手思路.md"
+            related="ne-4,ne-5,ne-8"/>
+      <note id="ne-8" title="秘传流运卦思路" path="learning_notes/东北派/秘传流运卦思路.md"
+            related="ne-7,ne-3,ne-6"/>
+    </folder>
+
+    <folder name="西北派" subtitle="古法归宗">
+      <note id="nw-1" title="西北响马卦的选牌与识牌" path="learning_notes/西北派/选牌与识牌.md"
+            related="nw-2,nw-3,ne-1,cp-1"/>
+      <note id="nw-2" title="西北响马卦的起卦" path="learning_notes/西北派/起卦.md"
+            related="nw-1,nw-3,ne-2"/>
+      <note id="nw-3" title="西北响马卦的取象规律" path="learning_notes/西北派/取象规律.md"
+            related="nw-1,nw-2,nw-4,cp-1"/>
+      <note id="nw-4" title="西北响马卦的演绎象法" path="learning_notes/西北派/演绎象法.md"
+            related="nw-3,nw-5,nw-1"/>
+      <note id="nw-5" title="九宫象法" path="learning_notes/西北派/九宫象法.md"
+            related="nw-4,nw-6,nw-7"/>
+      <folder name="后天卦">
+        <note id="nw-6" title="后天枢要" path="learning_notes/西北派/后天卦/后天枢要.md"
+              related="nw-5,nw-7,nw-8"/>
+        <note id="nw-7" title="走卦名和落卦名的运用" path="learning_notes/西北派/后天卦/走卦名和落卦名.md"
+              related="nw-6,nw-8,nw-9"/>
+      </folder>
+      <folder name="先天卦">
+        <note id="nw-8" title="碰牌十法" path="learning_notes/西北派/先天卦/碰牌十法.md"
+              related="nw-7,nw-9,nw-10,nw-11"/>
+        <note id="nw-9" title="换太极法" path="learning_notes/西北派/先天卦/换太极法.md"
+              related="nw-8,nw-10,nw-11"/>
+        <note id="nw-10" title="单宫定象法" path="learning_notes/西北派/先天卦/单宫定象法.md"
+              related="nw-8,nw-9,nw-11"/>
+        <note id="nw-11" title="秘传活八门九星八神之法" path="learning_notes/西北派/先天卦/秘传活八门九星八神之法.md"
+              related="nw-8,nw-9,nw-10,nw-12"/>
+        <note id="nw-12" title="一卦多占与六亲分宫法" path="learning_notes/西北派/先天卦/一卦多占与六亲分宫法.md"
+              related="nw-11,nw-13,nw-14"/>
+        <note id="nw-13" title="分类占的基本思路" path="learning_notes/西北派/先天卦/分类占的基本思路.md"
+              related="nw-12,nw-14,nw-15"/>
+        <note id="nw-14" title="应期思路" path="learning_notes/西北派/先天卦/应期思路.md"
+              related="nw-13,nw-15,nw-16"/>
+      </folder>
+      <note id="nw-15" title="三盘合参" path="learning_notes/西北派/三盘合参.md"
+            related="nw-14,nw-16,nw-17"/>
+      <note id="nw-16" title="十二宫终身卦思路" path="learning_notes/西北派/十二宫终身卦思路.md"
+            related="nw-15,nw-17,nw-10"/>
+      <folder name="补充资料">
+        <note id="nw-17" title="牌谱四种" path="learning_notes/西北派/补充资料/牌谱四种.md"
+              related="nw-7,nw-16,nw-5"/>
+      </folder>
+    </folder>
+
+    <folder name="两派对照" subtitle="同源异流 · 选学指南">
+      <note id="cp-1" title="两派关键差异对照" path="learning_notes/两派对照/两派关键差异对照.md"
+            related="ne-1,nw-1,cp-2"/>
+      <note id="cp-2" title="选学建议与学习路径" path="learning_notes/两派对照/选学建议与学习路径.md"
+            related="cp-1,ne-1,nw-1"/>
+    </folder>
+  </catalog>
+
+  <quizzes>
+    <quiz id="quiz-ne-1" title="东北派 · 选牌与识牌" desc="九星牌名、牌象、八门、九宫">
+      <question q="东北篇乾宫对应牌？" a="八万">
+        <opt>八万</opt><opt>一并</opt><opt>白花</opt>
+      </question>
+      <question q="东北篇离宫对应牌？" a="白花">
+        <opt>白花</opt><opt>小鱼</opt><opt>二条</opt>
+      </question>
+      <question q="东北篇坎宫对应牌？" a="小鱼">
+        <opt>小鱼</opt><opt>白花</opt><opt>二条</opt>
+      </question>
+      <question q="东北篇坤宫对应牌？" a="二条">
+        <opt>二条</opt><opt>一并</opt><opt>二并</opt>
+      </question>
+      <question q="东北篇艮宫对应牌？" a="一并">
+        <opt>一并</opt><opt>二并</opt><opt>三并</opt>
+      </question>
+      <question q="东北篇巽宫对应牌？" a="二并">
+        <opt>二并</opt><opt>三并</opt><opt>四并</opt>
+      </question>
+      <question q="东北篇震宫对应牌？" a="三并">
+        <opt>三并</opt><opt>二并</opt><opt>四并</opt>
+      </question>
+      <question q="东北篇兑宫对应牌？" a="四并">
+        <opt>四并</opt><opt>三并</opt><opt>五并</opt>
+      </question>
+      <question q="东北篇中宫对应牌？" a="五并">
+        <opt>五并</opt><opt>四并</opt><opt>八万</opt>
+      </question>
+      <question q="东北篇牌组共几张？" a="十八张">
+        <opt>十八张</opt><opt>十六张</opt><opt>二十张</opt>
+      </question>
+    </quiz>
+    <!-- 其余 quiz 按原内容照此格式补齐，见下文说明 -->
+  </quizzes>
+</site>

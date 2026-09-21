@@ -1,0 +1,403 @@
+================================================================================
+响马卦学习系统 · 维护指南（Maintenance Guide）
+================================================================================
+版本：v2.0（模块化拆分版）
+日期：2026-09-19
+作者：姜玄衣
+技术栈：原生 HTML + CSS + JS，无构建工具，无框架
+适用：index.html / learn.html / test.html / paipan.html
+
+
+================================================================================
+一、目录结构
+================================================================================
+
+/
+├── index.html                  欢迎主页（读取 learn.xml 生成目录）
+├── learn.html                  学习模块（读取 learn.xml + md）
+├── learn.xml                   目录 / 关联 / 小测数据（核心数据文件）
+├── test.html                   快速检测（读取 learn.xml 的 quizzes）
+├── paipan.html                 排盘软件（单文件，含 Shadow DOM）
+├── css/
+│   ├── common.css              变量 + 全局 + header + footer + 移动导航
+│   ├── index.css               欢迎页样式
+│   ├── learn.css               学习模块三栏布局 + md 正文 + 图谱 + 大纲
+│   └── test.css                小测样式
+├── js/
+│   ├── common.js               主题 / 移动导航 / XML 加载 / 工具
+│   ├── index.js                首页目录渲染
+│   ├── learn.js                侧边栏树 + md 渲染 + 知识图谱 + 大纲
+│   └── test.js                 小测渲染与评分
+├── img/
+│   └── jiang.jpg               讲师头像（缺失时自动降级为文字）
+├── fonts/
+│   └── qiji.woff2              齐伋体（可选，缺失回退楷体）
+├── learning_notes/             所有 Markdown 笔记
+│   ├── 东北派/
+│   ├── 西北派/
+│   │   ├── 后天卦/
+│   │   ├── 先天卦/
+│   │   └── 补充资料/
+│   └── 两派对照/
+└── quizzes/                    小测数据（当前内联在 learn.xml）
+
+
+================================================================================
+二、核心数据文件：learn.xml
+================================================================================
+
+2.1 根节点
+
+  <site title="..." author="...">
+    <catalog> ... </catalog>
+    <quizzes> ... </quizzes>
+  </site>
+
+2.2 catalog 目录树
+
+  <folder name="东北派" subtitle="理气妙论">
+    <note id="ne-1"
+          title="东北响马卦的选牌与识牌"
+          path="learning_notes/东北派/选牌与识牌.md"
+          related="ne-2,ne-4,nw-1,cp-1"/>
+    <folder name="后天卦">
+      <note .../>
+    </folder>
+  </folder>
+
+  字段说明：
+    name        文件夹显示名
+    subtitle    副标题（可选）
+    id          笔记唯一标识（推荐 ne-* / nw-* / cp-*）
+    title       笔记标题
+    path        md 文件相对路径（相对 learn.xml 所在目录）
+    related     关联笔记 id，逗号分隔，用于知识图谱
+
+2.3 quizzes 小测数据
+
+  <quiz id="quiz-ne-1" title="东北派 · 选牌与识牌" desc="九星牌名、牌象">
+    <question q="东北篇乾宫对应牌？" a="八万">
+      <opt>八万</opt><opt>一并</opt><opt>白花</opt>
+    </question>
+  </quiz>
+
+  字段说明：
+    id          唯一标识，推荐 quiz-*
+    title       小测标题
+    desc        范围说明
+    question.q  题干
+    question.a  正确答案（必须与某个 <opt> 完全一致）
+    <opt>       选项，2~6 个
+
+
+================================================================================
+三、常见维护任务
+================================================================================
+
+3.1 新增一篇笔记
+
+  步骤 1：在 learning_notes/ 下创建 .md 文件
+    文件名建议与主题一致，例如：
+      learning_notes/东北派/秘传流运卦思路.md
+
+  步骤 2：在 learn.xml 对应的 <folder> 内添加 <note>
+    <note id="ne-9"
+          title="秘传流运卦思路"
+          path="learning_notes/东北派/秘传流运卦思路.md"
+          related="ne-3,ne-6,ne-7"/>
+
+  步骤 3：如果新增了整个派系（顶层 folder），在 <catalog> 下加 <folder>
+    首页目录会自动更新，无需改 HTML。
+
+  注意：
+    · path 必须与实际文件路径完全一致（大小写敏感）
+    · 路径不要包含空格、#、?、% 等特殊字符
+    · related 里写的 id 必须已存在，否则图谱会忽略
+
+3.2 新增一套小测
+
+  在 learn.xml 的 <quizzes> 下追加 <quiz>：
+
+    <quiz id="quiz-ne-9" title="东北派 · 新章节" desc="范围说明">
+      <question q="题干 1" a="正确答案">
+        <opt>正确答案</opt>
+        <opt>干扰项 A</opt>
+        <opt>干扰项 B</opt>
+      </question>
+      <!-- 更多题目 -->
+    </quiz>
+
+  无需改任何 JS/CSS，test.html 的小测目录、卡片、成绩环会自动更新。
+
+3.3 修改主题色（朱砂）
+
+  只需改 1 个文件：css/common.css 的两处变量：
+
+    :root {
+      --accent: #c0392b;
+      --accent-soft: #fff5f2;
+    }
+    body.dark {
+      --accent: #ff7675;
+      --accent-soft: #2a1a1a;
+    }
+
+  全站所有朱砂元素（callout、active 状态、成绩环、图谱中心）
+  会自动更新。
+
+3.4 修改字体
+
+  在 css/common.css 的 @font-face 中替换字体文件路径：
+
+    @font-face{
+      font-family:'Qiji';
+      src:local('令東齊伋體'),local('齊伋體'),local('Qiji'),
+          url('../fonts/qiji.woff2') format('woff2');
+      font-display:swap;
+    }
+
+  字体族变量：
+    --font-qiji    标题字体（齐伋体）
+    --font-serif   正文字体（宋体）
+
+3.5 修改命宫算法（排盘）
+
+  位置：paipan.html 的 calcMingGongZhi 函数。
+
+  现行算法（师传口述）：
+    1. 年上起月：从生肖所在宫起正月，顺数到出生月（含起点）
+    2. 月上起日：从月所在宫起初一，顺数到出生日（含起点）
+    3. 日上起命宫：男顺四位，女逆四位（含起点，即偏移 3）
+
+  验证用例：申年三月二日男 → 命宫寅
+    申(生肖) → 戌(月) → 亥(日) → 寅(命宫)
+
+  如需修改，同步更新 test.html 与 paipan.html 中的说明文字。
+
+3.6 新增一个页面
+
+  步骤 1：新建 xxx.html，复用 header / footer 结构
+  步骤 2：在 4 个 HTML 的 navbar 里加 <a href="xxx.html">新页面</a>
+  步骤 3：在 js/common.js 的 PAGES 数组里加一项（用于移动端导航）
+
+    var PAGES = [
+      { href: 'index.html', label: '欢迎页面', page: 'welcome' },
+      { href: 'learn.html', label: '学习模块', page: 'modules' },
+      { href: 'test.html',  label: '快速检测', page: 'quizzes' },
+      { href: 'paipan.html',label: '排盘软件', page: 'pan' },
+      { href: 'xxx.html',   label: '新页面',   page: 'xxx' }
+    ];
+
+
+================================================================================
+四、Markdown 笔记规范
+================================================================================
+
+4.1 支持的语法
+
+  # 一级标题         → <h1>
+  ## 二级标题        → <h2>（左侧加下边框，参与本页大纲）
+  ### 三级标题       → <h3>
+  #### 四级标题      → <h4>
+  普通段落           → <p>
+  **粗体**           → <strong>
+  *斜体*             → <em>（显示为朱砂色）
+  `行内代码`         → <code>
+  ```代码块```       → <pre><code>
+  - 无序列表         → <ul><li>
+  1. 有序列表        → <ol><li>
+  > 引用块           → <blockquote>
+  ---                → <hr>
+  | 表格 | 表头 |    → <table>
+  [文本](链接)       → <a>
+  ![alt](图片路径)   → <img>
+
+4.2 Callout 特殊语法
+
+  引用块第一行如果是 **标题** 形式，会自动渲染为朱砂提示框：
+
+    > **术语纠正**
+    > 东北篇原书杂神门表格中所谓「六神」列……
+
+  渲染结果：
+
+    <div class="callout">
+      <div class="callout-title">术语纠正</div>
+      东北篇原书……
+    </div>
+
+  这是全站唯一恢复原始美术风格的关键语法，撰写笔记时优先使用。
+
+4.3 未支持的语法
+
+  · 嵌套列表（多级缩进）
+  · 任务列表 - [ ]
+  · 脚注 [^1]
+  · 数学公式 $...$
+  · HTML 内嵌（会被转义）
+
+  如确有需要，可扩展 js/learn.js 的 mdToHtml 函数。
+
+4.4 文件编码
+
+  · 所有 .md 保存为 UTF-8，不带 BOM
+  · 所有 .xml 保存为 UTF-8，首行声明 <?xml version="1.0" encoding="UTF-8"?>
+  · 换行符统一 LF（Unix），Windows 下 Git 可设置 core.autocrlf=true
+
+
+================================================================================
+五、本地开发与预览
+================================================================================
+
+5.1 必须通过 HTTP 服务访问
+
+  file:// 协议下 fetch 读 md、XHR 读 xml 会被 CORS 拦截。
+
+  本地预览：
+    python -m http.server 8000
+    或
+    npx serve .
+
+  浏览器访问：
+    http://localhost:8000/index.html
+
+5.2 浏览器要求
+
+  · Chrome / Edge / Firefox / Safari 现代版本
+  · 需要支持：fetch、DOMParser、URLSearchParams、CSS 变量
+  · 排盘页需要支持：Shadow DOM、attachShadow
+
+5.3 调试技巧
+
+  · 打开控制台查看 fetch 404 提示，确认 md 路径拼写
+  · 知识图谱不出节点时，检查 learn.xml 里 related 的 id 是否存在
+  · 本页大纲为空时，检查 md 是否使用了 ## / ### 而非 # 标题
+
+
+================================================================================
+六、部署到 GitHub Pages
+================================================================================
+
+6.1 前提
+
+  · 仓库根目录必须有 index.html
+  · 所有资源路径必须相对（不能以 / 开头）
+  · 中文路径可用，但避免空格与 #?%
+  · 建议加 .nojekyll 空文件跳过 Jekyll 处理
+
+6.2 步骤
+
+  1. 创建 GitHub 仓库，例如 xiangma-learn
+  2. 推送全部文件
+  3. 仓库 Settings → Pages → Source 选 main 分支 / (root)
+  4. 保存后等待 1~2 分钟
+  5. 访问 https://<用户名>.github.io/xiangma-learn/
+
+6.3 更新流程
+
+  git add .
+  git commit -m "[learn] 新增东北派流运卦一节"
+  git push
+
+  Pages 会自动重新部署。
+
+6.4 自定义域名（可选）
+
+  仓库根目录加 CNAME 文件，内容为域名：
+
+    xiangma.example.com
+
+  DNS 加 CNAME 记录指向 <user>.github.io，
+  在 Pages 设置里填域名并勾选 Enforce HTTPS。
+
+
+================================================================================
+七、常见问题排查
+================================================================================
+
+7.1 笔记打开后空白 / 显示"笔记加载失败"
+
+  原因：md 路径不对，或文件不存在，或中文被 URL 编码出错。
+  排查：打开浏览器控制台看 Network，找 404 的路径。
+  修复：
+    · 检查 learn.xml 的 path 与实际文件路径是否一致
+    · 路径中不能有空格、#、?、%
+    · 如遇编码问题，在 js/learn.js 里改用 fetch(encodeURI(note.path))
+
+7.2 知识图谱没有节点 / 连线
+
+  原因：related 的 id 不存在，或笔记本身没有 related。
+  修复：检查 learn.xml 中 <note> 的 related 属性，
+        每个 id 必须能在同一 learn.xml 里找到对应的 <note id="...">。
+
+7.3 本页大纲为空
+
+  原因：md 文件中没有 ## / ### / #### 标题。
+  修复：把用 # 一级标题的段落改为 ## 二级标题。
+
+7.4 Footer 没有贴在屏幕底部
+
+  原因：内容太短，main 未撑满。
+  说明：这是预期行为，main 用 flex:1 撑满，短内容时 footer 也在底部。
+        如仍不对，检查 css/common.css 中：
+          body{display:flex;flex-direction:column;min-height:100vh;}
+          main{flex:1 0 auto;}
+          footer{flex-shrink:0;}
+
+7.5 三栏没有独立滚动
+
+  原因：module-layout 高度没有锁定。
+  修复：css/learn.css 中：
+        .module-layout{display:grid;flex:1;min-height:0;overflow:hidden;}
+        .sidebar{height:100%;overflow:hidden;}
+        .sidebar-tree{flex:1 1 0;min-height:0;overflow-y:auto;}
+        .content-area{height:100%;overflow-y:auto;}
+        .right-panel{height:100%;overflow:hidden;}
+
+7.6 知识图谱高度太大
+
+  原因：viewBox 不是正方形，或容器未限制高度。
+  修复：css/learn.css 中：
+        .graph-canvas-wrap{aspect-ratio:1/1;max-height:240px;}
+        js/learn.js 中：var W=280,H=280;
+
+7.7 排盘页在 Shadow DOM 内样式异常
+
+  原因：模板里的 :host 变量未同步，或暗色模式没传进去。
+  修复：检查 paipan.html 中 syncPanTheme 函数：
+        if(isDark()) host.classList.add('dark');
+        else host.classList.remove('dark');
+
+7.8 切换昼夜模式后排盘页不变
+
+  说明：排盘页通过 Shadow DOM 隔离，主文档的主题切换不会自动同步。
+  修复：在 css/common.css 的主题切换监听里调用 syncPanTheme()。
+        当前版本已在 common.js 的 initTheme 里处理，如需扩展
+        新页面，同步在切换时调用即可。
+
+
+================================================================================
+八、版本记录
+================================================================================
+
+v2.0（2026-09-19）
+  · 模块化拆分：index / learn / test / paipan 四页面
+  · 数据驱动：learn.xml 统一管理目录、关联、小测
+  · Markdown 笔记独立维护，支持 callout 语法
+  · 知识图谱支持拖拽、缩放、悬浮显示
+  · 三栏独立滚动，footer 固定底部
+  · 命宫算法修正（年上起月、月上起日、日上起命宫）
+
+v1.1（原始版本）
+  · 单文件 HTML，含全部功能
+  · 东北派 9 节、西北派 11 节、两派对照 2 节
+  · 6 套小测
+  · 排盘软件（常规 / 终身 / 活盘）
+
+v1.0
+  · 首版
+
+
+================================================================================
+（完）
+================================================================================
