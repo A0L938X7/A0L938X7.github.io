@@ -1,35 +1,37 @@
 /* ============================================================
    学习模块页：三栏布局，独立滚动
    ============================================================ */
+
+/* ===== 三栏布局容器 ===== */
 .module-layout{
   display:grid;
   grid-template-columns:280px 1fr 300px;
   flex:1;
-  min-height:0;
+  min-height:0;              /* ★ 关键：让三栏拿到高度约束 */
   width:100%;
   overflow:hidden;
 }
 
-/* ===== 左侧栏 ===== */
+/* ============================================================
+   左侧栏：搜索框固定 + 目录独立滚动
+   ============================================================ */
 .sidebar{
   border-right:1px solid var(--border);
   background:var(--bg-soft);
   display:flex;
   flex-direction:column;
-  min-height:0;
-  overflow:hidden;
+  min-height:0;              /* ★ 关键 */
   height:100%;
+  overflow:hidden;
 }
 
-/* 搜索栏固定在侧边栏顶部 */
+/* 搜索框：固定在侧边栏顶部，不随目录滚动 */
 .sidebar-search-wrap{
-  position:sticky;
-  top:0;
-  z-index:6;
-  flex-shrink:0;
+  flex-shrink:0;             /* ★ 关键：不参与滚动 */
   background:var(--bg-soft);
   padding:14px 14px 10px;
   border-bottom:1px solid var(--border);
+  z-index:2;
 }
 
 .sidebar-search{
@@ -39,10 +41,10 @@
 }
 .sidebar-search:focus{border-color:var(--accent);}
 
-/* 目录树独立滚动 */
+/* 目录树：独立滚动 */
 .sidebar-tree{
   flex:1 1 0;
-  min-height:0;
+  min-height:0;              /* ★ 关键：允许收缩 + 滚动 */
   overflow-y:auto;
   padding:10px 12px 24px;
   scroll-behavior:smooth;
@@ -131,14 +133,14 @@
 }
 
 /* ============================================================
-   中间文档区：恢复原始美术风格
+   中间文档区：独立滚动
    ============================================================ */
 .content-area{
   overflow-y:auto;
+  min-height:0;              /* ★ 关键 */
+  height:100%;
   padding:32px 40px 64px;
   min-width:0;
-  min-height:0;
-  height:100%;
   scroll-behavior:smooth;
   font-family:var(--font-serif);
   font-size:15px;
@@ -284,14 +286,14 @@
 .content-area h4{scroll-margin-top:24px;}
 
 /* ============================================================
-   右侧栏：上方图谱固定 + 下方本页内容独立滚动
+   右侧栏：图谱固定 + 本页内容独立滚动
    ============================================================ */
 .right-panel{
   border-left:1px solid var(--border);
   background:var(--bg-soft);
   display:flex;
   flex-direction:column;
-  min-height:0;
+  min-height:0;              /* ★ 关键 */
   height:100%;
   overflow:hidden;
 }
@@ -302,9 +304,9 @@
   min-height:0;
 }
 
-/* 图谱：固定在上方 */
+/* 图谱：固定在上方，不参与滚动 */
 .panel-block.graph-block{
-  flex-shrink:0;
+  flex-shrink:0;             /* ★ 关键：固定高度 */
   border-bottom:1px solid var(--border);
   padding-bottom:10px;
 }
@@ -312,7 +314,9 @@
 /* 本页内容：占满剩余空间并滚动 */
 .panel-block.outline-block{
   flex:1 1 0;
-  min-height:0;
+  min-height:0;              /* ★ 关键 */
+  display:flex;
+  flex-direction:column;
 }
 
 .panel-title{
@@ -404,10 +408,10 @@
   opacity:1;
 }
 
-/* 本页内容滚动区 */
+/* 本页内容：独立滚动区 */
 .outline-scroll{
   flex:1 1 0;
-  min-height:0;
+  min-height:0;              /* ★ 关键 */
   overflow-y:auto;
   padding:10px 14px 20px;
   scroll-behavior:smooth;
@@ -446,12 +450,14 @@
 @media(max-width:820px){
   .module-layout{
     grid-template-columns:1fr;
+    min-height:0;
     height:auto;
     overflow:visible;
   }
   .sidebar{display:none;}
   .content-area{
     height:auto;
+    min-height:0;
     overflow:visible;
     padding:24px 20px 48px;
   }
