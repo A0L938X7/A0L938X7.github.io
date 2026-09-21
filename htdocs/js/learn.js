@@ -89,19 +89,26 @@
           quote.push(lines[i].replace(/^\s*>\s?/, ''));
           i++;
         }
+      
         var first = quote[0] || '';
         var calloutMatch = first.match(/^\*\*(.+?)\*\*\s*$/);
+      
+        // 逐行渲染后再用 <br> 拼接，保证换行不被转义
+        function renderLines(lines) {
+          return lines.map(function (l) { return inline(l); }).join('<br>');
+        }
+      
         if (calloutMatch) {
           var title = calloutMatch[1];
-          var body = quote.slice(1).join('\n');
+          var bodyHtml = renderLines(quote.slice(1));
           html.push(
             '<div class="callout">' +
               '<div class="callout-title">' + C.escapeHtml(title) + '</div>' +
-              inline(body) +
+              bodyHtml +
             '</div>'
           );
         } else {
-          html.push('<blockquote>' + inline(quote.join('<br>')) + '</blockquote>');
+          html.push('<blockquote>' + renderLines(quote) + '</blockquote>');
         }
         continue;
       }
