@@ -511,19 +511,17 @@
   if (!vp) return;
   while (vp.firstChild) vp.removeChild(vp.firstChild);
 
-  // 先画边
+  // 边
   graphState.links.forEach(function (l) {
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('class', 'graph-edge');
     line.setAttribute('x1', 0); line.setAttribute('y1', 0);
     line.setAttribute('x2', 0); line.setAttribute('y2', 0);
-    line.dataset.source = l.source;
-    line.dataset.target = l.target;
     vp.appendChild(line);
     l.el = line;
   });
 
-  // 再画节点
+  // 节点
   graphState.nodes.forEach(function (n) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     var cls = 'graph-node';
@@ -532,23 +530,32 @@
     if (n.related.length > 0) cls += ' has-children';
     if (n.id === graphState.rootId) cls += ' active';
     g.setAttribute('class', cls);
-    g.style.cursor = 'pointer';
     g.dataset.id = n.id;
 
-    // 用 <a> 包裹 circle + text，让节点成为真正的链接
-    // 注意：SVG 里 <a> 需要 xlink:href（现代浏览器也支持 href）
+    // 链接直接包裹 circle，让整圆成为可点区域
     var a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
-    a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      'learn.html?note=' + encodeURIComponent(n.id));
-    a.setAttribute('href', 'learn.html?note=' + encodeURIComponent(n.id));
+    var href = 'learn.html?note=' + encodeURIComponent(n.id);
+    a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', href);
+    a.setAttribute('href', href);
     a.setAttribute('target', '_self');
-    // 阻止浏览器默认跳转，改由 JS 处理（保持单击/双击逻辑）
-    a.addEventListener('click', function (e) { e.preventDefault(); });
+
+    // 关键：保证 <a> 内 circle 可点，且光标为 pointer
+    a.style.cursor = 'pointer';
+
+    // 阻止默认跳转，交给 JS 逻辑
+    a.addEventListener('click', function (e) {
+      // 中键 / Ctrl / Cmd 点击放行浏览器默认行为
+      if (e.button === 1 || e.ctrlKey || e.metaKey) return;
+      e.preventDefault();
+    });
 
     var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     c.setAttribute('r', n.r);
+    // 透明填充也算可点区域，但这里已经有 fill，直接可点
+    // 若节点小时不易点中，可加一个透明的点击热区（见下文可选）
     a.appendChild(c);
 
+    // 标签放在 <a> 里，但 pointer-events:none（CSS 里已有）
     var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     label.setAttribute('class', 'node-label');
     label.setAttribute('x', 0);
