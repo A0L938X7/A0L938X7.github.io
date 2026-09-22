@@ -278,24 +278,63 @@
       '<div class="module-sub">' + C.escapeHtml(note._group || '') + '</div>' +
       '<div class="md-loading">正在加载笔记…</div>';
 
+    // 计算上一节 / 下一节
+    var order = state.notesOrder;
+    var idx = order.findIndex(function (n) { return n.id === id; });
+    var prev = idx > 0 ? order[idx - 1] : null;
+    var next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+
+    function buildNav() {
+      if (!prev && !next) return '';
+      var html = '<div class="module-nav">';
+      if (prev) {
+        html += '<button class="btn ghost" data-note="' + prev.id + '">' +
+                '← ' + C.escapeHtml(prev.title) + '</button>';
+      } else {
+        html += '<button class="btn ghost" disabled>已是第一节</button>';
+      }
+      if (next) {
+        html += '<button class="btn ghost" data-note="' + next.id + '">' +
+                C.escapeHtml(next.title) + ' →</button>';
+      } else {
+        html += '<button class="btn ghost" disabled>已是最后一节</button>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function bindNav() {
+      content.querySelectorAll('.module-nav button[data-note]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          openNote(b.dataset.note);
+        });
+      });
+    }
+
     fetch(note.path).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.text();
     }).then(function (md) {
       var html = mdToHtml(md);
       content.innerHTML =
+        buildHeroHtml(note) +
         '<h1>' + C.escapeHtml(note.title) + '</h1>' +
         '<div class="module-sub">' + C.escapeHtml(note._group || '') + '</div>' +
-        '<div class="md-body">' + html + '</div>';
+        '<div class="md-body">' + html + '</div>' +
+        buildNav();
       renderOutline(content);
+      bindNav();
       content.scrollTop = 0;
     }).catch(function (err) {
       content.innerHTML =
+        buildHeroHtml(note) +
         '<h1>' + C.escapeHtml(note.title) + '</h1>' +
         '<div class="module-sub">' + C.escapeHtml(note._group || '') + '</div>' +
         '<div class="md-loading">笔记加载失败：' + C.escapeHtml(err.message) + '<br>' +
-        '请确认路径：' + C.escapeHtml(note.path) + '</div>';
+        '请确认路径：' + C.escapeHtml(note.path) + '</div>' +
+        buildNav();
       renderOutline(content);
+      bindNav();
     });
 
     state.lastRelated = note.related || [];
