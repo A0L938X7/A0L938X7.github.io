@@ -16,7 +16,6 @@
   /* ================= Markdown 渲染 ================= */
   function mdToHtml(md) {
     if (!md) return '';
-    // 先抽取代码块占位
     var codeBlocks = [];
     md = md.replace(/```([\s\S]*?)```/g, function (_, code) {
       codeBlocks.push(code.replace(/^\n+|\n+$/g, ''));
@@ -29,17 +28,12 @@
 
     function inline(s) {
       s = C.escapeHtml(s);
-      // 图片
       s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
         '<img src="$2" alt="$1" style="max-width:100%;">');
-      // 链接
       s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
         '<a href="$2" target="_blank" rel="noopener">$1</a>');
-      // 行内代码
       s = s.replace(/`([^`]+)`/g, function (_, c) { return '<code>' + c + '</code>'; });
-      // 粗体
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      // 斜体
       s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
       return s;
     }
@@ -55,10 +49,8 @@
     while (i < lines.length) {
       var line = lines[i];
 
-      // 空行
       if (/^\s*$/.test(line)) { closeList(listStack); i++; continue; }
 
-      // 代码块占位
       var codeM = line.match(/^\u0000CODE(\d+)\u0000$/);
       if (codeM) {
         closeList(listStack);
@@ -66,7 +58,6 @@
         i++; continue;
       }
 
-      // 标题
       var hM = line.match(/^(#{1,6})\s+(.*)$/);
       if (hM) {
         closeList(listStack);
@@ -75,13 +66,11 @@
         i++; continue;
       }
 
-      // 分隔线
       if (/^\s*([-*_])\s*\1\s*\1[\s\1]*$/.test(line)) {
         closeList(listStack);
         html.push('<hr>'); i++; continue;
       }
 
-      // 引用块 / Callout
       if (/^\s*>\s?/.test(line)) {
         closeList(listStack);
         var quote = [];
@@ -89,11 +78,9 @@
           quote.push(lines[i].replace(/^\s*>\s?/, ''));
           i++;
         }
-
         var first = quote[0] || '';
         var calloutMatch = first.match(/^\*\*(.+?)\*\*\s*$/);
 
-        // 逐行渲染后再用 <br> 拼接，避免 <br> 被 escapeHtml 转义
         function renderLines(arr) {
           return arr.map(function (l) { return inline(l); }).join('<br>');
         }
@@ -113,7 +100,6 @@
         continue;
       }
 
-      // 表格
       if (/\|/.test(line) && i + 1 < lines.length && /^\s*\|?[\s:|-]+\|?\s*$/.test(lines[i + 1])) {
         closeList(listStack);
         var header = splitRow(line);
@@ -136,7 +122,6 @@
         continue;
       }
 
-      // 无序列表
       var ulM = line.match(/^(\s*)[-*+]\s+(.*)$/);
       if (ulM) {
         if (!listStack.length || listStack[listStack.length - 1] !== 'ul') {
@@ -147,7 +132,6 @@
         i++; continue;
       }
 
-      // 有序列表
       var olM = line.match(/^(\s*)\d+\.\s+(.*)$/);
       if (olM) {
         if (!listStack.length || listStack[listStack.length - 1] !== 'ol') {
@@ -158,7 +142,6 @@
         i++; continue;
       }
 
-      // 普通段落
       closeList(listStack);
       var para = [line];
       i++;
@@ -290,7 +273,6 @@
       '<div class="module-sub">' + C.escapeHtml(note._group || '') + '</div>' +
       '<div class="md-loading">正在加载笔记…</div>';
 
-    // 计算上一节 / 下一节
     var order = state.notesOrder;
     var idx = order.findIndex(function (n) { return n.id === id; });
     var prev = idx > 0 ? order[idx - 1] : null;
@@ -376,7 +358,7 @@
     });
   }
 
-  /* ================= 知识图谱（力导向 + 多级展开） ================= */
+  /* ================= 知识图谱 ================= */
   var graphState = {
     svg: null,
     viewport: null,
@@ -386,11 +368,17 @@
     rootId: null,
     expanded: {},
     tx: 0, ty: 0, scale: 1,
-    draggingNode: null,
+
+    // 拖拽/平移状态
+    pendingDrag: null,     // { node, startX, startY, dragging }
+    draggingNode: null,    // 已进入真正拖拽的节点
     panning: false,
     panStartX: 0, panStartY: 0,
     panStartTx: 0, panStartTy: 0,
+
     rafId: null,
+
+    // 物理参数
     REPULSION: 900,
     REST_LENGTH: 55,
     SPRING_K: 0.05,
@@ -506,7 +494,6 @@
     graphState.nodeMap = nodesMap;
   }
 
-  /* 创建 SVG 元素 */
   function svgEl(tag) {
     return document.createElementNS('http://www.w3.org/2000/svg', tag);
   }
@@ -526,7 +513,7 @@
       l.el = line;
     });
 
-    // 节点（普通 <g>，不做 <a> 包裹）
+    // 节点：只有一层圆，不加透明热区
     graphState.nodes.forEach(function (n) {
       var g = svgEl('g');
       var cls = 'graph-node';
@@ -538,20 +525,10 @@
       g.dataset.id = n.id;
       g.style.cursor = 'pointer';
 
-      // 透明热区圆（扩大点击面积）
-      var hit = svgEl('circle');
-      hit.setAttribute('r', Math.max(n.r + 6, 10));
-      hit.setAttribute('fill', 'transparent');
-      hit.setAttribute('stroke', 'none');
-      hit.style.pointerEvents = 'all';
-      g.appendChild(hit);
-
-      // 可见的节点圆
       var c = svgEl('circle');
       c.setAttribute('r', n.r);
       g.appendChild(c);
 
-      // 标签
       var label = svgEl('text');
       label.setAttribute('class', 'node-label');
       label.setAttribute('x', 0);
@@ -566,6 +543,9 @@
     });
   }
 
+  /* 节点交互：单击 / 双击 / 拖拽
+     关键：单击与拖拽完全靠【鼠标】位移区分，绝不看节点位置
+  */
   function bindNodeEvents(g, n) {
     var clickTimer = null;
 
@@ -573,35 +553,34 @@
       e.stopPropagation();
       if (e.button !== 0) return;
 
-      n._downX = e.clientX;
-      n._downY = e.clientY;
+      // 只登记待定拖拽，不动节点
+      graphState.pendingDrag = {
+        node: n,
+        startX: e.clientX,
+        startY: e.clientY,
+        dragging: false
+      };
       n._moved = false;
-
-      graphState.draggingNode = n;
-      n.fixed = true;
-      var pt = getGraphSVGPoint(e);
-      n.x = pt.x;
-      n.y = pt.y;
-      n.vx = 0;
-      n.vy = 0;
     });
 
     g.addEventListener('click', function (e) {
       e.stopPropagation();
-      // 拖拽过 → 不算点击
+
+      // 若期间进入过真正拖拽，则视为拖拽结束，不触发单击
       if (n._moved) {
         n._moved = false;
         return;
       }
-      // 双击第二次触发，跳过单击逻辑
+
+      // 双击第二次触发的 click，忽略
       if (clickTimer) {
         clearTimeout(clickTimer);
         clickTimer = null;
         return;
       }
+
       clickTimer = setTimeout(function () {
         clickTimer = null;
-        // 单击：应用内切换笔记
         if (n.id !== graphState.rootId) openNote(n.id);
       }, 240);
     });
@@ -615,7 +594,6 @@
       toggleNodeExpanded(n.id);
     });
 
-    // 悬浮聚焦
     g.addEventListener('mouseenter', function () {
       focusGraphOn(n);
     });
@@ -625,13 +603,10 @@
     });
   }
 
-  /* 悬浮某节点：其他节点和边变暗 */
   function focusGraphOn(n) {
     var vp = graphState.viewport;
     if (!vp) return;
-
     vp.classList.add('has-hover');
-
     if (n.el) n.el.classList.add('hovered');
 
     graphState.links.forEach(function (l) {
@@ -788,21 +763,33 @@
     svg._canvasBound = true;
 
     document.addEventListener('mousemove', function (e) {
-      if (graphState.draggingNode) {
-        var n = graphState.draggingNode;
-        // 判断是否真正移动过（阈值 3px）
-        if (n._downX !== undefined) {
-          var ddx = e.clientX - n._downX;
-          var ddy = e.clientY - n._downY;
-          if (ddx * ddx + ddy * ddy > 9) n._moved = true;
+      // 1. 待定拖拽：先判断鼠标位移是否超过 3px，超过才开始拖
+      var pd = graphState.pendingDrag;
+      if (pd) {
+        if (!pd.dragging) {
+          var ddx = e.clientX - pd.startX;
+          var ddy = e.clientY - pd.startY;
+          // 用平方比较，避免开方
+          if (ddx * ddx + ddy * ddy > 9) {
+            pd.dragging = true;
+            pd.node.fixed = true;
+            pd.node._moved = true;
+            graphState.draggingNode = pd.node;
+          } else {
+            // 未超过阈值：不拖、不动、也不影响后续 click
+            return;
+          }
         }
+        // 已进入真正拖拽：把节点吸到光标（此处开始才改变节点位置）
         var pt = getGraphSVGPoint(e);
-        n.x = pt.x;
-        n.y = pt.y;
-        n.vx = 0;
-        n.vy = 0;
+        pd.node.x = pt.x;
+        pd.node.y = pt.y;
+        pd.node.vx = 0;
+        pd.node.vy = 0;
         return;
       }
+
+      // 2. 画布平移
       if (graphState.panning) {
         var dx = e.clientX - graphState.panStartX;
         var dy = e.clientY - graphState.panStartY;
@@ -813,13 +800,20 @@
     });
 
     document.addEventListener('mouseup', function () {
-      if (graphState.draggingNode) {
-        graphState.draggingNode.fixed = false;
-        graphState.draggingNode = null;
+      var pd = graphState.pendingDrag;
+      if (pd) {
+        if (pd.dragging) {
+          pd.node.fixed = false;
+        }
+        // 关键：保留 node._moved 供后续 click 判断
+        // 只有真正拖拽过才会是 true
       }
+      graphState.pendingDrag = null;
+      graphState.draggingNode = null;
       graphState.panning = false;
     });
 
+    // 画布空白处平移
     svg.addEventListener('mousedown', function (e) {
       if (e.target === svg) {
         graphState.panning = true;
@@ -830,6 +824,7 @@
       }
     });
 
+    // 滚轮缩放
     svg.addEventListener('wheel', function (e) {
       e.preventDefault();
       var rect = svg.getBoundingClientRect();
@@ -846,6 +841,7 @@
       applyViewportTransform();
     }, { passive: false });
 
+    // 触摸平移
     svg.addEventListener('touchstart', function (e) {
       if (e.touches.length === 1) {
         var t = e.touches[0];
