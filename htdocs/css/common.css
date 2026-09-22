@@ -19,6 +19,8 @@
   --font-qiji:'Qiji','令東齊伋體','STKaiti','KaiTi',serif;
   --font-serif:'Noto Serif SC','Source Han Serif SC','SimSun','Songti SC',serif;
   color-scheme:light;
+  --graph-edge: #8a8a7a;         /* 连线常态：深灰偏暖 */
+  --graph-edge-width: 1;
 }
 body.dark{
   --bg:#121212;--bg-soft:#1a1a1a;--bg-panel:#1e1e1e;--bg-panel-border:#333;
@@ -30,6 +32,8 @@ body.dark{
   --accent:#ff7675;--accent-soft:#2a1a1a;--link:#74b9ff;
   --taiji-yin:#e8e8e8;--taiji-yang:#121212;--taiji-border:#bbb;
   color-scheme:dark;
+  --graph-edge: #d8d8d8;         /* 连线常态：近白 */
+  --graph-edge-width: 1;
 }
 
 /* ===== 全局 ===== */
