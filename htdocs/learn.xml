@@ -4,7 +4,7 @@
     <folder name="东北派" subtitle="理气妙论">
       <note id="ne-1" title="东北响马卦的选牌与识牌" path="learning_notes/东北派/选牌与识牌.md"
             related="ne-2,ne-4,nw-1,cp-1"/>
-      <note id="ne-2" title="东北响马卦的起卦与行持" path="https://raw.githubusercontent.com/A0L938X7/A0L938X7.github.io/refs/heads/main/htdocs/learning_notes/%E4%B8%9C%E5%8C%97%E6%B4%BE/test.md"
+      <note id="ne-2" title="东北响马卦的起卦与行持" path="learning_notes/东北派/起卦与行持.md"
             related="ne-1,ne-3,ne-4"/>
       <note id="ne-3" title="东北响马卦的整体结构" path="learning_notes/东北派/整体结构.md"
             related="ne-2,ne-4,ne-5"/>
