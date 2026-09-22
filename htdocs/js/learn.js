@@ -506,83 +506,156 @@
     graphState.nodeMap = nodesMap;
   }
 
-  function renderGraphElements() {
-    var vp = graphState.viewport;
-    if (!vp) return;
-    while (vp.firstChild) vp.removeChild(vp.firstChild);
+ function renderGraphElements() {
+  var vp = graphState.viewport;
+  if (!vp) return;
+  while (vp.firstChild) vp.removeChild(vp.firstChild);
 
-    graphState.links.forEach(function (l) {
-      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('class', 'graph-edge');
-      line.setAttribute('x1', 0); line.setAttribute('y1', 0);
-      line.setAttribute('x2', 0); line.setAttribute('y2', 0);
-      vp.appendChild(line);
-      l.el = line;
-    });
+  // 先画边
+  graphState.links.forEach(function (l) {
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'graph-edge');
+    line.setAttribute('x1', 0); line.setAttribute('y1', 0);
+    line.setAttribute('x2', 0); line.setAttribute('y2', 0);
+    line.dataset.source = l.source;
+    line.dataset.target = l.target;
+    vp.appendChild(line);
+    l.el = line;
+  });
 
-    graphState.nodes.forEach(function (n) {
-      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      var cls = 'graph-node';
-      if (n.level === 0) cls += ' root';
-      if (graphState.expanded[n.id]) cls += ' expanded';
-      if (n.related.length > 0) cls += ' has-children';
-      if (n.id === graphState.rootId) cls += ' active';
-      g.setAttribute('class', cls);
-      g.style.cursor = 'pointer';
+  // 再画节点
+  graphState.nodes.forEach(function (n) {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    var cls = 'graph-node';
+    if (n.level === 0) cls += ' root';
+    if (graphState.expanded[n.id]) cls += ' expanded';
+    if (n.related.length > 0) cls += ' has-children';
+    if (n.id === graphState.rootId) cls += ' active';
+    g.setAttribute('class', cls);
+    g.style.cursor = 'pointer';
+    g.dataset.id = n.id;
 
-      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      c.setAttribute('r', n.r);
-      g.appendChild(c);
+    // 用 <a> 包裹 circle + text，让节点成为真正的链接
+    // 注意：SVG 里 <a> 需要 xlink:href（现代浏览器也支持 href）
+    var a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
+    a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+      'learn.html?note=' + encodeURIComponent(n.id));
+    a.setAttribute('href', 'learn.html?note=' + encodeURIComponent(n.id));
+    a.setAttribute('target', '_self');
+    // 阻止浏览器默认跳转，改由 JS 处理（保持单击/双击逻辑）
+    a.addEventListener('click', function (e) { e.preventDefault(); });
 
-      var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      label.setAttribute('class', 'node-label');
-      label.setAttribute('x', 0);
-      label.setAttribute('y', n.r + 10);
-      label.setAttribute('text-anchor', 'middle');
-      label.textContent = n.title;
-      g.appendChild(label);
+    var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('r', n.r);
+    a.appendChild(c);
 
-      bindNodeEvents(g, n);
-      vp.appendChild(g);
-      n.el = g;
-    });
-  }
+    var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('class', 'node-label');
+    label.setAttribute('x', 0);
+    label.setAttribute('y', n.r + 10);
+    label.setAttribute('text-anchor', 'middle');
+    label.textContent = n.title;
+    a.appendChild(label);
+
+    g.appendChild(a);
+
+    bindNodeEvents(g, n);
+    vp.appendChild(g);
+    n.el = g;
+  });
+}
 
   function bindNodeEvents(g, n) {
-    var clickTimer = null;
+  var clickTimer = null;
 
-    g.addEventListener('mousedown', function (e) {
-      e.stopPropagation();
-      if (e.button !== 0) return;
-      graphState.draggingNode = n;
-      n.fixed = true;
-      var pt = getGraphSVGPoint(e);
-      n.x = pt.x; n.y = pt.y;
-      n.vx = 0; n.vy = 0;
-    });
+  g.addEventListener('mousedown', function (e) {
+    e.stopPropagation();
+    if (e.button !== 0) return;
+    graphState.draggingNode = n;
+    n.fixed = true;
+    var pt = getGraphSVGPoint(e);
+    n.x = pt.x; n.y = pt.y;
+    n.vx = 0; n.vy = 0;
+  });
 
-    g.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (clickTimer) {
-        clearTimeout(clickTimer);
-        clickTimer = null;
-        return;
-      }
-      clickTimer = setTimeout(function () {
-        clickTimer = null;
-        if (n.id !== graphState.rootId) openNote(n.id);
-      }, 240);
-    });
+  g.addEventListener('click', function (e) {
+    e.stopPropagation();
+    // 中键 / Ctrl / Cmd 点击：让浏览器默认行为（新窗口打开链接）
+    if (e.button === 1 || e.ctrlKey || e.metaKey) {
+      return;
+    }
+    // 普通左键：延迟判断是否双击
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+      clickTimer = null;
+      return;
+    }
+    clickTimer = setTimeout(function () {
+      clickTimer = null;
+      if (n.id !== graphState.rootId) openNote(n.id);
+    }, 240);
+  });
 
-    g.addEventListener('dblclick', function (e) {
-      e.stopPropagation();
-      if (clickTimer) {
-        clearTimeout(clickTimer);
-        clickTimer = null;
-      }
-      toggleNodeExpanded(n.id);
-    });
-  }
+  g.addEventListener('dblclick', function (e) {
+    e.stopPropagation();
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+      clickTimer = null;
+    }
+    toggleNodeExpanded(n.id);
+  });
+
+  /* ---------- 悬浮聚焦 ---------- */
+  g.addEventListener('mouseenter', function () {
+    focusGraphOn(n);
+  });
+
+  g.addEventListener('mouseleave', function () {
+    clearGraphFocus();
+  });
+}
+
+/* 悬浮某节点：其他节点和边变暗 */
+function focusGraphOn(n) {
+  var vp = graphState.viewport;
+  if (!vp) return;
+
+  vp.classList.add('has-hover');
+
+  // 该节点标 hovered
+  if (n.el) n.el.classList.add('hovered');
+
+  // 找出与该节点相连的所有边
+  graphState.links.forEach(function (l) {
+    if (!l.el) return;
+    var connected = (l.source === n.id || l.target === n.id);
+    if (connected) {
+      l.el.classList.add('hovered');
+    }
+    // 与它相邻的节点保持原样，其他通过 CSS 变暗
+    var otherId = (l.source === n.id) ? l.target : (l.source === n.id ? l.target : null);
+    if (connected && otherId) {
+      var other = graphState.nodeMap[otherId];
+      if (other && other.el) other.el.classList.add('hovered');
+    }
+  });
+
+  // 根节点也视为 hovered（避免被压暗）
+  var root = graphState.nodeMap[graphState.rootId];
+  if (root && root.el) root.el.classList.add('hovered');
+}
+
+function clearGraphFocus() {
+  var vp = graphState.viewport;
+  if (!vp) return;
+  vp.classList.remove('has-hover');
+  graphState.nodes.forEach(function (n) {
+    if (n.el) n.el.classList.remove('hovered');
+  });
+  graphState.links.forEach(function (l) {
+    if (l.el) l.el.classList.remove('hovered');
+  });
+}
 
   function toggleNodeExpanded(id) {
     if (id === graphState.rootId) return;
