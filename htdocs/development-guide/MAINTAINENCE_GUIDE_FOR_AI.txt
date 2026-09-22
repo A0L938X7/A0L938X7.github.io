@@ -1,37 +1,73 @@
 ================================================================================
-响马卦学习系统 · 维护指南（Maintenance Guide）
+响马卦学习系统 · 开发指南（Development Guide）
 ================================================================================
-版本：v2.0（模块化拆分版）
-日期：2026-09-19
+版本：v2.2
+日期：2026-09-23
 作者：姜玄衣
-技术栈：原生 HTML + CSS + JS，无构建工具，无框架
+技术栈：原生 HTML + CSS 变量 + 原生 JS，无框架，无构建工具
 适用：index.html / learn.html / test.html / paipan.html
 
 
 ================================================================================
-一、目录结构
+第一部分  项目概述
+================================================================================
+
+1.1 定位
+
+  一个纯静态、零依赖、数据驱动的响马卦教学系统，包含四个功能页面：
+
+    index.html     欢迎主页（读取 learn.xml 生成目录）
+    learn.html     学习模块（三栏：目录树 / md 阅读器 / 图谱+大纲）
+    test.html      快速检测（读取 learn.xml 的 quizzes）
+    paipan.html    排盘软件（单文件，Shadow DOM 隔离）
+
+1.2 核心理念
+
+  · 内容与代码分离：笔记是独立 md 文件
+  · 数据驱动：learn.xml 是唯一数据源
+  · 零依赖：不引入任何外部库
+  · 可离线：HTTP 服务下完全离线可用
+  · 纸感风格：米黄纸底、宋体、齐伋体、朱砂点睛
+
+1.3 支持环境
+
+  · HTTP 服务（本地 python -m http.server 或 GitHub Pages）
+  · 不支持 file:// 直接双击（fetch 会被 CORS 拦截）
+  · 现代浏览器（Chrome / Edge / Firefox / Safari）
+
+
+================================================================================
+第二部分  目录结构
 ================================================================================
 
 /
-├── index.html                  欢迎主页（读取 learn.xml 生成目录）
-├── learn.html                  学习模块（读取 learn.xml + md）
-├── learn.xml                   目录 / 关联 / 小测数据（核心数据文件）
-├── test.html                   快速检测（读取 learn.xml 的 quizzes）
-├── paipan.html                 排盘软件（单文件，含 Shadow DOM）
+├── index.html                  欢迎主页
+├── learn.html                  学习模块
+├── test.html                   快速检测
+├── paipan.html                 排盘（单文件）
+├── learn.xml                   目录 / 关联 / 小测数据（核心）
+├── Makefile                    维护工具
+├── .nojekyll                   GitHub Pages 跳过 Jekyll（空文件）
+│
 ├── css/
 │   ├── common.css              变量 + 全局 + header + footer + 移动导航
-│   ├── index.css               欢迎页样式
-│   ├── learn.css               学习模块三栏布局 + md 正文 + 图谱 + 大纲
-│   └── test.css                小测样式
+│   ├── index.css               欢迎页
+│   ├── learn.css               学习模块三栏 + md 正文 + 图谱 + 大纲 + 翻页
+│   └── test.css                小测
+│
 ├── js/
 │   ├── common.js               主题 / 移动导航 / XML 加载 / 工具
 │   ├── index.js                首页目录渲染
-│   ├── learn.js                侧边栏树 + md 渲染 + 知识图谱 + 大纲
+│   ├── learn.js                树 + md 渲染 + 图谱 + 大纲 + 翻页
 │   └── test.js                 小测渲染与评分
+│
 ├── img/
-│   └── jiang.jpg               讲师头像（缺失时自动降级为文字）
+│   ├── jiang.jpg               讲师头像
+│   └── hero/                   Hero Image（可选）
+│
 ├── fonts/
-│   └── qiji.woff2              齐伋体（可选，缺失回退楷体）
+│   └── qiji.woff2              齐伋体（可选）
+│
 ├── learning_notes/             所有 Markdown 笔记
 │   ├── 东北派/
 │   ├── 西北派/
@@ -39,365 +75,257 @@
 │   │   ├── 先天卦/
 │   │   └── 补充资料/
 │   └── 两派对照/
+│
 └── quizzes/                    小测数据（当前内联在 learn.xml）
 
 
 ================================================================================
-二、核心数据文件：learn.xml
+第三部分  数据模型：learn.xml
 ================================================================================
 
-2.1 根节点
+3.1 根结构
 
+  <?xml version="1.0" encoding="UTF-8"?>
   <site title="..." author="...">
-    <catalog> ... </catalog>
-    <quizzes> ... </quizzes>
+    <catalog>
+      <folder name="...">
+        <note id="..." title="..." path="..." related="..." hero="..."/>
+      </folder>
+    </catalog>
+    <quizzes>
+      <quiz id="..." title="..." desc="...">
+        <question q="..." a="...">
+          <opt>...</opt>
+        </question>
+      </quiz>
+    </quizzes>
   </site>
 
-2.2 catalog 目录树
+3.2 note 字段
 
-  <folder name="东北派" subtitle="理气妙论">
-    <note id="ne-1"
-          title="东北响马卦的选牌与识牌"
-          path="learning_notes/东北派/选牌与识牌.md"
-          related="ne-2,ne-4,nw-1,cp-1"/>
-    <folder name="后天卦">
-      <note .../>
-    </folder>
-  </folder>
+  id          唯一标识（如 ne-1 / nw-6 / cp-2）
+  title       笔记标题
+  path        md 相对路径（相对 learn.xml）
+  related     关联 id 列表，逗号分隔，驱动知识图谱
+  hero        可选，Hero Image 路径（相对项目根）
+  hero-alt    可选，Hero Image 的 alt 文字
 
-  字段说明：
-    name        文件夹显示名
-    subtitle    副标题（可选）
-    id          笔记唯一标识（推荐 ne-* / nw-* / cp-*）
-    title       笔记标题
-    path        md 文件相对路径（相对 learn.xml 所在目录）
-    related     关联笔记 id，逗号分隔，用于知识图谱
+3.3 quiz 字段
 
-2.3 quizzes 小测数据
+  id          唯一标识（如 quiz-ne-1）
+  title       小测标题
+  desc        范围说明
+  question.q  题干
+  question.a  正确答案（必须与某个 opt 完全一致）
+  <opt>       选项，2-6 个
 
-  <quiz id="quiz-ne-1" title="东北派 · 选牌与识牌" desc="九星牌名、牌象">
-    <question q="东北篇乾宫对应牌？" a="八万">
-      <opt>八万</opt><opt>一并</opt><opt>白花</opt>
-    </question>
-  </quiz>
+3.4 加载流程
 
-  字段说明：
-    id          唯一标识，推荐 quiz-*
-    title       小测标题
-    desc        范围说明
-    question.q  题干
-    question.a  正确答案（必须与某个 <opt> 完全一致）
-    <opt>       选项，2~6 个
+  learn.xml
+     │
+     ├─→ js/common.js 的 loadXML() / parseCatalog()
+     │        │
+     │        ├─→ js/index.js    渲染首页目录
+     │        ├─→ js/learn.js    渲染左侧树 + 加载 md + 渲染图谱
+     │        └─→ js/test.js     渲染小测目录 + 题目
+     │
+  learning_notes/*.md
+     │
+     └─→ js/learn.js 的 fetch + mdToHtml()
+              │
+              └─→ 渲染到 #module-content
 
 
 ================================================================================
-三、常见维护任务
+第四部分  各页面布局详解
 ================================================================================
 
-3.1 新增一篇笔记
+4.1 欢迎页（index.html）
 
-  步骤 1：在 learning_notes/ 下创建 .md 文件
-    文件名建议与主题一致，例如：
-      learning_notes/东北派/秘传流运卦思路.md
+  容器：.welcome-wrap（max-width 1000px，居中）
+  结构：
+    .welcome-hero      英雄区（38px 主标题 + 副标题 + 分隔线 + 引导语）
+    .welcome-grid      两列网格（左 intro，右讲师卡片）
+    .welcome-toc       课程目录（由 learn.xml 动态生成）
+    .welcome-path      学习路径建议
+    .start-btn-wrap    开始按钮
 
-  步骤 2：在 learn.xml 对应的 <folder> 内添加 <note>
+  目录由 js/index.js 读取 learn.xml 后渲染。
+
+4.2 学习模块（learn.html）
+
+  布局：.module-layout（grid，280px | 1fr | 300px）
+  高度：flex:1 + min-height:0（由 main 和 .page 传递）
+
+  左侧栏：
+    .sidebar-search-wrap   搜索框（flex-shrink:0，固定）
+    .sidebar-tree          目录树（flex:1，独立滚动）
+
+  中间：
+    .content-area          md 阅读器（独立滚动）
+      可选 .note-hero      笔记顶部大图
+      h1 + .module-sub    标题与副标题
+      .md-body             md 渲染内容
+      .module-nav          上一节 / 下一节翻页按钮
+
+  右侧栏：
+    .panel-block.graph-block    图谱（flex-shrink:0，固定）
+    .panel-block.outline-block  本页内容（flex:1，独立滚动）
+
+4.3 快速检测（test.html）
+
+  布局：.quiz-layout（grid，280px | 1fr | 220px）
+
+  左侧：小测目录（复用 .sidebar / .tree-* 样式）
+  中间：.quiz-main（首页卡片 / 答题页）
+  右侧：.score-panel（成绩环 + 统计）
+
+4.4 排盘（paipan.html）
+
+  Shadow DOM 挂载到 #pan-host
+  三 Tab：常规 / 终身 / 活盘
+  样式通过 :host / :host(.dark) 定义，与主文档隔离
+
+
+================================================================================
+第五部分  关键函数索引
+================================================================================
+
+【js/common.js】
+  isDark()                 判断当前是否暗色
+  initTheme()              初始化主题（含 localStorage）
+  initHamburger()          汉堡菜单
+  buildMobileNav()         构建移动端导航
+  loadXML(url)             XHR 加载 XML
+  parseCatalog(doc)        解析为 JS 对象
+  parseFolder(el)          解析 folder
+  parseNote(el)            解析 note（含 hero / heroAlt）
+  parseQuiz(el)            解析 quiz
+  flattenNotes(folders)    扁平化，便于 id 查询
+  toast(msg)               提示条
+  escapeHtml / pad2 / shuffle
+
+【js/index.js】
+  renderToc(data)          渲染首页目录
+  init()                   入口
+
+【js/learn.js】
+  mdToHtml(md)             Markdown → HTML
+                           （引用块逐行 inline 后 <br> 拼接）
+  renderTree()             渲染左侧树
+  makeNoteLi(note, idx)    生成单个列表项
+  buildHeroHtml(note)      生成 Hero Image HTML
+  openNote(id)             打开笔记（加载 md + 渲染 + 图谱 + 翻页）
+                           （内部含 buildNav / bindNav）
+  renderOutline(contentEl) 从 md 渲染结果提取 h2/h3/h4
+  renderGraph(activeId)    渲染知识图谱
+  buildGraphData()         根据 expanded 集合构建节点与边
+  renderGraphElements()    创建 SVG 元素（含 <a> 包裹节点）
+  bindNodeEvents(g, n)     节点交互（单击/双击/拖拽/悬浮聚焦）
+  focusGraphOn(n)          悬浮聚焦：其他节点变暗
+  clearGraphFocus()        清除聚焦
+  bindGraphCanvas(svg)     画布交互（平移 / 缩放）
+  toggleNodeExpanded(id)   展开 / 收起节点
+  startGraphSimulation()   启动力导向循环
+  simulateGraph()          单帧物理计算
+  renderGraphFrame()       单帧 DOM 更新
+
+【js/test.js】
+  renderSidebar()          渲染小测目录
+  renderHome()             渲染小测首页
+  openQuiz(id)             打开小测
+  submitQuiz(quiz, qs)     提交与判分
+  updateScorePanel()       更新成绩环
+
+
+================================================================================
+第六部分  维护任务
+================================================================================
+
+6.1 新增一篇笔记
+
+  步骤 1：创建 md 文件
+    learning_notes/<分组>/<笔记名>.md
+
+  步骤 2：在 learn.xml 的对应 folder 里加 note
     <note id="ne-9"
           title="秘传流运卦思路"
           path="learning_notes/东北派/秘传流运卦思路.md"
+          hero="img/hero/东北派-流运.jpg"
           related="ne-3,ne-6,ne-7"/>
 
-  步骤 3：如果新增了整个派系（顶层 folder），在 <catalog> 下加 <folder>
-    首页目录会自动更新，无需改 HTML。
+  步骤 3：如加了 hero 或改了 CSS/JS，更新 HTML 的 ?v= 版本号
 
-  注意：
-    · path 必须与实际文件路径完全一致（大小写敏感）
-    · 路径不要包含空格、#、?、% 等特殊字符
-    · related 里写的 id 必须已存在，否则图谱会忽略
+  步骤 4：make check 校验，make serve 预览
 
-3.2 新增一套小测
+6.2 新增一套小测
 
-  在 learn.xml 的 <quizzes> 下追加 <quiz>：
+  在 learn.xml 的 <quizzes> 下追加 <quiz>，格式见第三部分。
 
-    <quiz id="quiz-ne-9" title="东北派 · 新章节" desc="范围说明">
-      <question q="题干 1" a="正确答案">
-        <opt>正确答案</opt>
-        <opt>干扰项 A</opt>
-        <opt>干扰项 B</opt>
-      </question>
-      <!-- 更多题目 -->
-    </quiz>
+  无需改任何 JS/CSS。
 
-  无需改任何 JS/CSS，test.html 的小测目录、卡片、成绩环会自动更新。
+6.3 新增一个页面
 
-3.3 修改主题色（朱砂）
+  步骤 1：复制现有 HTML
+  步骤 2：改 <title> 与内容区
+  步骤 3：在 4 个 HTML 的 navbar 里加 <a>
+  步骤 4：在 js/common.js 的 PAGES 数组加一项
+  步骤 5：新建 js/<page>.js 处理逻辑
+  步骤 6：如需新样式，新建 css/<page>.css
 
-  只需改 1 个文件：css/common.css 的两处变量：
+6.4 修改主题色
 
-    :root {
-      --accent: #c0392b;
-      --accent-soft: #fff5f2;
-    }
-    body.dark {
-      --accent: #ff7675;
-      --accent-soft: #2a1a1a;
-    }
+  只需改 css/common.css 的两处变量：
+    :root { --accent: #c0392b; --accent-soft: #fff5f2; }
+    body.dark { --accent: #ff7675; --accent-soft: #2a1a1a; }
 
-  全站所有朱砂元素（callout、active 状态、成绩环、图谱中心）
-  会自动更新。
+6.5 修改命宫算法
 
-3.4 修改字体
-
-  在 css/common.css 的 @font-face 中替换字体文件路径：
-
-    @font-face{
-      font-family:'Qiji';
-      src:local('令東齊伋體'),local('齊伋體'),local('Qiji'),
-          url('../fonts/qiji.woff2') format('woff2');
-      font-display:swap;
-    }
-
-  字体族变量：
-    --font-qiji    标题字体（齐伋体）
-    --font-serif   正文字体（宋体）
-
-3.5 修改命宫算法（排盘）
-
-  位置：paipan.html 的 calcMingGongZhi 函数。
+  位置：paipan.html 的 calcMingGongZhi 函数
 
   现行算法（师传口述）：
     1. 年上起月：从生肖所在宫起正月，顺数到出生月（含起点）
     2. 月上起日：从月所在宫起初一，顺数到出生日（含起点）
-    3. 日上起命宫：男顺四位，女逆四位（含起点，即偏移 3）
+    3. 日上起命宫：男顺四位，女逆四位（含起点，偏移 3）
 
-  验证用例：申年三月二日男 → 命宫寅
-    申(生肖) → 戌(月) → 亥(日) → 寅(命宫)
+  验证：申年三月二日男 → 命宫寅
 
-  如需修改，同步更新 test.html 与 paipan.html 中的说明文字。
+6.6 修改知识图谱交互
 
-3.6 新增一个页面
+  位置：js/learn.js 的 bindNodeEvents / focusGraphOn / clearGraphFocus
+        css/learn.css 的 .graph-viewport.has-hover 相关规则
 
-  步骤 1：新建 xxx.html，复用 header / footer 结构
-  步骤 2：在 4 个 HTML 的 navbar 里加 <a href="xxx.html">新页面</a>
-  步骤 3：在 js/common.js 的 PAGES 数组里加一项（用于移动端导航）
-
-    var PAGES = [
-      { href: 'index.html', label: '欢迎页面', page: 'welcome' },
-      { href: 'learn.html', label: '学习模块', page: 'modules' },
-      { href: 'test.html',  label: '快速检测', page: 'quizzes' },
-      { href: 'paipan.html',label: '排盘软件', page: 'pan' },
-      { href: 'xxx.html',   label: '新页面',   page: 'xxx' }
-    ];
+  调参：
+    · 悬浮变暗强度：改 .graph-viewport.has-hover 下的 opacity 值
+    · 力导向参数：改 graphState 的 REPULSION / REST_LENGTH / SPRING_K /
+                  GRAVITY / DAMPING
 
 
 ================================================================================
-四、Markdown 笔记规范
+第七部分  缓存与部署
 ================================================================================
 
-4.1 支持的语法
+7.1 缓存破坏
 
-  # 一级标题         → <h1>
-  ## 二级标题        → <h2>（左侧加下边框，参与本页大纲）
-  ### 三级标题       → <h3>
-  #### 四级标题      → <h4>
-  普通段落           → <p>
-  **粗体**           → <strong>
-  *斜体*             → <em>（显示为朱砂色）
-  `行内代码`         → <code>
-  ```代码块```       → <pre><code>
-  - 无序列表         → <ul><li>
-  1. 有序列表        → <ol><li>
-  > 引用块           → <blockquote>
-  ---                → <hr>
-  | 表格 | 表头 |    → <table>
-  [文本](链接)       → <a>
-  ![alt](图片路径)   → <img>
+  GitHub Pages 走 CDN，CSS/JS 会被缓存。每次改代码后必须
+  更新 HTML 里的 ?v= 参数：
 
-4.2 Callout 特殊语法
+    <link rel="stylesheet" href="css/common.css?v=20260923">
+    <script src="js/common.js?v=20260923"></script>
 
-  引用块第一行如果是 **标题** 形式，会自动渲染为朱砂提示框：
+  可用 make bump 一键更新为当前时间戳。
 
-    > **术语纠正**
-    > 东北篇原书杂神门表格中所谓「六神」列……
+7.2 GitHub Pages 部署
 
-  渲染结果：
+  1. 创建仓库，推送全部文件
+  2. 仓库根加 .nojekyll（空文件）
+  3. Settings → Pages → Source: main / (root)
+  4. 访问 https://<user>.github.io/<repo>/
+  5. 更新后 1-2 分钟自动部署
 
-    <div class="callout">
-      <div class="callout-title">术语纠正</div>
-      东北篇原书……
-    </div>
+7.3 本地开发
 
-  这是全站唯一恢复原始美术风格的关键语法，撰写笔记时优先使用。
+  make serve                   # 启动 HTTP 服务
+  python -m http.server 8000   # 或手动
 
-4.3 未支持的语法
-
-  · 嵌套列表（多级缩进）
-  · 任务列表 - [ ]
-  · 脚注 [^1]
-  · 数学公式 $...$
-  · HTML 内嵌（会被转义）
-
-  如确有需要，可扩展 js/learn.js 的 mdToHtml 函数。
-
-4.4 文件编码
-
-  · 所有 .md 保存为 UTF-8，不带 BOM
-  · 所有 .xml 保存为 UTF-8，首行声明 <?xml version="1.0" encoding="UTF-8"?>
-  · 换行符统一 LF（Unix），Windows 下 Git 可设置 core.autocrlf=true
-
-
-================================================================================
-五、本地开发与预览
-================================================================================
-
-5.1 必须通过 HTTP 服务访问
-
-  file:// 协议下 fetch 读 md、XHR 读 xml 会被 CORS 拦截。
-
-  本地预览：
-    python -m http.server 8000
-    或
-    npx serve .
-
-  浏览器访问：
-    http://localhost:8000/index.html
-
-5.2 浏览器要求
-
-  · Chrome / Edge / Firefox / Safari 现代版本
-  · 需要支持：fetch、DOMParser、URLSearchParams、CSS 变量
-  · 排盘页需要支持：Shadow DOM、attachShadow
-
-5.3 调试技巧
-
-  · 打开控制台查看 fetch 404 提示，确认 md 路径拼写
-  · 知识图谱不出节点时，检查 learn.xml 里 related 的 id 是否存在
-  · 本页大纲为空时，检查 md 是否使用了 ## / ### 而非 # 标题
-
-
-================================================================================
-六、部署到 GitHub Pages
-================================================================================
-
-6.1 前提
-
-  · 仓库根目录必须有 index.html
-  · 所有资源路径必须相对（不能以 / 开头）
-  · 中文路径可用，但避免空格与 #?%
-  · 建议加 .nojekyll 空文件跳过 Jekyll 处理
-
-6.2 步骤
-
-  1. 创建 GitHub 仓库，例如 xiangma-learn
-  2. 推送全部文件
-  3. 仓库 Settings → Pages → Source 选 main 分支 / (root)
-  4. 保存后等待 1~2 分钟
-  5. 访问 https://<用户名>.github.io/xiangma-learn/
-
-6.3 更新流程
-
-  git add .
-  git commit -m "[learn] 新增东北派流运卦一节"
-  git push
-
-  Pages 会自动重新部署。
-
-6.4 自定义域名（可选）
-
-  仓库根目录加 CNAME 文件，内容为域名：
-
-    xiangma.example.com
-
-  DNS 加 CNAME 记录指向 <user>.github.io，
-  在 Pages 设置里填域名并勾选 Enforce HTTPS。
-
-
-================================================================================
-七、常见问题排查
-================================================================================
-
-7.1 笔记打开后空白 / 显示"笔记加载失败"
-
-  原因：md 路径不对，或文件不存在，或中文被 URL 编码出错。
-  排查：打开浏览器控制台看 Network，找 404 的路径。
-  修复：
-    · 检查 learn.xml 的 path 与实际文件路径是否一致
-    · 路径中不能有空格、#、?、%
-    · 如遇编码问题，在 js/learn.js 里改用 fetch(encodeURI(note.path))
-
-7.2 知识图谱没有节点 / 连线
-
-  原因：related 的 id 不存在，或笔记本身没有 related。
-  修复：检查 learn.xml 中 <note> 的 related 属性，
-        每个 id 必须能在同一 learn.xml 里找到对应的 <note id="...">。
-
-7.3 本页大纲为空
-
-  原因：md 文件中没有 ## / ### / #### 标题。
-  修复：把用 # 一级标题的段落改为 ## 二级标题。
-
-7.4 Footer 没有贴在屏幕底部
-
-  原因：内容太短，main 未撑满。
-  说明：这是预期行为，main 用 flex:1 撑满，短内容时 footer 也在底部。
-        如仍不对，检查 css/common.css 中：
-          body{display:flex;flex-direction:column;min-height:100vh;}
-          main{flex:1 0 auto;}
-          footer{flex-shrink:0;}
-
-7.5 三栏没有独立滚动
-
-  原因：module-layout 高度没有锁定。
-  修复：css/learn.css 中：
-        .module-layout{display:grid;flex:1;min-height:0;overflow:hidden;}
-        .sidebar{height:100%;overflow:hidden;}
-        .sidebar-tree{flex:1 1 0;min-height:0;overflow-y:auto;}
-        .content-area{height:100%;overflow-y:auto;}
-        .right-panel{height:100%;overflow:hidden;}
-
-7.6 知识图谱高度太大
-
-  原因：viewBox 不是正方形，或容器未限制高度。
-  修复：css/learn.css 中：
-        .graph-canvas-wrap{aspect-ratio:1/1;max-height:240px;}
-        js/learn.js 中：var W=280,H=280;
-
-7.7 排盘页在 Shadow DOM 内样式异常
-
-  原因：模板里的 :host 变量未同步，或暗色模式没传进去。
-  修复：检查 paipan.html 中 syncPanTheme 函数：
-        if(isDark()) host.classList.add('dark');
-        else host.classList.remove('dark');
-
-7.8 切换昼夜模式后排盘页不变
-
-  说明：排盘页通过 Shadow DOM 隔离，主文档的主题切换不会自动同步。
-  修复：在 css/common.css 的主题切换监听里调用 syncPanTheme()。
-        当前版本已在 common.js 的 initTheme 里处理，如需扩展
-        新页面，同步在切换时调用即可。
-
-
-================================================================================
-八、版本记录
-================================================================================
-
-v2.0（2026-09-19）
-  · 模块化拆分：index / learn / test / paipan 四页面
-  · 数据驱动：learn.xml 统一管理目录、关联、小测
-  · Markdown 笔记独立维护，支持 callout 语法
-  · 知识图谱支持拖拽、缩放、悬浮显示
-  · 三栏独立滚动，footer 固定底部
-  · 命宫算法修正（年上起月、月上起日、日上起命宫）
-
-v1.1（原始版本）
-  · 单文件 HTML，含全部功能
-  · 东北派 9 节、西北派 11 节、两派对照 2 节
-  · 6 套小测
-  · 排盘软件（常规 / 终身 / 活盘）
-
-v1.0
-  · 首版
-
-
-================================================================================
-（完）
-================================================================================
+  访问 http://
