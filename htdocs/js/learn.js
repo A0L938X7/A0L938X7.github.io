@@ -506,163 +506,160 @@
     graphState.nodeMap = nodesMap;
   }
 
- function renderGraphElements() {
-  var vp = graphState.viewport;
-  if (!vp) return;
-  while (vp.firstChild) vp.removeChild(vp.firstChild);
+  /* 创建 SVG 元素 */
+  function svgEl(tag) {
+    return document.createElementNS('http://www.w3.org/2000/svg', tag);
+  }
 
-  // 边
-  graphState.links.forEach(function (l) {
-    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('class', 'graph-edge');
-    line.setAttribute('x1', 0); line.setAttribute('y1', 0);
-    line.setAttribute('x2', 0); line.setAttribute('y2', 0);
-    vp.appendChild(line);
-    l.el = line;
-  });
+  function renderGraphElements() {
+    var vp = graphState.viewport;
+    if (!vp) return;
+    while (vp.firstChild) vp.removeChild(vp.firstChild);
 
-  // 节点
-  graphState.nodes.forEach(function (n) {
-    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    var cls = 'graph-node';
-    if (n.level === 0) cls += ' root';
-    if (graphState.expanded[n.id]) cls += ' expanded';
-    if (n.related.length > 0) cls += ' has-children';
-    if (n.id === graphState.rootId) cls += ' active';
-    g.setAttribute('class', cls);
-    g.dataset.id = n.id;
-
-    // 链接直接包裹 circle，让整圆成为可点区域
-    var a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
-    var href = 'learn.html?note=' + encodeURIComponent(n.id);
-    a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', href);
-    a.setAttribute('href', href);
-    a.setAttribute('target', '_self');
-
-    // 关键：保证 <a> 内 circle 可点，且光标为 pointer
-    a.style.cursor = 'pointer';
-
-    // 阻止默认跳转，交给 JS 逻辑
-    a.addEventListener('click', function (e) {
-      // 中键 / Ctrl / Cmd 点击放行浏览器默认行为
-      if (e.button === 1 || e.ctrlKey || e.metaKey) return;
-      e.preventDefault();
+    // 边
+    graphState.links.forEach(function (l) {
+      var line = svgEl('line');
+      line.setAttribute('class', 'graph-edge');
+      line.setAttribute('x1', 0); line.setAttribute('y1', 0);
+      line.setAttribute('x2', 0); line.setAttribute('y2', 0);
+      vp.appendChild(line);
+      l.el = line;
     });
 
-    var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    c.setAttribute('r', n.r);
-    // 透明填充也算可点区域，但这里已经有 fill，直接可点
-    // 若节点小时不易点中，可加一个透明的点击热区（见下文可选）
-    a.appendChild(c);
+    // 节点（普通 <g>，不做 <a> 包裹）
+    graphState.nodes.forEach(function (n) {
+      var g = svgEl('g');
+      var cls = 'graph-node';
+      if (n.level === 0) cls += ' root';
+      if (graphState.expanded[n.id]) cls += ' expanded';
+      if (n.related.length > 0) cls += ' has-children';
+      if (n.id === graphState.rootId) cls += ' active';
+      g.setAttribute('class', cls);
+      g.dataset.id = n.id;
+      g.style.cursor = 'pointer';
 
-    // 标签放在 <a> 里，但 pointer-events:none（CSS 里已有）
-    var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    label.setAttribute('class', 'node-label');
-    label.setAttribute('x', 0);
-    label.setAttribute('y', n.r + 10);
-    label.setAttribute('text-anchor', 'middle');
-    label.textContent = n.title;
-    a.appendChild(label);
+      // 透明热区圆（扩大点击面积）
+      var hit = svgEl('circle');
+      hit.setAttribute('r', Math.max(n.r + 6, 10));
+      hit.setAttribute('fill', 'transparent');
+      hit.setAttribute('stroke', 'none');
+      hit.style.pointerEvents = 'all';
+      g.appendChild(hit);
 
-    g.appendChild(a);
+      // 可见的节点圆
+      var c = svgEl('circle');
+      c.setAttribute('r', n.r);
+      g.appendChild(c);
 
-    bindNodeEvents(g, n);
-    vp.appendChild(g);
-    n.el = g;
-  });
-}
+      // 标签
+      var label = svgEl('text');
+      label.setAttribute('class', 'node-label');
+      label.setAttribute('x', 0);
+      label.setAttribute('y', n.r + 10);
+      label.setAttribute('text-anchor', 'middle');
+      label.textContent = n.title;
+      g.appendChild(label);
+
+      bindNodeEvents(g, n);
+      vp.appendChild(g);
+      n.el = g;
+    });
+  }
 
   function bindNodeEvents(g, n) {
-  var clickTimer = null;
+    var clickTimer = null;
 
-  g.addEventListener('mousedown', function (e) {
-    e.stopPropagation();
-    if (e.button !== 0) return;
-    graphState.draggingNode = n;
-    n.fixed = true;
-    var pt = getGraphSVGPoint(e);
-    n.x = pt.x; n.y = pt.y;
-    n.vx = 0; n.vy = 0;
-  });
+    g.addEventListener('mousedown', function (e) {
+      e.stopPropagation();
+      if (e.button !== 0) return;
 
-  g.addEventListener('click', function (e) {
-    e.stopPropagation();
-    // 中键 / Ctrl / Cmd 点击：让浏览器默认行为（新窗口打开链接）
-    if (e.button === 1 || e.ctrlKey || e.metaKey) {
-      return;
-    }
-    // 普通左键：延迟判断是否双击
-    if (clickTimer) {
-      clearTimeout(clickTimer);
-      clickTimer = null;
-      return;
-    }
-    clickTimer = setTimeout(function () {
-      clickTimer = null;
-      if (n.id !== graphState.rootId) openNote(n.id);
-    }, 240);
-  });
+      n._downX = e.clientX;
+      n._downY = e.clientY;
+      n._moved = false;
 
-  g.addEventListener('dblclick', function (e) {
-    e.stopPropagation();
-    if (clickTimer) {
-      clearTimeout(clickTimer);
-      clickTimer = null;
-    }
-    toggleNodeExpanded(n.id);
-  });
+      graphState.draggingNode = n;
+      n.fixed = true;
+      var pt = getGraphSVGPoint(e);
+      n.x = pt.x;
+      n.y = pt.y;
+      n.vx = 0;
+      n.vy = 0;
+    });
 
-  /* ---------- 悬浮聚焦 ---------- */
-  g.addEventListener('mouseenter', function () {
-    focusGraphOn(n);
-  });
+    g.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // 拖拽过 → 不算点击
+      if (n._moved) {
+        n._moved = false;
+        return;
+      }
+      // 双击第二次触发，跳过单击逻辑
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        return;
+      }
+      clickTimer = setTimeout(function () {
+        clickTimer = null;
+        // 单击：应用内切换笔记
+        if (n.id !== graphState.rootId) openNote(n.id);
+      }, 240);
+    });
 
-  g.addEventListener('mouseleave', function () {
-    clearGraphFocus();
-  });
-}
+    g.addEventListener('dblclick', function (e) {
+      e.stopPropagation();
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+      }
+      toggleNodeExpanded(n.id);
+    });
 
-/* 悬浮某节点：其他节点和边变暗 */
-function focusGraphOn(n) {
-  var vp = graphState.viewport;
-  if (!vp) return;
+    // 悬浮聚焦
+    g.addEventListener('mouseenter', function () {
+      focusGraphOn(n);
+    });
 
-  vp.classList.add('has-hover');
+    g.addEventListener('mouseleave', function () {
+      clearGraphFocus();
+    });
+  }
 
-  // 该节点标 hovered
-  if (n.el) n.el.classList.add('hovered');
+  /* 悬浮某节点：其他节点和边变暗 */
+  function focusGraphOn(n) {
+    var vp = graphState.viewport;
+    if (!vp) return;
 
-  // 找出与该节点相连的所有边
-  graphState.links.forEach(function (l) {
-    if (!l.el) return;
-    var connected = (l.source === n.id || l.target === n.id);
-    if (connected) {
-      l.el.classList.add('hovered');
-    }
-    // 与它相邻的节点保持原样，其他通过 CSS 变暗
-    var otherId = (l.source === n.id) ? l.target : (l.source === n.id ? l.target : null);
-    if (connected && otherId) {
-      var other = graphState.nodeMap[otherId];
-      if (other && other.el) other.el.classList.add('hovered');
-    }
-  });
+    vp.classList.add('has-hover');
 
-  // 根节点也视为 hovered（避免被压暗）
-  var root = graphState.nodeMap[graphState.rootId];
-  if (root && root.el) root.el.classList.add('hovered');
-}
+    if (n.el) n.el.classList.add('hovered');
 
-function clearGraphFocus() {
-  var vp = graphState.viewport;
-  if (!vp) return;
-  vp.classList.remove('has-hover');
-  graphState.nodes.forEach(function (n) {
-    if (n.el) n.el.classList.remove('hovered');
-  });
-  graphState.links.forEach(function (l) {
-    if (l.el) l.el.classList.remove('hovered');
-  });
-}
+    graphState.links.forEach(function (l) {
+      if (!l.el) return;
+      var connected = (l.source === n.id || l.target === n.id);
+      if (connected) {
+        l.el.classList.add('hovered');
+        var otherId = (l.source === n.id) ? l.target : l.source;
+        var other = graphState.nodeMap[otherId];
+        if (other && other.el) other.el.classList.add('hovered');
+      }
+    });
+
+    var root = graphState.nodeMap[graphState.rootId];
+    if (root && root.el) root.el.classList.add('hovered');
+  }
+
+  function clearGraphFocus() {
+    var vp = graphState.viewport;
+    if (!vp) return;
+    vp.classList.remove('has-hover');
+    graphState.nodes.forEach(function (n) {
+      if (n.el) n.el.classList.remove('hovered');
+    });
+    graphState.links.forEach(function (l) {
+      if (l.el) l.el.classList.remove('hovered');
+    });
+  }
 
   function toggleNodeExpanded(id) {
     if (id === graphState.rootId) return;
@@ -792,11 +789,18 @@ function clearGraphFocus() {
 
     document.addEventListener('mousemove', function (e) {
       if (graphState.draggingNode) {
+        var n = graphState.draggingNode;
+        // 判断是否真正移动过（阈值 3px）
+        if (n._downX !== undefined) {
+          var ddx = e.clientX - n._downX;
+          var ddy = e.clientY - n._downY;
+          if (ddx * ddx + ddy * ddy > 9) n._moved = true;
+        }
         var pt = getGraphSVGPoint(e);
-        graphState.draggingNode.x = pt.x;
-        graphState.draggingNode.y = pt.y;
-        graphState.draggingNode.vx = 0;
-        graphState.draggingNode.vy = 0;
+        n.x = pt.x;
+        n.y = pt.y;
+        n.vx = 0;
+        n.vy = 0;
         return;
       }
       if (graphState.panning) {
