@@ -1,5 +1,5 @@
 /* ============================================================
-   学习模块：左侧树 + md 渲染 + 知识图谱 + 本页大纲
+   学习模块：左侧树 + md 渲染 + 知识图谱 + 本页大纲 + 翻页
    ============================================================ */
 (function () {
   'use strict';
@@ -39,7 +39,7 @@
       s = s.replace(/`([^`]+)`/g, function (_, c) { return '<code>' + c + '</code>'; });
       // 粗体
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      // 斜体（*text*，避免与 ** 冲突）
+      // 斜体
       s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
       return s;
     }
@@ -89,15 +89,15 @@
           quote.push(lines[i].replace(/^\s*>\s?/, ''));
           i++;
         }
-      
+
         var first = quote[0] || '';
         var calloutMatch = first.match(/^\*\*(.+?)\*\*\s*$/);
-      
-        // 逐行渲染后再用 <br> 拼接，保证换行不被转义
-        function renderLines(lines) {
-          return lines.map(function (l) { return inline(l); }).join('<br>');
+
+        // 逐行渲染后再用 <br> 拼接，避免 <br> 被 escapeHtml 转义
+        function renderLines(arr) {
+          return arr.map(function (l) { return inline(l); }).join('<br>');
         }
-      
+
         if (calloutMatch) {
           var title = calloutMatch[1];
           var bodyHtml = renderLines(quote.slice(1));
@@ -204,7 +204,6 @@
 
       var fBody = document.createElement('div');
       fBody.className = 'tree-folder-body';
-      // grid-template-rows 动画需要内部包裹
       var fInner = document.createElement('div');
       fBody.appendChild(fInner);
       fEl.appendChild(fBody);
@@ -252,6 +251,18 @@
     return li;
   }
 
+  /* ================= Hero Image ================= */
+  function buildHeroHtml(note) {
+    if (!note.hero) return '';
+    var alt = note.heroAlt || note.title || '';
+    return '' +
+      '<div class="note-hero">' +
+        '<img src="' + C.escapeHtml(note.hero) + '" ' +
+             'alt="' + C.escapeHtml(alt) + '" ' +
+             'onerror="this.parentNode.style.display=\'none\'">' +
+      '</div>';
+  }
+
   /* ================= 打开笔记 ================= */
   function openNote(id) {
     var note = state.notesMap[id];
@@ -274,7 +285,8 @@
     C.buildMobileNav('modules', state.data, id, function (n) { openNote(n.id); });
 
     var content = document.getElementById('module-content');
-    content.innerHTML = '<h1>' + C.escapeHtml(note.title) + '</h1>' +
+    content.innerHTML = buildHeroHtml(note) +
+      '<h1>' + C.escapeHtml(note.title) + '</h1>' +
       '<div class="module-sub">' + C.escapeHtml(note._group || '') + '</div>' +
       '<div class="md-loading">正在加载笔记…</div>';
 
@@ -286,21 +298,21 @@
 
     function buildNav() {
       if (!prev && !next) return '';
-      var html = '<div class="module-nav">';
+      var h = '<div class="module-nav">';
       if (prev) {
-        html += '<button class="btn ghost" data-note="' + prev.id + '">' +
-                '← ' + C.escapeHtml(prev.title) + '</button>';
+        h += '<button class="btn ghost" data-note="' + prev.id + '">' +
+             '← ' + C.escapeHtml(prev.title) + '</button>';
       } else {
-        html += '<button class="btn ghost" disabled>已是第一节</button>';
+        h += '<button class="btn ghost" disabled>已是第一节</button>';
       }
       if (next) {
-        html += '<button class="btn ghost" data-note="' + next.id + '">' +
-                C.escapeHtml(next.title) + ' →</button>';
+        h += '<button class="btn ghost" data-note="' + next.id + '">' +
+             C.escapeHtml(next.title) + ' →</button>';
       } else {
-        html += '<button class="btn ghost" disabled>已是最后一节</button>';
+        h += '<button class="btn ghost" disabled>已是最后一节</button>';
       }
-      html += '</div>';
-      return html;
+      h += '</div>';
+      return h;
     }
 
     function bindNav() {
@@ -364,184 +376,414 @@
     });
   }
 
-  /* ================= 知识图谱（正方形，可拖拽缩放） ================= */
+  /* ================= 知识图谱（力导向 + 多级展开） ================= */
   var graphState = {
     svg: null,
-    viewBox: { x: 0, y: 0, w: 280, h: 280 },
-    dragging: false,
-    lastX: 0, lastY: 0
+    viewport: null,
+    nodeMap: {},
+    nodes: [],
+    links: [],
+    rootId: null,
+    expanded: {},
+    tx: 0, ty: 0, scale: 1,
+    draggingNode: null,
+    panning: false,
+    panStartX: 0, panStartY: 0,
+    panStartTx: 0, panStartTy: 0,
+    rafId: null,
+    REPULSION: 900,
+    REST_LENGTH: 55,
+    SPRING_K: 0.05,
+    GRAVITY: 0.025,
+    DAMPING: 0.85
   };
 
   function renderGraph(activeId) {
     var svg = document.getElementById('graph-svg');
     if (!svg || !state.data) return;
     graphState.svg = svg;
-
-    var nodes = [];
-    var active = state.notesMap[activeId];
-    if (active) nodes.push({ id: active.id, title: active.title, center: true });
-    (state.lastRelated || []).forEach(function (rid) {
-      var n = state.notesMap[rid];
-      if (n && (!active || rid !== active.id)) nodes.push({ id: n.id, title: n.title });
-    });
-
-    // 正方形视图
-    var W = 280, H = 280;
-    var cx = W / 2, cy = H / 2;
-    var positions = [];
-    var N = nodes.length;
-    var hasCenter = nodes.some(function (n) { return n.center; });
-    var ringCount = N - (hasCenter ? 1 : 0);
-    if (ringCount < 1) ringCount = 1;
-    var rad = 92;
-
-    for (var i = 0; i < N; i++) {
-      if (nodes[i].center) {
-        positions.push({ x: cx, y: cy, r: 20 });
-      } else {
-        var k = i - (hasCenter ? 1 : 0);
-        var ang = (Math.PI * 2 * k) / ringCount - Math.PI / 2;
-        positions.push({
-          x: cx + Math.cos(ang) * rad,
-          y: cy + Math.sin(ang) * rad,
-          r: 16
-        });
-      }
-    }
+    graphState.rootId = activeId;
+    graphState.expanded = {};
+    graphState.expanded[activeId] = true;
 
     svg.innerHTML = '';
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var vp = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    vp.setAttribute('class', 'graph-viewport');
+    svg.appendChild(vp);
+    graphState.viewport = vp;
 
-    // 连线
-    for (var e = 0; e < N; e++) {
-      if (nodes[e].center) continue;
-      var from = positions[0];
-      var to = positions[e];
-      var line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      var mx = (from.x + to.x) / 2, my = (from.y + to.y) / 2;
-      line.setAttribute('d', 'M' + from.x + ',' + from.y + ' Q' + mx + ',' + my + ' ' + to.x + ',' + to.y);
-      line.setAttribute('class', 'graph-edge' + (nodes[e].id === activeId ? ' active' : ''));
-      svg.appendChild(line);
+    var rect = svg.getBoundingClientRect();
+    graphState.tx = rect.width / 2;
+    graphState.ty = rect.height / 2;
+    graphState.scale = 1;
+    applyViewportTransform();
+
+    buildGraphData();
+    renderGraphElements();
+    startGraphSimulation();
+    bindGraphCanvas(svg);
+  }
+
+  function buildGraphData() {
+    var nodesMap = {};
+    var nodes = [];
+    var links = [];
+
+    function addNode(id, level, parentId) {
+      if (nodesMap[id]) return nodesMap[id];
+      var note = state.notesMap[id];
+      if (!note) return null;
+      var n = {
+        id: id,
+        title: note.title,
+        related: note.related || [],
+        level: level,
+        x: 0, y: 0, vx: 0, vy: 0,
+        fixed: false,
+        el: null,
+        r: level === 0 ? 10 : (level === 1 ? 5.5 : 4)
+      };
+      if (parentId && nodesMap[parentId]) {
+        var p = nodesMap[parentId];
+        var ang = Math.random() * Math.PI * 2;
+        var dist = 30 + Math.random() * 20;
+        n.x = p.x + Math.cos(ang) * dist;
+        n.y = p.y + Math.sin(ang) * dist;
+      } else if (level === 0) {
+        n.x = 0; n.y = 0;
+      }
+      nodesMap[id] = n;
+      nodes.push(n);
+      return n;
     }
 
-    // 节点
-    nodes.forEach(function (n, i) {
-      var pos = positions[i];
+    function addLink(sId, tId) {
+      var exists = links.some(function (l) {
+        return (l.source === sId && l.target === tId) ||
+               (l.source === tId && l.target === sId);
+      });
+      if (exists) return;
+      links.push({ source: sId, target: tId, el: null });
+    }
+
+    addNode(graphState.rootId, 0, null);
+    var queue = [graphState.rootId];
+    var visited = {};
+    visited[graphState.rootId] = true;
+
+    while (queue.length > 0) {
+      var curId = queue.shift();
+      if (!graphState.expanded[curId]) continue;
+      var curNode = nodesMap[curId];
+      var note = state.notesMap[curId];
+      if (!note || !curNode) continue;
+      (note.related || []).forEach(function (rid) {
+        if (rid === curId) return;
+        if (!state.notesMap[rid]) return;
+        var n = addNode(rid, curNode.level + 1, curId);
+        if (n) {
+          addLink(curId, rid);
+          if (graphState.expanded[rid] && !visited[rid]) {
+            visited[rid] = true;
+            queue.push(rid);
+          }
+        }
+      });
+    }
+
+    var oldMap = graphState.nodeMap || {};
+    nodes.forEach(function (n) {
+      if (oldMap[n.id]) {
+        n.x = oldMap[n.id].x;
+        n.y = oldMap[n.id].y;
+        n.vx = oldMap[n.id].vx;
+        n.vy = oldMap[n.id].vy;
+      }
+    });
+
+    graphState.nodes = nodes;
+    graphState.links = links;
+    graphState.nodeMap = nodesMap;
+  }
+
+  function renderGraphElements() {
+    var vp = graphState.viewport;
+    if (!vp) return;
+    while (vp.firstChild) vp.removeChild(vp.firstChild);
+
+    graphState.links.forEach(function (l) {
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'graph-edge');
+      line.setAttribute('x1', 0); line.setAttribute('y1', 0);
+      line.setAttribute('x2', 0); line.setAttribute('y2', 0);
+      vp.appendChild(line);
+      l.el = line;
+    });
+
+    graphState.nodes.forEach(function (n) {
       var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.setAttribute('class', 'graph-node' + (n.center ? ' active' : ''));
+      var cls = 'graph-node';
+      if (n.level === 0) cls += ' root';
+      if (graphState.expanded[n.id]) cls += ' expanded';
+      if (n.related.length > 0) cls += ' has-children';
+      if (n.id === graphState.rootId) cls += ' active';
+      g.setAttribute('class', cls);
       g.style.cursor = 'pointer';
 
       var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      c.setAttribute('cx', pos.x); c.setAttribute('cy', pos.y); c.setAttribute('r', pos.r);
+      c.setAttribute('r', n.r);
       g.appendChild(c);
 
-      // 中心节点始终显示文字，其他节点隐藏（由 CSS 控制 hover 显示 .node-label）
-      if (n.center) {
-        var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t.setAttribute('x', pos.x); t.setAttribute('y', pos.y);
-        t.textContent = n.title.slice(0, 4);
-        g.appendChild(t);
-      } else {
-        // 非中心节点：圆内空，悬浮显示完整名称
-        var t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t2.setAttribute('x', pos.x); t2.setAttribute('y', pos.y);
-        t2.textContent = n.title.slice(0, 2);
-        g.appendChild(t2);
-      }
+      var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('class', 'node-label');
+      label.setAttribute('x', 0);
+      label.setAttribute('y', n.r + 10);
+      label.setAttribute('text-anchor', 'middle');
+      label.textContent = n.title;
+      g.appendChild(label);
 
-      var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      lbl.setAttribute('class', 'node-label');
-      lbl.setAttribute('x', pos.x);
-      lbl.setAttribute('y', pos.y + pos.r + 12);
-      lbl.textContent = n.title;
-      g.appendChild(lbl);
-
-      g.addEventListener('click', function (ev) {
-        ev.stopPropagation();
-        if (!n.center) openNote(n.id);
-      });
-      svg.appendChild(g);
+      bindNodeEvents(g, n);
+      vp.appendChild(g);
+      n.el = g;
     });
-
-    bindGraphPan(svg);
   }
 
-  function bindGraphPan(svg) {
-    if (svg._panBound) return;
-    svg._panBound = true;
+  function bindNodeEvents(g, n) {
+    var clickTimer = null;
+
+    g.addEventListener('mousedown', function (e) {
+      e.stopPropagation();
+      if (e.button !== 0) return;
+      graphState.draggingNode = n;
+      n.fixed = true;
+      var pt = getGraphSVGPoint(e);
+      n.x = pt.x; n.y = pt.y;
+      n.vx = 0; n.vy = 0;
+    });
+
+    g.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        return;
+      }
+      clickTimer = setTimeout(function () {
+        clickTimer = null;
+        if (n.id !== graphState.rootId) openNote(n.id);
+      }, 240);
+    });
+
+    g.addEventListener('dblclick', function (e) {
+      e.stopPropagation();
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+      }
+      toggleNodeExpanded(n.id);
+    });
+  }
+
+  function toggleNodeExpanded(id) {
+    if (id === graphState.rootId) return;
+    var note = state.notesMap[id];
+    if (!note) return;
+    if (!(note.related || []).length) return;
+
+    if (graphState.expanded[id]) {
+      delete graphState.expanded[id];
+    } else {
+      graphState.expanded[id] = true;
+    }
+    buildGraphData();
+    renderGraphElements();
+    wakeGraphSimulation();
+  }
+
+  function startGraphSimulation() {
+    if (graphState.rafId) return;
+    function step() {
+      simulateGraph();
+      renderGraphFrame();
+      graphState.rafId = requestAnimationFrame(step);
+    }
+    graphState.rafId = requestAnimationFrame(step);
+  }
+
+  function wakeGraphSimulation() {
+    graphState.nodes.forEach(function (n) {
+      if (!n.fixed) {
+        n.vx += (Math.random() - 0.5) * 0.6;
+        n.vy += (Math.random() - 0.5) * 0.6;
+      }
+    });
+  }
+
+  function simulateGraph() {
+    var nodes = graphState.nodes;
+    var links = graphState.links;
+
+    for (var i = 0; i < nodes.length; i++) {
+      for (var j = i + 1; j < nodes.length; j++) {
+        var a = nodes[i], b = nodes[j];
+        var dx = b.x - a.x;
+        var dy = b.y - a.y;
+        var d2 = dx * dx + dy * dy;
+        if (d2 < 0.01) {
+          dx = (Math.random() - 0.5) * 0.1;
+          dy = (Math.random() - 0.5) * 0.1;
+          d2 = dx * dx + dy * dy + 0.01;
+        }
+        var d = Math.sqrt(d2);
+        var f = graphState.REPULSION / d2;
+        var fx = (dx / d) * f;
+        var fy = (dy / d) * f;
+        if (!a.fixed) { a.vx -= fx; a.vy -= fy; }
+        if (!b.fixed) { b.vx += fx; b.vy += fy; }
+      }
+    }
+
+    links.forEach(function (l) {
+      var a = graphState.nodeMap[l.source];
+      var b = graphState.nodeMap[l.target];
+      if (!a || !b) return;
+      var dx = b.x - a.x;
+      var dy = b.y - a.y;
+      var d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+      var f = (d - graphState.REST_LENGTH) * graphState.SPRING_K;
+      var fx = (dx / d) * f;
+      var fy = (dy / d) * f;
+      if (!a.fixed) { a.vx += fx; a.vy += fy; }
+      if (!b.fixed) { b.vx -= fx; b.vy -= fy; }
+    });
+
+    nodes.forEach(function (n) {
+      if (n.fixed) { n.vx = 0; n.vy = 0; return; }
+      n.vx += (0 - n.x) * graphState.GRAVITY;
+      n.vy += (0 - n.y) * graphState.GRAVITY;
+      n.vx *= graphState.DAMPING;
+      n.vy *= graphState.DAMPING;
+      n.x += n.vx;
+      n.y += n.vy;
+    });
+  }
+
+  function renderGraphFrame() {
+    graphState.nodes.forEach(function (n) {
+      if (!n.el) return;
+      n.el.setAttribute('transform',
+        'translate(' + n.x.toFixed(2) + ',' + n.y.toFixed(2) + ')');
+    });
+    graphState.links.forEach(function (l) {
+      if (!l.el) return;
+      var a = graphState.nodeMap[l.source];
+      var b = graphState.nodeMap[l.target];
+      if (!a || !b) return;
+      l.el.setAttribute('x1', a.x.toFixed(2));
+      l.el.setAttribute('y1', a.y.toFixed(2));
+      l.el.setAttribute('x2', b.x.toFixed(2));
+      l.el.setAttribute('y2', b.y.toFixed(2));
+    });
+  }
+
+  function getGraphSVGPoint(e) {
+    var svg = graphState.svg;
+    if (!svg) return { x: 0, y: 0 };
+    var rect = svg.getBoundingClientRect();
+    var sx = e.clientX - rect.left;
+    var sy = e.clientY - rect.top;
+    return {
+      x: (sx - graphState.tx) / graphState.scale,
+      y: (sy - graphState.ty) / graphState.scale
+    };
+  }
+
+  function applyViewportTransform() {
+    if (!graphState.viewport) return;
+    graphState.viewport.setAttribute(
+      'transform',
+      'translate(' + graphState.tx + ',' + graphState.ty + ') scale(' + graphState.scale + ')'
+    );
+  }
+
+  function bindGraphCanvas(svg) {
+    if (svg._canvasBound) return;
+    svg._canvasBound = true;
+
+    document.addEventListener('mousemove', function (e) {
+      if (graphState.draggingNode) {
+        var pt = getGraphSVGPoint(e);
+        graphState.draggingNode.x = pt.x;
+        graphState.draggingNode.y = pt.y;
+        graphState.draggingNode.vx = 0;
+        graphState.draggingNode.vy = 0;
+        return;
+      }
+      if (graphState.panning) {
+        var dx = e.clientX - graphState.panStartX;
+        var dy = e.clientY - graphState.panStartY;
+        graphState.tx = graphState.panStartTx + dx;
+        graphState.ty = graphState.panStartTy + dy;
+        applyViewportTransform();
+      }
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (graphState.draggingNode) {
+        graphState.draggingNode.fixed = false;
+        graphState.draggingNode = null;
+      }
+      graphState.panning = false;
+    });
 
     svg.addEventListener('mousedown', function (e) {
-      graphState.dragging = true;
-      graphState.lastX = e.clientX;
-      graphState.lastY = e.clientY;
-      svg.classList.add('dragging');
+      if (e.target === svg) {
+        graphState.panning = true;
+        graphState.panStartX = e.clientX;
+        graphState.panStartY = e.clientY;
+        graphState.panStartTx = graphState.tx;
+        graphState.panStartTy = graphState.ty;
+      }
     });
-    document.addEventListener('mousemove', function (e) {
-      if (!graphState.dragging) return;
-      var dx = e.clientX - graphState.lastX;
-      var dy = e.clientY - graphState.lastY;
-      graphState.lastX = e.clientX;
-      graphState.lastY = e.clientY;
-      panViewBox(dx, dy);
-    });
-    document.addEventListener('mouseup', function () {
-      if (!graphState.dragging) return;
-      graphState.dragging = false;
-      svg.classList.remove('dragging');
-    });
-
-    svg.addEventListener('touchstart', function (e) {
-      if (e.touches.length !== 1) return;
-      graphState.dragging = true;
-      graphState.lastX = e.touches[0].clientX;
-      graphState.lastY = e.touches[0].clientY;
-    }, { passive: true });
-    svg.addEventListener('touchmove', function (e) {
-      if (!graphState.dragging || e.touches.length !== 1) return;
-      var t = e.touches[0];
-      var dx = t.clientX - graphState.lastX;
-      var dy = t.clientY - graphState.lastY;
-      graphState.lastX = t.clientX;
-      graphState.lastY = t.clientY;
-      panViewBox(dx, dy);
-      e.preventDefault();
-    }, { passive: false });
-    svg.addEventListener('touchend', function () { graphState.dragging = false; });
 
     svg.addEventListener('wheel', function (e) {
       e.preventDefault();
-      var vb = graphState.viewBox;
-      var scale = e.deltaY > 0 ? 1.1 : 0.9;
-      var nw = vb.w * scale, nh = vb.h * scale;
-      if (nw < 80 || nw > 1200) return;
       var rect = svg.getBoundingClientRect();
-      var mx = (e.clientX - rect.left) / rect.width;
-      var my = (e.clientY - rect.top) / rect.height;
-      var newX = vb.x + (vb.w - nw) * mx;
-      var newY = vb.y + (vb.h - nh) * my;
-      vb.x = newX; vb.y = newY; vb.w = nw; vb.h = nh;
-      applyViewBox();
+      var mx = e.clientX - rect.left;
+      var my = e.clientY - rect.top;
+      var lx = (mx - graphState.tx) / graphState.scale;
+      var ly = (my - graphState.ty) / graphState.scale;
+      var factor = e.deltaY > 0 ? 0.9 : 1.1;
+      var newScale = graphState.scale * factor;
+      if (newScale < 0.3 || newScale > 4) return;
+      graphState.scale = newScale;
+      graphState.tx = mx - lx * graphState.scale;
+      graphState.ty = my - ly * graphState.scale;
+      applyViewportTransform();
     }, { passive: false });
 
-    applyViewBox();
-  }
-
-  function panViewBox(dx, dy) {
-    var svg = graphState.svg;
-    if (!svg) return;
-    var rect = svg.getBoundingClientRect();
-    var vb = graphState.viewBox;
-    var ux = dx * (vb.w / rect.width);
-    var uy = dy * (vb.h / rect.height);
-    vb.x -= ux; vb.y -= uy;
-    applyViewBox();
-  }
-
-  function applyViewBox() {
-    var svg = graphState.svg;
-    if (!svg) return;
-    var vb = graphState.viewBox;
-    svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
+    svg.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 1) {
+        var t = e.touches[0];
+        graphState.panning = true;
+        graphState.panStartX = t.clientX;
+        graphState.panStartY = t.clientY;
+        graphState.panStartTx = graphState.tx;
+        graphState.panStartTy = graphState.ty;
+      }
+    }, { passive: true });
+    svg.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 1 && graphState.panning) {
+        var t = e.touches[0];
+        graphState.tx = graphState.panStartTx + (t.clientX - graphState.panStartX);
+        graphState.ty = graphState.panStartTy + (t.clientY - graphState.panStartY);
+        applyViewportTransform();
+        e.preventDefault();
+      }
+    }, { passive: false });
+    svg.addEventListener('touchend', function () {
+      graphState.panning = false;
+    });
   }
 
   /* ================= 初始化 ================= */
