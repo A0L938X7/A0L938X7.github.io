@@ -454,16 +454,31 @@
 
 /* ---------- 边 ---------- */
 .graph-edge{
-  stroke:var(--border-3);
-  stroke-width:.8;
-  opacity:.55;
-  transition:stroke .15s ease, opacity .15s ease, stroke-width .15s ease;
+  stroke: var(--graph-edge);
+  stroke-width: var(--graph-edge-width);
+  opacity: .9;
+  transition: stroke .15s ease,
+             opacity .15s ease,
+             stroke-width .15s ease;
 }
 
+/* 与当前笔记直接相连的边（active） */
 .graph-edge.active{
-  stroke:var(--accent);
-  stroke-width:1.2;
-  opacity:1;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  opacity: 1;
+}
+
+/* 悬浮聚焦：非悬浮边变暗 */
+.graph-viewport.has-hover .graph-edge:not(.hovered){
+  opacity: .25;
+}
+
+/* 悬浮聚焦：与悬浮节点相连的边高亮 */
+.graph-viewport.has-hover .graph-edge.hovered{
+  stroke: var(--accent);
+  stroke-width: 2;
+  opacity: 1;
 }
 
 /* ---------- 悬浮聚焦：其他节点变暗 ---------- */
@@ -472,14 +487,6 @@
 }
 .graph-viewport.has-hover .graph-node.root:not(.hovered){
   opacity:.55;
-}
-.graph-viewport.has-hover .graph-edge:not(.hovered){
-  opacity:.15;
-}
-.graph-viewport.has-hover .graph-edge.hovered{
-  stroke:var(--accent);
-  stroke-width:1.6;
-  opacity:1;
 }
 
 .outline-scroll{
