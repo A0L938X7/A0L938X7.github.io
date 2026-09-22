@@ -362,6 +362,10 @@
   background:var(--bg-soft);
 }
 
+/* ============================================================
+   知识图谱：力导向 + 多级展开 + 悬浮聚焦
+   ============================================================ */
+
 .graph-canvas-wrap{
   width:auto;
   aspect-ratio:1 / 1;
@@ -386,7 +390,11 @@
 }
 .graph-svg:active{cursor:grabbing;}
 
-.graph-node{cursor:pointer;}
+/* ---------- 节点 ---------- */
+.graph-node{
+  cursor:pointer;
+  transition:opacity .18s ease;
+}
 
 .graph-node circle{
   fill:var(--bg-card);
@@ -395,19 +403,17 @@
   transition:fill .15s ease,
              stroke .15s ease,
              stroke-width .15s ease,
-             stroke-dasharray .15s ease;
+             stroke-opacity .15s ease;
 }
 
-.graph-node.has-children:not(.expanded) circle{
-  stroke-dasharray:2 2;
-  stroke:var(--text-4);
-}
-
+/* 一级节点：红边（未展开用实线，已展开也实线） */
 .graph-node:not(.root) circle{
   stroke:var(--accent);
-  stroke-opacity:.65;
+  stroke-opacity:.85;
+  stroke-dasharray:none;
 }
 
+/* 根节点：朱砂填充 */
 .graph-node.root circle{
   fill:var(--accent);
   stroke:var(--accent);
@@ -416,16 +422,19 @@
   stroke-dasharray:none;
 }
 
+/* 悬浮 / 激活：实心红边加粗 */
 .graph-node:hover circle,
 .graph-node.active circle{
   fill:var(--accent-soft);
   stroke:var(--accent);
-  stroke-width:1.6;
+  stroke-width:1.8;
+  stroke-opacity:1;
 }
 .graph-node.root:hover circle{
   fill:var(--accent);
 }
 
+/* ---------- 标签：默认隐藏，悬浮才显示 ---------- */
 .graph-node .node-label{
   font-size:9px;
   fill:var(--text);
@@ -447,6 +456,7 @@
   opacity:1;
 }
 
+/* ---------- 边 ---------- */
 .graph-edge{
   stroke:var(--border-3);
   stroke-width:.8;
@@ -457,6 +467,22 @@
 .graph-edge.active{
   stroke:var(--accent);
   stroke-width:1.2;
+  opacity:1;
+}
+
+/* ---------- 悬浮聚焦：其他节点变暗 ---------- */
+.graph-viewport.has-hover .graph-node:not(.hovered):not(.root){
+  opacity:.25;
+}
+.graph-viewport.has-hover .graph-node.root:not(.hovered){
+  opacity:.55;
+}
+.graph-viewport.has-hover .graph-edge:not(.hovered){
+  opacity:.15;
+}
+.graph-viewport.has-hover .graph-edge.hovered{
+  stroke:var(--accent);
+  stroke-width:1.6;
   opacity:1;
 }
 
