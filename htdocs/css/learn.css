@@ -396,6 +396,10 @@
   transition:opacity .18s ease;
 }
 
+.graph-node a {
+  cursor: pointer;
+}
+
 .graph-node circle{
   fill:var(--bg-card);
   stroke:var(--border-3);
