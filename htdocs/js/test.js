@@ -1,9 +1,13 @@
 /* ============================================================
    快速检测：读取 learn.xml 的 quizzes，渲染目录与小测
+   进度持久化到 localStorage
    ============================================================ */
 (function () {
   'use strict';
   var C = window.XMCommon;
+
+  var STORAGE_KEY = 'xiangma-quiz-progress';
+  var STORAGE_VERSION = 1;
 
   var state = {
     data: null,
@@ -11,6 +15,47 @@
     scores: {},      // { quizId: { correct, total } }
     answers: {}      // { quizId: true }
   };
+
+  /* ================= 持久化 ================= */
+
+  function loadProgress() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var obj = JSON.parse(raw);
+      if (!obj || typeof obj !== 'object') return;
+      if (obj.v !== STORAGE_VERSION) {
+        console.warn('[quiz] 进度版本不匹配，忽略旧数据');
+        return;
+      }
+      state.scores = obj.scores || {};
+      state.answers = obj.answers || {};
+    } catch (e) {
+      console.warn('[quiz] 读取进度失败：', e);
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e2) {}
+    }
+  }
+
+  function saveProgress() {
+    try {
+      var obj = {
+        v: STORAGE_VERSION,
+        scores: state.scores,
+        answers: state.answers
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {
+      console.warn('[quiz] 保存进度失败：', e);
+    }
+  }
+
+  function clearProgress() {
+    state.scores = {};
+    state.answers = {};
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+  }
 
   /* ================= 左侧目录 ================= */
   function renderSidebar() {
@@ -28,18 +73,39 @@
 
     var body = document.createElement('div');
     body.className = 'tree-folder-body';
+    var inner = document.createElement('div');
+    body.appendChild(inner);
+    folder.appendChild(body);
+
     var ul = document.createElement('ul');
     ul.className = 'tree-list';
-    state.data.quizzes.forEach(function (q) {
+    state.data.quizzes.forEach(function (q, i) {
       var li = document.createElement('li');
       li.dataset.id = q.id;
-      li.textContent = q.title;
+      li.innerHTML = '<span class="num">' + C.pad2(i + 1) + '</span>' +
+                     C.escapeHtml(q.title);
       li.addEventListener('click', function () { openQuiz(q.id); });
       ul.appendChild(li);
     });
-    body.appendChild(ul);
-    folder.appendChild(body);
+    inner.appendChild(ul);
     wrap.appendChild(folder);
+
+    // 「清空进度」按钮
+    var clearBox = document.createElement('div');
+    clearBox.style.cssText = 'padding:14px;border-top:1px solid var(--border);margin-top:14px;';
+    var clearBtn = document.createElement('button');
+    clearBtn.className = 'btn ghost';
+    clearBtn.style.cssText = 'width:100%;font-size:13px;padding:8px;';
+    clearBtn.textContent = '清空所有进度';
+    clearBtn.addEventListener('click', function () {
+      if (!confirm('确定要清空所有小测进度吗？此操作不可恢复。')) return;
+      clearProgress();
+      renderSidebar();
+      renderHome();
+      if (C.toast) C.toast('进度已清空');
+    });
+    clearBox.appendChild(clearBtn);
+    wrap.appendChild(clearBox);
   }
 
   /* ================= 首页 ================= */
@@ -90,9 +156,13 @@
       };
     });
 
+    var alreadyDone = !!state.answers[quiz.id];
+
     var main = document.getElementById('quiz-main');
     var html = '<h1>' + C.escapeHtml(quiz.title) + '</h1>' +
-      '<div class="quiz-sub">' + C.escapeHtml(quiz.desc) + ' · 共 ' + questions.length + ' 题</div>' +
+      '<div class="quiz-sub">' + C.escapeHtml(quiz.desc) + ' · 共 ' + questions.length + ' 题' +
+      (alreadyDone ? ' · <span style="color:var(--accent);">已完成</span>' : '') +
+      '</div>' +
       '<div id="quiz-body">';
     questions.forEach(function (item, i) {
       html += '<div class="quiz-question" data-q="' + i + '">' +
@@ -113,7 +183,7 @@
 
     main.querySelectorAll('.quiz-options li').forEach(function (li) {
       li.addEventListener('click', function () {
-        if (state.answers[quiz.id]) return;
+        if (state.answers[quiz.id]) return;   // 已提交锁定
         var qi = parseInt(li.dataset.q, 10);
         var parent = li.parentElement;
         parent.querySelectorAll('li').forEach(function (x) { x.classList.remove('selected'); });
@@ -121,6 +191,7 @@
         questions[qi].selected = li.dataset.opt;
       });
     });
+
     document.getElementById('quiz-submit').addEventListener('click', function () {
       submitQuiz(quiz, questions);
     });
@@ -149,6 +220,7 @@
 
     state.scores[quiz.id] = { correct: correct, total: questions.length };
     state.answers[quiz.id] = true;
+    saveProgress();
 
     var pct = Math.round(correct / questions.length * 100);
     document.getElementById('quiz-result').innerHTML =
@@ -192,10 +264,10 @@
 
     C.loadXML('learn.xml').then(function (doc) {
       state.data = C.parseCatalog(doc);
+      loadProgress();
       renderSidebar();
       renderHome();
       C.buildMobileNav('quizzes', state.data, null, function (n) {
-        // 小测页的移动导航：note 点击跳转到 learn.html
         location.href = 'learn.html?note=' + encodeURIComponent(n.id);
       });
     }).catch(function (err) {
