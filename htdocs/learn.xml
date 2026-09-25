@@ -55,22 +55,21 @@
         <note id="nw-14" title="应期思路" path="learning_notes/西北派/先天卦/应期思路.md"
               related="nw-13,nw-15,nw-16"/>
       </folder>
-      <note id="nw-15" title="三盘合参" path="learning_notes/西北派/三盘合参.md"
-            related="nw-14,nw-16,nw-17"/>
-      <note id="nw-16" title="十二宫终身卦思路" path="learning_notes/西北派/十二宫终身卦思路.md"
-            related="nw-15,nw-17,nw-10"/>
+
+      <folder name="进阶思路">
+        <note id="nw-15" title="三盘合参" path="learning_notes/西北派/先天卦/三盘合参.md"
+            related="nw-6, nw-13, nw-17"/>
+        <note id="nw-16" title="十二宫终身卦思路" path="learning_notes/西北派/先天卦/十二宫终身卦思路.md"
+            related="nw-15,nw-17, ne-8"/>
+      </folder>
+
       <folder name="补充资料">
         <note id="nw-17" title="牌谱四种" path="learning_notes/西北派/补充资料/牌谱四种.md"
-              related="nw-7,nw-16,nw-5"/>
-      </folder>
+              related="nw-7, nw-6, nw-5, nw-3, nw-1"/>
+      </folder>  
+      
     </folder>
-
-    <folder name="两派对照" subtitle="同源异流 · 选学指南">
-      <note id="cp-1" title="两派关键差异对照" path="learning_notes/两派对照/两派关键差异对照.md"
-            related="ne-1,nw-1,cp-2"/>
-      <note id="cp-2" title="选学建议与学习路径" path="learning_notes/两派对照/选学建议与学习路径.md"
-            related="cp-1,ne-1,nw-1"/>
-    </folder>
+    
   </catalog>
 
   <quizzes>
