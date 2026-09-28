@@ -1,5 +1,10 @@
 /* ============================================================
    学习模块：左侧树 + md 渲染 + 知识图谱 + 本页大纲 + 翻页
+   渲染器特性：
+     · 支持 <br> / <br/> 在任意段落、列表项内换行
+     · 支持嵌套列表（按缩进层级）
+     · 支持松散列表（空行分隔的同类项合并为一个 <ol>）
+     · 行内代码内的 <br> 保持字面显示
    ============================================================ */
 (function () {
   'use strict';
@@ -16,6 +21,8 @@
   /* ================= Markdown 渲染 ================= */
   function mdToHtml(md) {
     if (!md) return '';
+
+    // 抽取代码块占位
     var codeBlocks = [];
     md = md.replace(/```([\s\S]*?)```/g, function (_, code) {
       codeBlocks.push(code.replace(/^\n+|\n+$/g, ''));
@@ -26,58 +33,142 @@
     var html = [];
     var i = 0;
 
+    /* ---------- 行内渲染 ---------- */
     function inline(s) {
       s = C.escapeHtml(s);
+
+      // 抽取行内代码，占位（防止 <br> 还原影响代码内容）
+      var codeSnippets = [];
+      s = s.replace(/`([^`]+)`/g, function (_, c) {
+        codeSnippets.push(c);
+        return '\u0001IC' + (codeSnippets.length - 1) + '\u0001';
+      });
+
+      // 允许 <br> / <br/> / <BR> / <br > 还原为真换行标签
+      s = s.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+
+      // 图片
       s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
         '<img src="$2" alt="$1" style="max-width:100%;">');
+      // 链接
       s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
         '<a href="$2" target="_blank" rel="noopener">$1</a>');
-      s = s.replace(/`([^`]+)`/g, function (_, c) { return '<code>' + c + '</code>'; });
+      // 粗体
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // 斜体
       s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+
+      // 还原行内代码
+      s = s.replace(/\u0001IC(\d+)\u0001/g, function (_, idx) {
+        return '<code>' + codeSnippets[+idx] + '</code>';
+      });
+
       return s;
     }
 
-    function closeList(stack) {
-      while (stack.length) {
-        html.push(stack.pop() === 'ul' ? '</ul>' : '</ol>');
+    /* ---------- 列表栈 ----------
+       栈元素：{ type: 'ul'|'ol', indent: 数字, hasOpenLi: 布尔 }
+       hasOpenLi 表示该层的 <li> 还开着，等下一项或子列表结束后关闭
+    */
+    var listStack = [];
+
+    function closeAllLists() {
+      while (listStack.length > 0) {
+        var t = listStack.pop();
+        if (t.hasOpenLi) html.push('</li>');
+        html.push(t.type === 'ul' ? '</ul>' : '</ol>');
       }
     }
 
-    var listStack = [];
+    function handleListItem(indent, type, text) {
+      // 1. 关闭所有缩进比当前深的层
+      while (listStack.length > 0 &&
+             listStack[listStack.length - 1].indent > indent) {
+        var t = listStack.pop();
+        if (t.hasOpenLi) html.push('</li>');
+        html.push(t.type === 'ul' ? '</ul>' : '</ol>');
+      }
 
+      // 2. 同缩进但类型不同 → 关闭栈顶
+      if (listStack.length > 0) {
+        var top2 = listStack[listStack.length - 1];
+        if (top2.indent === indent && top2.type !== type) {
+          if (top2.hasOpenLi) html.push('</li>');
+          html.push(top2.type === 'ul' ? '</ul>' : '</ol>');
+          listStack.pop();
+        }
+      }
+
+      // 3. 需要开新列表（栈空 或 缩进比栈顶深）
+      if (listStack.length === 0 ||
+          listStack[listStack.length - 1].indent < indent) {
+        html.push('<' + type + '>');
+        listStack.push({ type: type, indent: indent, hasOpenLi: false });
+      }
+
+      // 4. 关闭上一个 <li>（同级项切换）
+      var top3 = listStack[listStack.length - 1];
+      if (top3.hasOpenLi) {
+        html.push('</li>');
+      }
+
+      // 5. 开新 <li>
+      html.push('<li>' + inline(text));
+      top3.hasOpenLi = true;
+    }
+
+    /* ---------- 主循环 ---------- */
     while (i < lines.length) {
       var line = lines[i];
 
-      if (/^\s*$/.test(line)) { closeList(listStack); i++; continue; }
+      // 空行：向前看是否仍在列表内
+      if (/^\s*$/.test(line)) {
+        var j = i + 1;
+        while (j < lines.length && /^\s*$/.test(lines[j])) j++;
+        var nextLine = j < lines.length ? lines[j] : '';
+        var nextIsList = /^\s*[-*+]\s+/.test(nextLine) ||
+                         /^\s*\d+\.\s+/.test(nextLine);
+        if (listStack.length > 0 && nextIsList) {
+          i++;              // 松散列表：跳过空行
+          continue;
+        }
+        closeAllLists();
+        i++;
+        continue;
+      }
 
+      // 代码块占位
       var codeM = line.match(/^\u0000CODE(\d+)\u0000$/);
       if (codeM) {
-        closeList(listStack);
+        closeAllLists();
         html.push('<pre><code>' + C.escapeHtml(codeBlocks[+codeM[1]]) + '</code></pre>');
         i++; continue;
       }
 
+      // 标题
       var hM = line.match(/^(#{1,6})\s+(.*)$/);
       if (hM) {
-        closeList(listStack);
+        closeAllLists();
         var lvl = hM[1].length;
         html.push('<h' + lvl + '>' + inline(hM[2]) + '</h' + lvl + '>');
         i++; continue;
       }
 
+      // 分隔线
       if (/^\s*([-*_])\s*\1\s*\1[\s\1]*$/.test(line)) {
-        closeList(listStack);
+        closeAllLists();
         html.push('<hr>'); i++; continue;
       }
 
+      // 引用块 / Callout
       if (/^\s*>\s?/.test(line)) {
-        closeList(listStack);
+        closeAllLists();
         var quote = [];
         while (i < lines.length && /^\s*>\s?/.test(lines[i])) {
           quote.push(lines[i].replace(/^\s*>\s?/, ''));
           i++;
         }
+
         var first = quote[0] || '';
         var calloutMatch = first.match(/^\*\*(.+?)\*\*\s*$/);
 
@@ -100,8 +191,10 @@
         continue;
       }
 
-      if (/\|/.test(line) && i + 1 < lines.length && /^\s*\|?[\s:|-]+\|?\s*$/.test(lines[i + 1])) {
-        closeList(listStack);
+      // 表格
+      if (/\|/.test(line) && i + 1 < lines.length &&
+          /^\s*\|?[\s:|-]+\|?\s*$/.test(lines[i + 1])) {
+        closeAllLists();
         var header = splitRow(line);
         i += 2;
         var rows = [];
@@ -114,7 +207,9 @@
         t += '</tr></thead><tbody>';
         rows.forEach(function (r) {
           t += '<tr>';
-          for (var k = 0; k < header.length; k++) t += '<td>' + inline(r[k] || '') + '</td>';
+          for (var k = 0; k < header.length; k++) {
+            t += '<td>' + inline(r[k] || '') + '</td>';
+          }
           t += '</tr>';
         });
         t += '</tbody></table>';
@@ -122,27 +217,22 @@
         continue;
       }
 
+      // 无序列表
       var ulM = line.match(/^(\s*)[-*+]\s+(.*)$/);
       if (ulM) {
-        if (!listStack.length || listStack[listStack.length - 1] !== 'ul') {
-          closeList(listStack);
-          html.push('<ul>'); listStack.push('ul');
-        }
-        html.push('<li>' + inline(ulM[2]) + '</li>');
+        handleListItem(ulM[1].length, 'ul', ulM[2]);
         i++; continue;
       }
 
+      // 有序列表
       var olM = line.match(/^(\s*)\d+\.\s+(.*)$/);
       if (olM) {
-        if (!listStack.length || listStack[listStack.length - 1] !== 'ol') {
-          closeList(listStack);
-          html.push('<ol>'); listStack.push('ol');
-        }
-        html.push('<li>' + inline(olM[2]) + '</li>');
+        handleListItem(olM[1].length, 'ol', olM[2]);
         i++; continue;
       }
 
-      closeList(listStack);
+      // 普通段落
+      closeAllLists();
       var para = [line];
       i++;
       while (i < lines.length && !/^\s*$/.test(lines[i]) &&
@@ -157,7 +247,8 @@
       }
       html.push('<p>' + inline(para.join(' ')) + '</p>');
     }
-    closeList(listStack);
+
+    closeAllLists();
     return html.join('\n');
 
     function splitRow(row) {
@@ -368,17 +459,12 @@
     rootId: null,
     expanded: {},
     tx: 0, ty: 0, scale: 1,
-
-    // 拖拽/平移状态
-    pendingDrag: null,     // { node, startX, startY, dragging }
-    draggingNode: null,    // 已进入真正拖拽的节点
+    pendingDrag: null,
+    draggingNode: null,
     panning: false,
     panStartX: 0, panStartY: 0,
     panStartTx: 0, panStartTy: 0,
-
     rafId: null,
-
-    // 物理参数
     REPULSION: 900,
     REST_LENGTH: 55,
     SPRING_K: 0.05,
@@ -503,7 +589,6 @@
     if (!vp) return;
     while (vp.firstChild) vp.removeChild(vp.firstChild);
 
-    // 边
     graphState.links.forEach(function (l) {
       var line = svgEl('line');
       line.setAttribute('class', 'graph-edge');
@@ -513,7 +598,6 @@
       l.el = line;
     });
 
-    // 节点：只有一层圆，不加透明热区
     graphState.nodes.forEach(function (n) {
       var g = svgEl('g');
       var cls = 'graph-node';
@@ -543,17 +627,12 @@
     });
   }
 
-  /* 节点交互：单击 / 双击 / 拖拽
-     关键：单击与拖拽完全靠【鼠标】位移区分，绝不看节点位置
-  */
   function bindNodeEvents(g, n) {
     var clickTimer = null;
 
     g.addEventListener('mousedown', function (e) {
       e.stopPropagation();
       if (e.button !== 0) return;
-
-      // 只登记待定拖拽，不动节点
       graphState.pendingDrag = {
         node: n,
         startX: e.clientX,
@@ -565,20 +644,12 @@
 
     g.addEventListener('click', function (e) {
       e.stopPropagation();
-
-      // 若期间进入过真正拖拽，则视为拖拽结束，不触发单击
-      if (n._moved) {
-        n._moved = false;
-        return;
-      }
-
-      // 双击第二次触发的 click，忽略
+      if (n._moved) { n._moved = false; return; }
       if (clickTimer) {
         clearTimeout(clickTimer);
         clickTimer = null;
         return;
       }
-
       clickTimer = setTimeout(function () {
         clickTimer = null;
         if (n.id !== graphState.rootId) openNote(n.id);
@@ -594,13 +665,8 @@
       toggleNodeExpanded(n.id);
     });
 
-    g.addEventListener('mouseenter', function () {
-      focusGraphOn(n);
-    });
-
-    g.addEventListener('mouseleave', function () {
-      clearGraphFocus();
-    });
+    g.addEventListener('mouseenter', function () { focusGraphOn(n); });
+    g.addEventListener('mouseleave', function () { clearGraphFocus(); });
   }
 
   function focusGraphOn(n) {
@@ -763,24 +829,20 @@
     svg._canvasBound = true;
 
     document.addEventListener('mousemove', function (e) {
-      // 1. 待定拖拽：先判断鼠标位移是否超过 3px，超过才开始拖
       var pd = graphState.pendingDrag;
       if (pd) {
         if (!pd.dragging) {
           var ddx = e.clientX - pd.startX;
           var ddy = e.clientY - pd.startY;
-          // 用平方比较，避免开方
           if (ddx * ddx + ddy * ddy > 9) {
             pd.dragging = true;
             pd.node.fixed = true;
             pd.node._moved = true;
             graphState.draggingNode = pd.node;
           } else {
-            // 未超过阈值：不拖、不动、也不影响后续 click
             return;
           }
         }
-        // 已进入真正拖拽：把节点吸到光标（此处开始才改变节点位置）
         var pt = getGraphSVGPoint(e);
         pd.node.x = pt.x;
         pd.node.y = pt.y;
@@ -789,7 +851,6 @@
         return;
       }
 
-      // 2. 画布平移
       if (graphState.panning) {
         var dx = e.clientX - graphState.panStartX;
         var dy = e.clientY - graphState.panStartY;
@@ -802,18 +863,13 @@
     document.addEventListener('mouseup', function () {
       var pd = graphState.pendingDrag;
       if (pd) {
-        if (pd.dragging) {
-          pd.node.fixed = false;
-        }
-        // 关键：保留 node._moved 供后续 click 判断
-        // 只有真正拖拽过才会是 true
+        if (pd.dragging) pd.node.fixed = false;
       }
       graphState.pendingDrag = null;
       graphState.draggingNode = null;
       graphState.panning = false;
     });
 
-    // 画布空白处平移
     svg.addEventListener('mousedown', function (e) {
       if (e.target === svg) {
         graphState.panning = true;
@@ -824,7 +880,6 @@
       }
     });
 
-    // 滚轮缩放
     svg.addEventListener('wheel', function (e) {
       e.preventDefault();
       var rect = svg.getBoundingClientRect();
@@ -841,7 +896,6 @@
       applyViewportTransform();
     }, { passive: false });
 
-    // 触摸平移
     svg.addEventListener('touchstart', function (e) {
       if (e.touches.length === 1) {
         var t = e.touches[0];
