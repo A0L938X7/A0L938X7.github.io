@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古法干支易六爻研修与实践</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+      <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+      <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+      <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+    </svg>
+    <div class="brand">易海易象探源</div>
+  </div>
+  <nav class="navbar">
+    <a href="index.html" class="active">欢迎页面</a>
+    <a href="learn.html">学习模块</a>
+    <a href="test.html">快速检测</a>
+    <a href="paipan.html">排盘软件</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+    <button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+<section class="page active" id="page-welcome">
+  <div class="welcome-wrap">
+
+    <div class="welcome-hero">
+      <h1>古法干支易六爻研修与实践</h1>
+      <div class="sub">古为今用 · 诸家总归 · 传承与实操</div>
+      <div class="divider"></div>
+      <div class="tagline">
+        本六爻教学体系以传统古论为根基，融合干支易象、李纯文多断技法，教学核心聚焦基础夯实与底层逻辑拆解。</br>
+        课程内容循序渐进，覆盖六爻从零入门到高阶实战进阶的完整学习路径。
+      </div>
+    </div>
+
+    <div class="welcome-grid">
+      <div class="welcome-intro">
+        <h2>欢迎加入：古法干支易六爻研修与实践</h2>
+        <p>多数学习者常出现“古书理论易懂、实战断卦不准”的问题。本课程将深度拆解传统古籍理论的底层逻辑，多方交叉引证，破除书本刻板教条，带领学员灵活、辩证地理解古法断卦思路。
+
+实战教学中，精准区分六神核心象义、明确六神串用条件，让学员读懂卦局整体结构，摆脱机械套公式的断卦误区，形成自主占断思维。</p>
+        <p>系统传授全套实战技法，涵盖神煞起用规则、神煞组合断法、双伏藏系统、干支易象解卦等核心技巧。
+
+教学重点讲解如何通过干支推演神煞深层象义，规范神煞取用逻辑，彻底解决实战中“神煞杂乱、象义飘忽、断卦不准”的常见问题，让断卦有理可依、有据可循。</p>
+        <p>纵向推演以卦局结构、事态脉络为核心，整合干支推演、爻位分析、神煞取象、干支易象、卦辞爻辞多维技法，完整梳理事态的起因、过程、结果，实现全局精准推演。
+横向拓展思路，传授高阶飞宫技法、特殊卦象（鬼怪卦）断法、财官专项断法、六亲组合辨析等独家技巧，多角度拆解问题核心。
+
+同时教学干支易象克应取用、风水卦断法、一象多断、多象定一象等高阶能力，大幅提升断卦的稳定性、全面性与精准度。</p>
+        <div class="callout">
+          <div class="callout-title">特别声明</div>
+          本人不盲目推崇某个书上的铁论，更注重活学活用。重点拆解旺衰判定逻辑、六神喜忌用法，从卦体结构、爻位本质解析每一爻的核心含义，通透讲解五行、干支的底层原理，帮助学员建立标准、规范的读象思维，筑牢实战根基。我和一诺老师，以及贺云飞老师有过长期的学习，对于教学有一定的经验
+        </div>
+      </div>
+      <div class="instructor-card">
+        <img class="instructor-avatar" src="img/24.jpg" alt="尔思"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="instructor-avatar-fallback" style="display:none;">24</div>
+        <div class="instructor-name">尔思</div>
+        <div class="instructor-role">讲师 · 民间六爻传承人 · 李纯文再传弟子</div>
+        <div class="instructor-desc">学易数载，尤善六爻。曾与李纯文弟子一诺老师学习六爻之法，又与贺云飞老师本人学习干支易象学，后续又陆续接触学习过多套六爻体系，最终结合自己多年的实战经验，总结出独家实战体系，信息量大，断事细腻。</div>
+      </div>
+    </div>
+
+    <div class="welcome-toc">
+      <h2>课程目录</h2>
+      <div id="toc-container"></div>
+    </div>
+
+    <div class="welcome-path">
+      <h2>推荐学习方式</h2>
+      <div class="path-grid" style="grid-template-columns:1fr;">
+        <div class="path-card">
+          <h3>学习路径建议</h3>
+          <p style="color:var(--text-2);font-size:14px;line-height:2;margin-bottom:12px;">每周学一阶段，大约十二周学完</p>
+          <ul style="list-style:none;padding-left:0;color:var(--text-2);font-size:14px;line-height:2;">
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第一周</strong>：五行、干支、八卦、纳甲
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第二周</strong>：装卦、世应、六亲、六神
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第三周</strong>：四值、空亡、月破、暗动、入墓、进退
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第四周</strong>：大伏、飞伏、世身、卦身、命爻
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第五周</strong>：六亲双意、六神组合、神煞
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第六周</strong>：生扶拱合、克害刑冲、旺衰动静
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第七周</strong>：黄金策总断千金赋
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第八周</strong>：干支易、辟卦、纳音
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第九周</strong>：分类占：婚姻、财运、家宅
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第十周</strong>：分类占：疾病、官讼、考试、出行
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第十一周</strong>：来意、一卦多断
+            </li>
+            <li style="padding:6px 0;border-bottom:1px dashed var(--border);">
+              <strong>第十二周</strong>：案例复盘、因果化解、形成个人体系
+            </li>
+            
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="start-btn-wrap">
+      <button class="btn" id="start-learning">开始学习 →</button>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer>易海易象探源 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script src="js/common.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

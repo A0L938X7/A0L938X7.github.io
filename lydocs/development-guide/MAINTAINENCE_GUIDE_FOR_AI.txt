@@ -1,0 +1,331 @@
+================================================================================
+响马卦学习系统 · 开发指南（Development Guide）
+================================================================================
+版本：v2.2
+日期：2026-09-23
+作者：姜玄衣
+技术栈：原生 HTML + CSS 变量 + 原生 JS，无框架，无构建工具
+适用：index.html / learn.html / test.html / paipan.html
+
+
+================================================================================
+第一部分  项目概述
+================================================================================
+
+1.1 定位
+
+  一个纯静态、零依赖、数据驱动的响马卦教学系统，包含四个功能页面：
+
+    index.html     欢迎主页（读取 learn.xml 生成目录）
+    learn.html     学习模块（三栏：目录树 / md 阅读器 / 图谱+大纲）
+    test.html      快速检测（读取 learn.xml 的 quizzes）
+    paipan.html    排盘软件（单文件，Shadow DOM 隔离）
+
+1.2 核心理念
+
+  · 内容与代码分离：笔记是独立 md 文件
+  · 数据驱动：learn.xml 是唯一数据源
+  · 零依赖：不引入任何外部库
+  · 可离线：HTTP 服务下完全离线可用
+  · 纸感风格：米黄纸底、宋体、齐伋体、朱砂点睛
+
+1.3 支持环境
+
+  · HTTP 服务（本地 python -m http.server 或 GitHub Pages）
+  · 不支持 file:// 直接双击（fetch 会被 CORS 拦截）
+  · 现代浏览器（Chrome / Edge / Firefox / Safari）
+
+
+================================================================================
+第二部分  目录结构
+================================================================================
+
+/
+├── index.html                  欢迎主页
+├── learn.html                  学习模块
+├── test.html                   快速检测
+├── paipan.html                 排盘（单文件）
+├── learn.xml                   目录 / 关联 / 小测数据（核心）
+├── Makefile                    维护工具
+├── .nojekyll                   GitHub Pages 跳过 Jekyll（空文件）
+│
+├── css/
+│   ├── common.css              变量 + 全局 + header + footer + 移动导航
+│   ├── index.css               欢迎页
+│   ├── learn.css               学习模块三栏 + md 正文 + 图谱 + 大纲 + 翻页
+│   └── test.css                小测
+│
+├── js/
+│   ├── common.js               主题 / 移动导航 / XML 加载 / 工具
+│   ├── index.js                首页目录渲染
+│   ├── learn.js                树 + md 渲染 + 图谱 + 大纲 + 翻页
+│   └── test.js                 小测渲染与评分
+│
+├── img/
+│   ├── jiang.jpg               讲师头像
+│   └── hero/                   Hero Image（可选）
+│
+├── fonts/
+│   └── qiji.woff2              齐伋体（可选）
+│
+├── learning_notes/             所有 Markdown 笔记
+│   ├── 东北派/
+│   ├── 西北派/
+│   │   ├── 后天卦/
+│   │   ├── 先天卦/
+│   │   └── 补充资料/
+│   └── 两派对照/
+│
+└── quizzes/                    小测数据（当前内联在 learn.xml）
+
+
+================================================================================
+第三部分  数据模型：learn.xml
+================================================================================
+
+3.1 根结构
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <site title="..." author="...">
+    <catalog>
+      <folder name="...">
+        <note id="..." title="..." path="..." related="..." hero="..."/>
+      </folder>
+    </catalog>
+    <quizzes>
+      <quiz id="..." title="..." desc="...">
+        <question q="..." a="...">
+          <opt>...</opt>
+        </question>
+      </quiz>
+    </quizzes>
+  </site>
+
+3.2 note 字段
+
+  id          唯一标识（如 ne-1 / nw-6 / cp-2）
+  title       笔记标题
+  path        md 相对路径（相对 learn.xml）
+  related     关联 id 列表，逗号分隔，驱动知识图谱
+  hero        可选，Hero Image 路径（相对项目根）
+  hero-alt    可选，Hero Image 的 alt 文字
+
+3.3 quiz 字段
+
+  id          唯一标识（如 quiz-ne-1）
+  title       小测标题
+  desc        范围说明
+  question.q  题干
+  question.a  正确答案（必须与某个 opt 完全一致）
+  <opt>       选项，2-6 个
+
+3.4 加载流程
+
+  learn.xml
+     │
+     ├─→ js/common.js 的 loadXML() / parseCatalog()
+     │        │
+     │        ├─→ js/index.js    渲染首页目录
+     │        ├─→ js/learn.js    渲染左侧树 + 加载 md + 渲染图谱
+     │        └─→ js/test.js     渲染小测目录 + 题目
+     │
+  learning_notes/*.md
+     │
+     └─→ js/learn.js 的 fetch + mdToHtml()
+              │
+              └─→ 渲染到 #module-content
+
+
+================================================================================
+第四部分  各页面布局详解
+================================================================================
+
+4.1 欢迎页（index.html）
+
+  容器：.welcome-wrap（max-width 1000px，居中）
+  结构：
+    .welcome-hero      英雄区（38px 主标题 + 副标题 + 分隔线 + 引导语）
+    .welcome-grid      两列网格（左 intro，右讲师卡片）
+    .welcome-toc       课程目录（由 learn.xml 动态生成）
+    .welcome-path      学习路径建议
+    .start-btn-wrap    开始按钮
+
+  目录由 js/index.js 读取 learn.xml 后渲染。
+
+4.2 学习模块（learn.html）
+
+  布局：.module-layout（grid，280px | 1fr | 300px）
+  高度：flex:1 + min-height:0（由 main 和 .page 传递）
+
+  左侧栏：
+    .sidebar-search-wrap   搜索框（flex-shrink:0，固定）
+    .sidebar-tree          目录树（flex:1，独立滚动）
+
+  中间：
+    .content-area          md 阅读器（独立滚动）
+      可选 .note-hero      笔记顶部大图
+      h1 + .module-sub    标题与副标题
+      .md-body             md 渲染内容
+      .module-nav          上一节 / 下一节翻页按钮
+
+  右侧栏：
+    .panel-block.graph-block    图谱（flex-shrink:0，固定）
+    .panel-block.outline-block  本页内容（flex:1，独立滚动）
+
+4.3 快速检测（test.html）
+
+  布局：.quiz-layout（grid，280px | 1fr | 220px）
+
+  左侧：小测目录（复用 .sidebar / .tree-* 样式）
+  中间：.quiz-main（首页卡片 / 答题页）
+  右侧：.score-panel（成绩环 + 统计）
+
+4.4 排盘（paipan.html）
+
+  Shadow DOM 挂载到 #pan-host
+  三 Tab：常规 / 终身 / 活盘
+  样式通过 :host / :host(.dark) 定义，与主文档隔离
+
+
+================================================================================
+第五部分  关键函数索引
+================================================================================
+
+【js/common.js】
+  isDark()                 判断当前是否暗色
+  initTheme()              初始化主题（含 localStorage）
+  initHamburger()          汉堡菜单
+  buildMobileNav()         构建移动端导航
+  loadXML(url)             XHR 加载 XML
+  parseCatalog(doc)        解析为 JS 对象
+  parseFolder(el)          解析 folder
+  parseNote(el)            解析 note（含 hero / heroAlt）
+  parseQuiz(el)            解析 quiz
+  flattenNotes(folders)    扁平化，便于 id 查询
+  toast(msg)               提示条
+  escapeHtml / pad2 / shuffle
+
+【js/index.js】
+  renderToc(data)          渲染首页目录
+  init()                   入口
+
+【js/learn.js】
+  mdToHtml(md)             Markdown → HTML
+                           （引用块逐行 inline 后 <br> 拼接）
+  renderTree()             渲染左侧树
+  makeNoteLi(note, idx)    生成单个列表项
+  buildHeroHtml(note)      生成 Hero Image HTML
+  openNote(id)             打开笔记（加载 md + 渲染 + 图谱 + 翻页）
+                           （内部含 buildNav / bindNav）
+  renderOutline(contentEl) 从 md 渲染结果提取 h2/h3/h4
+  renderGraph(activeId)    渲染知识图谱
+  buildGraphData()         根据 expanded 集合构建节点与边
+  renderGraphElements()    创建 SVG 元素（含 <a> 包裹节点）
+  bindNodeEvents(g, n)     节点交互（单击/双击/拖拽/悬浮聚焦）
+  focusGraphOn(n)          悬浮聚焦：其他节点变暗
+  clearGraphFocus()        清除聚焦
+  bindGraphCanvas(svg)     画布交互（平移 / 缩放）
+  toggleNodeExpanded(id)   展开 / 收起节点
+  startGraphSimulation()   启动力导向循环
+  simulateGraph()          单帧物理计算
+  renderGraphFrame()       单帧 DOM 更新
+
+【js/test.js】
+  renderSidebar()          渲染小测目录
+  renderHome()             渲染小测首页
+  openQuiz(id)             打开小测
+  submitQuiz(quiz, qs)     提交与判分
+  updateScorePanel()       更新成绩环
+
+
+================================================================================
+第六部分  维护任务
+================================================================================
+
+6.1 新增一篇笔记
+
+  步骤 1：创建 md 文件
+    learning_notes/<分组>/<笔记名>.md
+
+  步骤 2：在 learn.xml 的对应 folder 里加 note
+    <note id="ne-9"
+          title="秘传流运卦思路"
+          path="learning_notes/东北派/秘传流运卦思路.md"
+          hero="img/hero/东北派-流运.jpg"
+          related="ne-3,ne-6,ne-7"/>
+
+  步骤 3：如加了 hero 或改了 CSS/JS，更新 HTML 的 ?v= 版本号
+
+  步骤 4：make check 校验，make serve 预览
+
+6.2 新增一套小测
+
+  在 learn.xml 的 <quizzes> 下追加 <quiz>，格式见第三部分。
+
+  无需改任何 JS/CSS。
+
+6.3 新增一个页面
+
+  步骤 1：复制现有 HTML
+  步骤 2：改 <title> 与内容区
+  步骤 3：在 4 个 HTML 的 navbar 里加 <a>
+  步骤 4：在 js/common.js 的 PAGES 数组加一项
+  步骤 5：新建 js/<page>.js 处理逻辑
+  步骤 6：如需新样式，新建 css/<page>.css
+
+6.4 修改主题色
+
+  只需改 css/common.css 的两处变量：
+    :root { --accent: #c0392b; --accent-soft: #fff5f2; }
+    body.dark { --accent: #ff7675; --accent-soft: #2a1a1a; }
+
+6.5 修改命宫算法
+
+  位置：paipan.html 的 calcMingGongZhi 函数
+
+  现行算法（师传口述）：
+    1. 年上起月：从生肖所在宫起正月，顺数到出生月（含起点）
+    2. 月上起日：从月所在宫起初一，顺数到出生日（含起点）
+    3. 日上起命宫：男顺四位，女逆四位（含起点，偏移 3）
+
+  验证：申年三月二日男 → 命宫寅
+
+6.6 修改知识图谱交互
+
+  位置：js/learn.js 的 bindNodeEvents / focusGraphOn / clearGraphFocus
+        css/learn.css 的 .graph-viewport.has-hover 相关规则
+
+  调参：
+    · 悬浮变暗强度：改 .graph-viewport.has-hover 下的 opacity 值
+    · 力导向参数：改 graphState 的 REPULSION / REST_LENGTH / SPRING_K /
+                  GRAVITY / DAMPING
+
+
+================================================================================
+第七部分  缓存与部署
+================================================================================
+
+7.1 缓存破坏
+
+  GitHub Pages 走 CDN，CSS/JS 会被缓存。每次改代码后必须
+  更新 HTML 里的 ?v= 参数：
+
+    <link rel="stylesheet" href="css/common.css?v=20260923">
+    <script src="js/common.js?v=20260923"></script>
+
+  可用 make bump 一键更新为当前时间戳。
+
+7.2 GitHub Pages 部署
+
+  1. 创建仓库，推送全部文件
+  2. 仓库根加 .nojekyll（空文件）
+  3. Settings → Pages → Source: main / (root)
+  4. 访问 https://<user>.github.io/<repo>/
+  5. 更新后 1-2 分钟自动部署
+
+7.3 本地开发
+
+  make serve                   # 启动 HTTP 服务
+  python -m http.server 8000   # 或手动
+
+  访问 http://
