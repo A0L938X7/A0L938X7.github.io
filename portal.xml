@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portal title="太清術院" subtitle="一个免费且高质的術数学习平台">
-  <home>
+  <home hero="/img/test.jpg" hero-alt="响马卦学习中枢">
     <card id="learn"
           title="响马卦"
           subtitle="东北派 · 西北派 · 两派对照"
@@ -16,7 +16,7 @@
     
   </home>
 
-  <about>
+  <about hero="/img/test.jpg" hero-alt="响马卦学习中枢">
     <member name="姜玄衣"
             avatar="/img/test.jpg"
             role="主讲师 · 作者"
