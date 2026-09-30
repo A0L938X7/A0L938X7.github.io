@@ -1,43 +1,26 @@
 /* ============================================================
-   主门户：读取 portal.xml，渲染卡片与成员，处理主页/关于路由
+   门户主逻辑：读取 portal.xml，渲染卡片 / 成员 / Hero，处理路由
    ============================================================ */
 (function () {
   'use strict';
   var C = window.XMCommon;
 
-  /* ================= 加载 portal.xml ================= */
-  function loadPortalXML() {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'portal.xml', true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState !== 4) return;
-        if (xhr.status === 0 || (xhr.status >= 200 && xhr.status < 300)) {
-          try {
-            var doc = new DOMParser().parseFromString(xhr.responseText, 'application/xml');
-            var err = doc.querySelector('parsererror');
-            if (err) return reject(new Error('XML 解析失败'));
-            resolve(doc);
-          } catch (e) { reject(e); }
-        } else {
-          reject(new Error('加载失败 ' + xhr.status));
-        }
-      };
-      xhr.onerror = function () { reject(new Error('网络错误')); };
-      xhr.send();
-    });
-  }
-
-  /* ================= 解析 ================= */
+  /* ================= 解析 portal.xml ================= */
   function parsePortal(doc) {
     var root = doc.documentElement;
 
     var title = root.getAttribute('title') || '响马卦 · 学习中枢';
     var subtitle = root.getAttribute('subtitle') || '';
 
+    /* ----- 主页 ----- */
     var home = [];
+    var homeHero = null;
     var homeEl = root.querySelector('home');
     if (homeEl) {
+      homeHero = {
+        image: homeEl.getAttribute('hero') || '',
+        alt: homeEl.getAttribute('hero-alt') || title
+      };
       Array.prototype.forEach.call(homeEl.querySelectorAll('card'), function (el) {
         home.push({
           id: el.getAttribute('id') || '',
@@ -50,9 +33,19 @@
       });
     }
 
+    /* ----- 关于我们 ----- */
     var about = [];
+    var aboutHero = null;
+    var aboutTitle = '关于我们';
+    var aboutSubtitle = '讲师与整理者';
     var aboutEl = root.querySelector('about');
     if (aboutEl) {
+      aboutTitle = aboutEl.getAttribute('title') || aboutTitle;
+      aboutSubtitle = aboutEl.getAttribute('subtitle') || aboutSubtitle;
+      aboutHero = {
+        image: aboutEl.getAttribute('hero') || '',
+        alt: aboutEl.getAttribute('hero-alt') || aboutTitle
+      };
       Array.prototype.forEach.call(aboutEl.querySelectorAll('member'), function (el) {
         about.push({
           name: el.getAttribute('name') || '',
@@ -66,7 +59,38 @@
       });
     }
 
-    return { title: title, subtitle: subtitle, home: home, about: about };
+    return {
+      title: title,
+      subtitle: subtitle,
+      home: home,
+      homeHero: homeHero,
+      about: about,
+      aboutHero: aboutHero,
+      aboutTitle: aboutTitle,
+      aboutSubtitle: aboutSubtitle
+    };
+  }
+
+  /* ================= 应用 Hero ================= */
+  function applyHero(heroEl, heroData) {
+    if (!heroEl) return;
+    var bg = heroEl.querySelector('.page-hero-bg');
+    if (!bg) return;
+
+    if (heroData && heroData.image) {
+      // 预加载图片，确保可用再设置背景
+      var probe = new Image();
+      probe.onload = function () {
+        bg.style.backgroundImage = 'url("' + heroData.image.replace(/"/g, '\\"') + '")';
+        heroEl.classList.add('has-image');
+      };
+      probe.onerror = function () {
+        heroEl.classList.remove('has-image');
+      };
+      probe.src = heroData.image;
+    } else {
+      heroEl.classList.remove('has-image');
+    }
   }
 
   /* ================= 渲染主页卡片 ================= */
@@ -108,7 +132,6 @@
       imgWrap.classList.add('no-image');
     }
 
-    /* 未开放：锁 + 角标 */
     if (!isAvailable) {
       var lock = document.createElement('div');
       lock.className = 'card-lock';
@@ -145,7 +168,7 @@
       body.appendChild(sub);
     }
 
-    /* ----- 展开区（描述 + 进入按钮） ----- */
+    /* ----- 展开区 ----- */
     if (card.desc || isAvailable) {
       var expand = document.createElement('div');
       expand.className = 'card-expand';
@@ -167,7 +190,6 @@
         enter.textContent = '进入 →';
         enter.addEventListener('click', function (e) {
           e.stopPropagation();
-          // 让浏览器原生跳转（不带 target，当前页跳转）
         });
         inner.appendChild(enter);
       }
@@ -181,22 +203,19 @@
     /* ----- 交互 ----- */
     function toggle() {
       if (!isAvailable) {
-        if (C.toast) C.toast('此内容尚未开放');
+        C.toast('此内容尚未开放');
         return;
       }
-      // 若可展开内容，切换展开状态
       if (el.querySelector('.card-expand')) {
         if (el.classList.contains('expanded')) {
           el.classList.remove('expanded');
         } else {
-          // 收起其他展开的卡片
           document.querySelectorAll('.portal-card.expanded').forEach(function (c) {
             c.classList.remove('expanded');
           });
           el.classList.add('expanded');
         }
       } else {
-        // 无描述内容，直接跳转
         location.href = card.link;
       }
     }
@@ -230,10 +249,8 @@
     var el = document.createElement('div');
     el.className = 'member-card';
 
-    /* 头像 */
     var avatarWrap = document.createElement('div');
     avatarWrap.className = 'member-avatar-wrap';
-
     var fallbackText = (m.name || '?').slice(0, 1);
 
     if (m.avatar) {
@@ -244,19 +261,16 @@
       img.onerror = function () {
         avatarWrap.innerHTML =
           '<div class="member-avatar-fallback">' +
-          C.escapeHtml(fallbackText) +
-          '</div>';
+          C.escapeHtml(fallbackText) + '</div>';
       };
       avatarWrap.appendChild(img);
     } else {
       avatarWrap.innerHTML =
         '<div class="member-avatar-fallback">' +
-        C.escapeHtml(fallbackText) +
-        '</div>';
+        C.escapeHtml(fallbackText) + '</div>';
     }
     el.appendChild(avatarWrap);
 
-    /* 内容 */
     var body = document.createElement('div');
     body.className = 'member-body';
 
@@ -266,28 +280,24 @@
       name.textContent = m.name;
       body.appendChild(name);
     }
-
     if (m.role) {
       var role = document.createElement('div');
       role.className = 'member-role';
       role.textContent = m.role;
       body.appendChild(role);
     }
-
     if (m.bio) {
       var bio = document.createElement('div');
       bio.className = 'member-bio';
       bio.textContent = m.bio;
       body.appendChild(bio);
     }
-
     if (m.message) {
       var msg = document.createElement('div');
       msg.className = 'member-message';
       msg.textContent = m.message;
       body.appendChild(msg);
     }
-
     if (m.contact) {
       var contact = document.createElement('div');
       contact.className = 'member-contact';
@@ -299,7 +309,7 @@
     return el;
   }
 
-  /* ================= 路由：主页 / 关于我们 ================= */
+  /* ================= 路由 ================= */
   function goPage(page) {
     document.querySelectorAll('.page').forEach(function (p) {
       p.classList.remove('active');
@@ -310,12 +320,15 @@
     document.querySelectorAll('.navbar a[data-page]').forEach(function (a) {
       a.classList.toggle('active', a.dataset.page === page);
     });
+    document.querySelectorAll('.mobile-nav-item[data-page]').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.page === page);
+    });
 
     if (history.replaceState) {
       if (page === 'home') {
-        history.replaceState(null, '', 'portal.html');
+        history.replaceState(null, '', location.pathname);
       } else {
-        history.replaceState(null, '', 'portal.html#' + page);
+        history.replaceState(null, '', location.pathname + '#' + page);
       }
     }
   }
@@ -333,13 +346,13 @@
     var nav = document.getElementById('mobile-nav');
     if (!nav) return;
     nav.innerHTML = '';
-    var items = [
+    [
       { label: '主页', page: 'home' },
       { label: '关于我们', page: 'about' }
-    ];
-    items.forEach(function (item) {
+    ].forEach(function (item) {
       var btn = document.createElement('button');
       btn.className = 'mobile-nav-item';
+      btn.dataset.page = item.page;
       btn.textContent = item.label;
       btn.addEventListener('click', function () {
         goPage(item.page);
@@ -358,32 +371,44 @@
     initNav();
     initMobileNav();
 
-    /* 太极图标点击返回主页 */
-    var taijiLink = document.querySelector('.taiji-link');
-    if (taijiLink) {
-      taijiLink.addEventListener('click', function (e) {
+    /* 太极图标 → 返回主页 */
+    var taiji = document.getElementById('taiji-home');
+    if (taiji) {
+      taiji.addEventListener('click', function (e) {
         e.preventDefault();
         goPage('home');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
 
-    /* 从 hash 判断初始页 */
+    /* hash 路由 */
     var hash = (location.hash || '').replace('#', '');
-    if (hash === 'about') {
-      goPage('about');
-    }
+    if (hash === 'about') goPage('about');
+    window.addEventListener('hashchange', function () {
+      var h = (location.hash || '').replace('#', '');
+      goPage(h === 'about' ? 'about' : 'home');
+    });
 
     /* 加载配置 */
-    loadPortalXML().then(function (doc) {
+    C.loadXML('portal.xml').then(function (doc) {
       var data = parsePortal(doc);
 
-      // 更新标题
+      /* ----- 主页 ----- */
       var titleEl = document.getElementById('portal-title');
       var subEl = document.getElementById('portal-subtitle');
       if (titleEl) titleEl.textContent = data.title;
       if (subEl) subEl.textContent = data.subtitle;
       document.title = data.title;
+      applyHero(document.getElementById('home-hero'), data.homeHero);
 
+      /* ----- 关于我们 ----- */
+      var aboutTitleEl = document.getElementById('about-title');
+      var aboutSubEl = document.getElementById('about-subtitle');
+      if (aboutTitleEl) aboutTitleEl.textContent = data.aboutTitle;
+      if (aboutSubEl) aboutSubEl.textContent = data.aboutSubtitle;
+      applyHero(document.getElementById('about-hero'), data.aboutHero);
+
+      /* ----- 渲染内容 ----- */
       renderHome(data.home);
       renderAbout(data.about);
     }).catch(function (err) {
