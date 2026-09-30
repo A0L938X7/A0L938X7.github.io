@@ -43,12 +43,13 @@
 
 /* ============================================================
    主页：卡片网格
+   注意：卡片展开时不能影响同行其他卡片，所以用 align-items:start
    ============================================================ */
 .card-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
   gap:24px;
-  align-items:start;         /* ★ 关键：卡片按自身高度显示，不被行高拉伸 */
+  align-items:start;         /* ★ 主页专用：卡片各自按自身高度显示 */
 }
 
 .portal-card{
@@ -61,10 +62,10 @@
   overflow:hidden;
   border-radius:0;
   outline:none;
+  align-self:start;          /* ★ 兼容：显式声明不拉伸 */
   transition:transform .22s cubic-bezier(.16,1,.3,1),
              box-shadow .22s cubic-bezier(.16,1,.3,1),
              border-color .15s ease;
-  align-self:start;          /* ★ 兼容：显式声明不拉伸 */
 }
 .portal-card:focus-visible{
   border-color:var(--accent);
@@ -75,9 +76,7 @@
   box-shadow:0 10px 28px rgba(0,0,0,0.10);
   border-color:var(--border-3);
 }
-.portal-card.disabled{
-  cursor:not-allowed;
-}
+.portal-card.disabled{cursor:not-allowed;}
 .portal-card.disabled:hover{
   transform:none;
   box-shadow:0 1px 3px rgba(0,0,0,0.05);
@@ -103,16 +102,12 @@
   display:block;
   transition:transform .35s cubic-bezier(.16,1,.3,1);
 }
-.portal-card:hover .card-image img{
-  transform:scale(1.04);
-}
+.portal-card:hover .card-image img{transform:scale(1.04);}
 .portal-card.disabled .card-image img{
   filter:grayscale(1) brightness(0.72);
   opacity:.65;
 }
-.portal-card.disabled:hover .card-image img{
-  transform:none;
-}
+.portal-card.disabled:hover .card-image img{transform:none;}
 .card-image.no-image{
   background:linear-gradient(135deg, var(--bg-card-soft), var(--bg-soft));
 }
@@ -185,9 +180,7 @@
   transition:grid-template-rows .35s cubic-bezier(.16,1,.3,1);
   overflow:hidden;
 }
-.portal-card.expanded .card-expand{
-  grid-template-rows:1fr;
-}
+.portal-card.expanded .card-expand{grid-template-rows:1fr;}
 .card-expand > .card-expand-inner{
   min-height:0;
   overflow:hidden;
@@ -220,30 +213,34 @@
 
 /* ============================================================
    关于我们：成员卡片
+   注意：成员卡片必须等高对齐，所以用默认 align-items:stretch，
+        卡片本身不设 align-self:start
    ============================================================ */
 .member-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
   gap:80px 24px;
   padding-top:60px;
-  align-items:start;         /* ★ 同样不拉伸 */
+  /* 默认 align-items:stretch —— 卡片等高对齐 */
 }
+
 .member-card{
   position:relative;
   background:var(--bg-card);
   border:1px solid var(--border);
   box-shadow:0 1px 3px rgba(0,0,0,0.05);
   padding:72px 22px 26px;
-  text-align:center;
   border-radius:0;
+  display:flex;                /* ★ 新增：让内部纵向排布可控 */
+  flex-direction:column;
   transition:transform .22s cubic-bezier(.16,1,.3,1),
              box-shadow .22s cubic-bezier(.16,1,.3,1);
-  align-self:start;
 }
 .member-card:hover{
   transform:translateY(-3px);
   box-shadow:0 10px 28px rgba(0,0,0,0.10);
 }
+
 .member-avatar-wrap{
   position:absolute;
   top:-55px;
@@ -274,12 +271,15 @@
   color:var(--accent);
   background:var(--bg-card-soft);
 }
+
 .member-body{
   display:flex;
   flex-direction:column;
   gap:6px;
   text-align:left;
+  flex:1;                       /* ★ 撑满剩余空间 */
 }
+
 .member-name{
   font-family:var(--font-qiji);
   font-size:20px;
@@ -312,7 +312,7 @@
 .member-contact{
   font-size:12.5px;
   color:var(--text-4);
-  margin-top:10px;
+  margin-top:auto;              /* ★ 贴到卡片底部 */
   padding-top:10px;
   border-top:1px dashed var(--border);
   word-break:break-all;
@@ -327,34 +327,14 @@
   transition:opacity .15s ease;
   cursor:pointer;
 }
-.taiji-link:hover{
-  opacity:.75;
-  text-decoration:none;
-}
+.taiji-link:hover{opacity:.75;text-decoration:none;}
 
 /* ===== 响应式 ===== */
 @media (max-width:820px){
-  .portal-wrap{
-    padding:24px 16px 60px;
-  }
-  .portal-hero{
-    margin-bottom:28px;
-  }
-  .portal-hero h1{
-    font-size:24px;
-    letter-spacing:4px;
-  }
-  .portal-sub{
-    font-size:13px;
-    letter-spacing:2px;
-  }
-  .card-grid{
-    grid-template-columns:1fr;
-    gap:16px;
-  }
-  .member-grid{
-    grid-template-columns:1fr;
-    gap:80px 16px;
-    padding-top:40px;
-  }
+  .portal-wrap{padding:24px 16px 60px;}
+  .portal-hero{margin-bottom:28px;}
+  .portal-hero h1{font-size:24px;letter-spacing:4px;}
+  .portal-sub{font-size:13px;letter-spacing:2px;}
+  .card-grid{grid-template-columns:1fr;gap:16px;}
+  .member-grid{grid-template-columns:1fr;gap:80px 16px;padding-top:40px;}
 }
