@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>太清術院</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="portal.html" class="taiji-link" title="返回主页">
+      <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
+        <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
+        <circle cx="50" cy="26" r="24" fill="var(--taiji-yang)"/>
+        <circle cx="50" cy="74" r="24" fill="var(--taiji-yin)"/>
+        <circle cx="50" cy="26" r="7" fill="var(--taiji-yin)"/>
+        <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
+      </svg>
+    </a>
+    <div class="brand">太清術院</div>
+  </div>
+  <nav class="navbar">
+    <a href="portal.html" data-page="home" class="active">主页</a>
+    <a href="#about" data-page="about">关于我们</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn hamburger" id="hamburger" title="菜单">☰</button>
+    <button class="icon-btn" id="theme-toggle" title="切换昼夜模式">🌙</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"></div>
+
+<main>
+  <section class="page active" id="page-home">
+    <div class="portal-wrap">
+      <div class="portal-hero">
+        <h1 id="portal-title">太清術院</h1>
+        <p class="portal-sub" id="portal-subtitle">一个免费且高质量的術数学习站点</p>
+      </div>
+      <div class="card-grid" id="home-grid">
+        <div class="portal-loading">正在加载…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-about">
+    <div class="portal-wrap">
+      <div class="portal-hero">
+        <h1>关于我们</h1>
+        <p class="portal-sub">讲师与整理者</p>
+      </div>
+      <div class="member-grid" id="member-grid">
+        <div class="portal-loading">正在加载…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>太清術院学习站点 · 作者：姜玄衣 · 仅供学习研究</footer>
+
+<script src="js/common.js"></script>
+<script src="js/portal.js"></script>
+</body>
+</html>

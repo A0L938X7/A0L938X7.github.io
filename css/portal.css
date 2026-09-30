@@ -1,0 +1,384 @@
+/* ============================================================
+   主门户站点：卡片网格 + 关于我们
+   复用 css/common.css 的变量与 header / footer
+   ============================================================ */
+
+/* ===== 页面容器 ===== */
+.page.active{overflow-y:auto;}
+
+.portal-wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+  width:100%;
+}
+
+.portal-hero{
+  text-align:center;
+  margin-bottom:44px;
+}
+
+.portal-hero h1{
+  font-family:var(--font-qiji);
+  font-size:32px;
+  letter-spacing:6px;
+  font-weight:400;
+  margin-bottom:10px;
+  color:var(--text);
+  line-height:1.4;
+}
+
+.portal-sub{
+  font-size:15px;
+  color:var(--text-3);
+  letter-spacing:4px;
+}
+
+.portal-loading{
+  grid-column:1 / -1;
+  padding:40px;
+  text-align:center;
+  color:var(--text-4);
+  font-size:14px;
+}
+
+/* ============================================================
+   主页：卡片网格
+   ============================================================ */
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:24px;
+}
+
+/* ===== 门户卡片 ===== */
+.portal-card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  transition:transform .22s cubic-bezier(.16,1,.3,1),
+             box-shadow .22s cubic-bezier(.16,1,.3,1),
+             border-color .15s ease;
+  /* 锐角 */
+  border-radius:0;
+  /* 键盘可访问 */
+  outline:none;
+}
+.portal-card:focus-visible{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent-soft);
+}
+
+.portal-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+  border-color:var(--border-3);
+}
+
+.portal-card.disabled{
+  cursor:not-allowed;
+}
+.portal-card.disabled:hover{
+  transform:none;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  border-color:var(--border);
+}
+
+.portal-card.expanded{
+  border-color:var(--accent);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+}
+
+/* ===== 图片区 ===== */
+.card-image{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  background:var(--bg-card-soft);
+  overflow:hidden;
+}
+
+.card-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.portal-card:hover .card-image img{
+  transform:scale(1.04);
+}
+.portal-card.disabled .card-image img{
+  filter:grayscale(1) brightness(0.72);
+  opacity:.65;
+}
+.portal-card.disabled:hover .card-image img{
+  transform:none;
+}
+
+/* 无图片时的占位背景 */
+.card-image.no-image{
+  background:linear-gradient(135deg, var(--bg-card-soft), var(--bg-soft));
+}
+.card-image.no-image::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 12px,
+    rgba(0,0,0,0.025) 12px,
+    rgba(0,0,0,0.025) 24px
+  );
+  pointer-events:none;
+}
+
+/* 未开放的锁图标 */
+.card-lock{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:rgba(255,255,255,0.95);
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  pointer-events:none;
+  z-index:2;
+}
+
+/* 未开放角标 */
+.card-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:3px 10px;
+  font-size:11px;
+  letter-spacing:1.5px;
+  background:var(--accent);
+  color:#fff;
+  z-index:2;
+  font-family:var(--font-qiji);
+}
+
+/* ===== 内容区 ===== */
+.card-body{
+  padding:18px 20px 20px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.card-title{
+  font-family:var(--font-qiji);
+  font-size:19px;
+  letter-spacing:2px;
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:6px;
+  line-height:1.4;
+}
+
+.card-subtitle{
+  font-size:13px;
+  color:var(--text-3);
+  letter-spacing:1px;
+  line-height:1.5;
+}
+
+/* ===== 展开区（描述 + 进入按钮） ===== */
+.card-expand{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows .35s cubic-bezier(.16,1,.3,1);
+  overflow:hidden;
+}
+.portal-card.expanded .card-expand{
+  grid-template-rows:1fr;
+}
+.card-expand > .card-expand-inner{
+  min-height:0;
+  overflow:hidden;
+}
+
+.card-desc{
+  font-size:13.5px;
+  color:var(--text-2);
+  line-height:1.9;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px dashed var(--border);
+}
+
+.card-enter{
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 16px;
+  font-size:13px;
+  color:var(--accent);
+  border:1px solid var(--accent);
+  text-decoration:none;
+  letter-spacing:1px;
+  transition:background .15s ease, color .15s ease;
+  align-self:flex-start;
+  font-family:inherit;
+}
+.card-enter:hover{
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+}
+
+/* ============================================================
+   关于我们：成员卡片
+   ============================================================ */
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:80px 24px;
+  padding-top:60px;
+}
+
+.member-card{
+  position:relative;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  padding:72px 22px 26px;
+  text-align:center;
+  transition:transform .22s cubic-bezier(.16,1,.3,1),
+             box-shadow .22s cubic-bezier(.16,1,.3,1);
+  border-radius:0;
+}
+.member-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+}
+
+/* 圆形头像：一半在卡片上，一半悬空 */
+.member-avatar-wrap{
+  position:absolute;
+  top:-55px;
+  left:50%;
+  transform:translateX(-50%);
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid var(--bg);
+  background:var(--bg-card-soft);
+  box-shadow:0 4px 16px rgba(0,0,0,0.10);
+}
+.member-avatar{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.member-avatar-fallback{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-qiji);
+  font-size:44px;
+  color:var(--accent);
+  background:var(--bg-card-soft);
+}
+
+.member-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  text-align:left;
+}
+
+.member-name{
+  font-family:var(--font-qiji);
+  font-size:20px;
+  letter-spacing:3px;
+  color:var(--text);
+  text-align:center;
+  margin-bottom:2px;
+}
+
+.member-role{
+  font-size:12.5px;
+  color:var(--accent);
+  letter-spacing:1px;
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.member-bio{
+  font-size:13.5px;
+  color:var(--text-2);
+  line-height:1.9;
+}
+
+.member-message{
+  font-size:13px;
+  color:var(--text-3);
+  line-height:1.8;
+  border-left:2px solid var(--accent);
+  padding-left:10px;
+  margin-top:8px;
+  font-style:italic;
+}
+
+.member-contact{
+  font-size:12.5px;
+  color:var(--text-4);
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px dashed var(--border);
+  word-break:break-all;
+}
+
+/* ============================================================
+   太极图标链接
+   ============================================================ */
+.taiji-link{
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  color:inherit;
+  transition:opacity .15s ease;
+}
+.taiji-link:hover{
+  opacity:.75;
+  text-decoration:none;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width:820px){
+  .portal-wrap{
+    padding:24px 16px 60px;
+  }
+  .portal-hero{
+    margin-bottom:28px;
+  }
+  .portal-hero h1{
+    font-size:24px;
+    letter-spacing:4px;
+  }
+  .portal-sub{
+    font-size:13px;
+    letter-spacing:2px;
+  }
+  .card-grid{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  .member-grid{
+    grid-template-columns:1fr;
+    gap:80px 16px;
+    padding-top:40px;
+  }
+}
