@@ -437,3 +437,162 @@
     padding-top:40px;
   }
 }
+
+/* ============================================================
+   阴云雨幕（装饰层）
+   · 昏暗的雨云天色 + 云雾自下而上漂浮 + 雨丝
+   · 纯装饰：固定定位、pointer-events:none，不参与布局
+   · 卡片与成员档案的样式一律不动，只是浮在雨幕之上
+   ============================================================ */
+body{
+  background:#050505;                 /* 云层之外的底色也保持昏暗（纯黑灰，无冷色） */
+}
+
+.storm{
+  position:fixed;
+  inset:0;
+  z-index:0;                          /* 最底层天色：在 Hero 图与所有部件之下 */
+  overflow:hidden;
+  pointer-events:none;
+  contain:paint;                      /* 隔离绘制，减少整页重绘 */
+  /* 云后一点天光 + 暗角都并入这里的渐变：
+     天光原是一个 mix-blend-mode 图层、暗角原是一个独立图层，
+     两者都会加大每帧合成开销；现在它们只是静态渐变（无 JS 时也成立），
+     JS 正常运行时暗角由云画布再画一次，效果一致 */
+  background:
+    radial-gradient(58% 42% at 76% 16%, rgba(255,255,255,.075), rgba(255,255,255,0) 72%),
+    radial-gradient(132% 92% at 50% 38%, rgba(0,0,0,0) 40%, rgba(0,0,0,.58) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.46) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,.38) 100%),
+    radial-gradient(125% 85% at 78% 14%, #3c3c3c 0%, #171717 46%, #050505 100%),
+    linear-gradient(to bottom, #070707 0%, #0d0d0d 55%, #050505 100%);
+}
+
+/* 两层云：远层慢而虚、近层快而实，形成自下而上的漂浮与纵深
+   几何：盒子 4 块 tile 高（每块 = 1 个视口高），每周期正好上移"一块"，
+   图案与起始帧完全重合（云图双向无缝），盒底始终在视口之外。
+   性能要点：明暗与模糊都烘焙进图片，这里只留 opacity + transform。
+   （曾试过把云搬进画布做 pattern 填充：实测 193ms/帧，比这里慢一个数量级，已回退。） */
+.storm-layer{
+  position:absolute;
+  left:-6%; right:-6%;
+  top:-100%;
+  height:400%;
+  background-repeat:repeat-y;
+  background-size:100% 25%;
+  will-change:transform;
+  backface-visibility:hidden;
+  animation:storm-rise 150s linear infinite;
+}
+.storm-far{
+  background-image:url("../img/portal/storm-clouds-far.jpg");
+  opacity:.50;
+  animation-duration:55s;                 /* 约 16 px/s */
+}
+.storm-near{
+  background-image:url("../img/portal/storm-clouds.jpg");
+  opacity:.86;
+  animation-duration:30s;                 /* 约 30 px/s，比最初快 4 倍 */
+  animation-delay:-10s;
+}
+@keyframes storm-rise{
+  from{ transform:translate3d(0,0,0); }
+  to{ transform:translate3d(0,-25%,0); }   /* 正好一块 tile */
+}
+
+/* 弱机降级：js/portal.js 依实测帧时间设置 html[data-q] */
+html[data-q="1"] .storm-far{ opacity:.38; }
+html[data-q="0"] .storm-far{ display:none; }         /* 只留一层云：合成面积减半 */
+html[data-q="0"] .storm-near{ animation-duration:44s; }
+
+/* 暗角：静态图层，不参与动画 */
+.storm-vignette{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(132% 92% at 50% 38%, rgba(0,0,0,0) 38%, rgba(0,0,0,.58) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.46) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,.38) 100%);
+}
+
+/* 云后一点天光已并入 .storm 渐变，不再单独占一层，也不再做呼吸动画 */
+.storm-rain{
+  position:fixed;
+  inset:0;
+  z-index:2;                          /* 盖在 Hero 图上、卡片与文字之下 */
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+}
+
+/* 页面部件浮在雨幕之上：雨丝不穿过卡片、文字与页脚
+   注意：.page-hero-content 必须保持原有的 position:absolute + inset:0（标题在 Hero 内居中），
+   这里只补 z-index，绝不能改成 position:relative */
+.portal-card,
+.member-card,
+.portal-loading{
+  position:relative;
+  z-index:3;
+}
+.page-hero-content{ z-index:3; }
+
+/* 顶栏与导航：暗色半透明（不做 backdrop-filter 磨砂——页面背后是整屏动画，
+   磨砂会逼浏览器每帧重新模糊整屏，是卡顿的首要来源） */
+header{
+  background:rgba(8,8,8,.78);
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.brand{ color:#eaeaea; }
+.navbar a{ color:#b4b4b4; border-right-color:rgba(255,255,255,.10); }
+.navbar a:first-child{ border-left-color:rgba(255,255,255,.10); }
+.navbar a:hover{ background:rgba(255,255,255,.07); color:#fff; }
+.navbar a.active{ background:#e6e6e6; color:#0d0d0d; }
+.icon-btn{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.18);
+  color:#d2d2d2;
+}
+.icon-btn:hover{ background:rgba(255,255,255,.14); }
+
+.mobile-nav{
+  background:rgba(10,10,10,.97);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.mobile-nav-item{ color:#c4c4c4; border-bottom-color:rgba(255,255,255,.08); }
+.mobile-nav-item:hover{ background:rgba(255,255,255,.07); color:#fff; }
+.mobile-nav-item.active{
+  color:#f08b84;
+  background:rgba(192,57,43,.22);
+  border-left-color:#c0392b;
+}
+.mobile-nav-group-title{
+  color:#f08b84;
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.08);
+}
+.mobile-nav-subgroup-title{
+  color:#8f8f8f;
+  background:rgba(255,255,255,.03);
+  border-color:rgba(255,255,255,.06);
+}
+.mobile-nav-page-label{ color:#8f8f8f; }
+.mobile-nav-divider{ border-top-color:rgba(255,255,255,.16); }
+
+footer{
+  position:relative;
+  z-index:3;
+  background:transparent;
+  border-top:1px solid rgba(255,255,255,.14);
+  color:#ababab;
+}
+.portal-loading{ color:#969696; }
+.portal-sub{ /* Hero 副标题在雨幕上保持可读 */ text-shadow:0 1px 8px rgba(0,0,0,.75); }
+
+/* Hero 图保留，只在底缘化开，与雨云自然衔接 */
+.page-hero{
+  -webkit-mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.45) 92%,transparent 100%);
+          mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.45) 92%,transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .storm-layer{ animation:none; }
+}
