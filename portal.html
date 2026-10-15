@@ -4,10 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>太清術院</title>
-<link rel="stylesheet" href="css/common.css">
-<link rel="stylesheet" href="css/portal.css">
+<link rel="stylesheet" href="css/common.css?v=20261020">
+<link rel="stylesheet" href="css/portal.css?v=20261020">
 </head>
 <body>
+
+<!-- 阴云天色：静态渐变兜底。两层云走 CSS 合成器变换——
+     实测比画布 pattern 填充快一个数量级（7ms vs 193ms/帧） -->
+<div class="storm" aria-hidden="true">
+  <div class="storm-layer storm-far"></div>
+  <div class="storm-layer storm-near"></div>
+  <div class="storm-vignette"></div>
+</div>
+
+<!-- 雨与上浮云雾：盖在 Hero 图上、卡片与文字之下 -->
+<canvas class="storm-rain" id="storm-rain" aria-hidden="true"></canvas>
 
 <header>
   <div class="header-left">
@@ -69,7 +80,7 @@
 
 <footer>太清術院学习站点 · 作者：姜玄衣 · 仅供学习研究</footer>
 
-<script src="js/common.js"></script>
-<script src="js/portal.js"></script>
+<script src="js/common.js?v=20261020"></script>
+<script src="js/portal.js?v=20261020"></script>
 </body>
 </html>
