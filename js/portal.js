@@ -364,10 +364,243 @@
     });
   }
 
+  /* ================= 雨幕 / 云雾（纯装饰，独立于页面部件） ================= */
+  function initStorm() {
+    var cv = document.getElementById('storm-rain');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d', { alpha: true, desynchronized: true });
+
+    /* 自适应画质：按实测帧时间分三档（2 高 / 1 中 / 0 低）。
+       低档减少雨量与雾量，并通过 html[data-q="0"] 让 CSS 砍掉一层云，
+       这样在弱机/软件渲染上也能保住动感而不是掉到个位数帧率。 */
+    var quality = { level: 2, sum: 0, n: 0, cool: 0 };
+    function qMul() { return quality.level === 2 ? 1 : (quality.level === 1 ? .62 : .36); }
+
+    var BUCKETS = 8;                         // 雨丝按透明度分 8 档批量绘制
+    var BUCKET_ALPHA = (function () {
+      var out = [];
+      for (var i = 0; i < BUCKETS; i++) out.push(.07 + (.30 - .07) * (i + .5) / BUCKETS);
+      return out;
+    })();
+    var bucketList = (function () {
+      var out = [];
+      for (var i = 0; i < BUCKETS; i++) out.push([]);
+      return out;
+    })();
+    function bucketOf(a) {
+      var b = Math.floor((a - .07) / ((.30 - .07) / BUCKETS));
+      return b < 0 ? 0 : (b >= BUCKETS ? BUCKETS - 1 : b);
+    }
+
+    var reduce = false;
+    try {
+      reduce = !!(window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (e) {}
+
+    var W = 0, H = 0, dpr = 1, raf = null, last = 0, running = false;
+    var drops = [], mists = [];
+    var SLANT = 0.15;                        // 雨丝斜度
+
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+
+    /* 预渲染一根雨丝（渐变 + 斜度），逐帧只做 drawImage */
+    var sprite = document.createElement('canvas');
+    sprite.width = 10; sprite.height = 180;
+    (function () {
+      var sc = sprite.getContext('2d');
+      var g = sc.createLinearGradient(0, 0, 0, 180);
+      g.addColorStop(0, 'rgba(255,255,255,0)');
+      g.addColorStop(.45, 'rgba(255,255,255,.42)');
+      g.addColorStop(1, 'rgba(255,255,255,.95)');
+      sc.fillStyle = g;
+      sc.beginPath();
+      sc.moveTo(8.4, 0); sc.lineTo(9.6, 0); sc.lineTo(1.6, 180); sc.lineTo(.4, 180);
+      sc.closePath(); sc.fill();
+    })();
+
+    /* 雾贴图：十几处错落柔斑叠成（不是正圆）；再预渲染几款转向，避免逐帧旋转 */
+    var mistSprite = document.createElement('canvas');
+    mistSprite.width = mistSprite.height = 256;
+    (function () {
+      var mc = mistSprite.getContext('2d');
+      for (var i = 0; i < 11; i++) {
+        var mx = rnd(58, 198), my = rnd(58, 198), mr = rnd(44, 116);
+        var mg = mc.createRadialGradient(mx, my, 0, mx, my, mr);
+        mg.addColorStop(0, 'rgba(242,242,242,.19)');
+        mg.addColorStop(.6, 'rgba(242,242,242,.08)');
+        mg.addColorStop(1, 'rgba(242,242,242,0)');
+        mc.fillStyle = mg;
+        mc.beginPath();
+        mc.arc(mx, my, mr, 0, Math.PI * 2);
+        mc.fill();
+      }
+    })();
+    var MIST_VARIANTS = 5;
+    var mistPics = [];
+    for (var mv = 0; mv < MIST_VARIANTS; mv++) {
+      var mcv = document.createElement('canvas');
+      mcv.width = mcv.height = 256;
+      var mcx = mcv.getContext('2d');
+      mcx.translate(128, 128);
+      mcx.rotate(mv * Math.PI * 2 / MIST_VARIANTS);
+      mcx.scale(1 - mv * 0.02, 1 + mv * 0.02);
+      mcx.drawImage(mistSprite, -128, -128);
+      mistPics.push(mcv);
+    }
+
+    function newDrop(seed) {
+      var a = rnd(.07, .30);
+      return {
+        x: rnd(-.12, 1.12) * W,
+        y: seed ? rnd(-1, 1) * H : rnd(-.3, -.02) * H,
+        len: rnd(34, 120),                   // 雨丝更短（速度提上来后靠拖影读动感）
+        spd: rnd(1150, 2200),                // 下落更快
+        alpha: a,
+        b: bucketOf(a),                      // 预分桶：绘制时按桶批量切 globalAlpha
+        w: rnd(3.0, 7.0)
+      };
+    }
+    function newMist(seed) {
+      return {
+        x: rnd(0, 1) * W,
+        y: seed ? rnd(-.15, 1) * H : rnd(1.02, 1.34) * H,
+        r: rnd(150, 400),                    // 单片更小 → 全屏重复覆盖面积大幅下降
+        spd: rnd(34, 90),                    // px/s，自下而上（明显更快）
+        alpha: rnd(.034, .086),
+        wob: rnd(0, Math.PI * 2),
+        ws: rnd(.05, .16),
+        v: Math.floor(Math.random() * MIST_VARIANTS)
+      };
+    }
+
+    function build() {
+      var mul = qMul();
+      var n = Math.round(Math.min(700, Math.max(120, W * H / 5200 * mul)));
+      drops = [];
+      for (var i = 0; i < n; i++) drops.push(newDrop(true));
+      var m = Math.round(Math.min(12, Math.max(3, W / 200 * mul)));   // 雾团数量按档位缩放
+      mists = [];
+      for (var j = 0; j < m; j++) mists.push(newMist(true));
+    }
+
+    /* 每帧累计，定期评估：慢则降档（减雨雾 + 砍一层云），快则逐级恢复 */
+    function tuneQuality(dt) {
+      quality.sum += dt; quality.n++;
+      if (quality.cool > 0) quality.cool--;
+      if (quality.n < 24) return;
+      var avg = quality.sum / quality.n;
+      quality.sum = 0; quality.n = 0;
+      var lv = quality.level;
+      if (avg > 0.028 && lv > 0) quality.level = lv - 1;
+      else if (avg < 0.016 && lv < 2 && quality.cool === 0) quality.level = lv + 1;
+      if (quality.level !== lv) {
+        quality.cool = (quality.level < lv) ? 120 : 240;
+        document.documentElement.setAttribute('data-q', String(quality.level));
+        build();
+        paint(0);
+      }
+    }
+
+    function paint(dt) {
+      ctx.clearRect(0, 0, W, H);
+
+      /* 云雾：向上漂浮（贴图已是预旋转的几款，绘制时不再逐帧做变换） */
+      for (var i = 0; i < mists.length; i++) {
+        var m = mists[i];
+        m.y -= m.spd * dt;
+        m.wob += m.ws * dt;
+        if (m.y + m.r < -60) { mists[i] = newMist(false); continue; }
+        var mx = m.x + Math.sin(m.wob) * 28;
+        ctx.globalAlpha = Math.min(1, m.alpha * 1.7 * (0.85 + 0.3 * Math.sin(m.wob)));
+        ctx.drawImage(mistPics[m.v], mx - m.r, m.y - m.r, m.r * 2, m.r * 2);
+      }
+
+      /* 雨丝：先推进，再按透明度分桶批量绘制（每桶只切一次 globalAlpha） */
+      for (var b = 0; b < BUCKETS; b++) bucketList[b].length = 0;
+      for (var k = 0; k < drops.length; k++) {
+        var d = drops[k];
+        d.y += d.spd * dt;
+        if (d.y - d.len > H + 30) { drops[k] = newDrop(false); continue; }
+        d.x += d.spd * dt * SLANT * .35;
+        d.dx = d.x - d.len * SLANT;
+        d.dy = d.y - d.len;
+        bucketList[d.b].push(d);
+      }
+      for (var bi = 0; bi < BUCKETS; bi++) {
+        var list = bucketList[bi];
+        if (!list.length) continue;
+        ctx.globalAlpha = BUCKET_ALPHA[bi];
+        for (var q = 0; q < list.length; q++) {
+          var dd = list[q];
+          ctx.drawImage(sprite, dd.dx, dd.dy, dd.w, dd.len);
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame(ts) {
+      if (!running) return;
+      if (!last) last = ts;
+      var dt = Math.min(.05, (ts - last) / 1000);
+      last = ts;
+      paint(dt);
+      tuneQuality(dt);
+      raf = window.requestAnimationFrame(frame);
+    }
+    function start() {
+      if (running) return;
+      running = true; last = 0;
+      raf = window.requestAnimationFrame(frame);
+    }
+    function stop() {
+      running = false;
+      if (raf) { window.cancelAnimationFrame(raf); raf = null; }
+    }
+
+    function resize() {
+      /* 尺寸以画布元素自身的实际盒子为准（不要用 window.innerHeight：
+         首屏布局时它可能与元素不符，会把画布钉在错误高度，雨幕就会断一条线） */
+      var rect = cv.getBoundingClientRect();
+      W = Math.max(1, Math.round(rect.width));
+      H = Math.max(1, Math.round(rect.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 1.25);   // 雨雾本就柔和，1.25 足够且省下约 30% 填充
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      build();
+      paint(0);
+    }
+
+    resize();
+    document.documentElement.setAttribute('data-q', String(quality.level));
+    if (reduce) { paint(0); return; }         // 尊重"减少动态"：只留一帧静景
+    start();
+
+    /* 视口/元素尺寸变化时重新贴合（含首屏布局完成后的那次修正） */
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { resize(); }).observe(cv);
+    }
+    var rt = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(resize, 180);
+    });
+    window.addEventListener('orientationchange', function () {
+      clearTimeout(rt);
+      rt = setTimeout(resize, 240);
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+    window.addEventListener('pagehide', stop);
+  }
+
   /* ================= 初始化 ================= */
   function init() {
     C.initTheme();
     C.initHamburger();
+    initStorm();
     initNav();
     initMobileNav();
 
