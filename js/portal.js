@@ -374,7 +374,21 @@
        低档减少雨量与雾量，并通过 html[data-q="0"] 让 CSS 砍掉一层云，
        这样在弱机/软件渲染上也能保住动感而不是掉到个位数帧率。 */
     var quality = { level: 2, sum: 0, n: 0, cool: 0 };
-    function qMul() { return quality.level === 2 ? 1 : (quality.level === 1 ? .62 : .36); }
+    function qMul() { return quality.level === 2 ? 1 : (quality.level === 1 ? .7 : .5); }
+
+    /* 云图缺失自检：CSS 里的 background-image 一旦 404 是静默退化的，
+       这里主动探一次并在控制台点名缺失文件，省得靠肉眼比对排查 */
+    (function probeCloudImage() {
+      var probe = new Image();
+      probe.onerror = function () {
+        document.documentElement.classList.add('no-clouds');
+        if (window.console && console.warn) {
+          console.warn('[storm] 云图缺失：img/portal/storm-clouds.jpg（及 storm-clouds-far.jpg）' +
+            ' 未找到，天色退化为兜底渐变。请把 img/portal/ 目录一并上传。');
+        }
+      };
+      probe.src = 'img/portal/storm-clouds.jpg';
+    })();
 
     var BUCKETS = 8;                         // 雨丝按透明度分 8 档批量绘制
     var BUCKET_ALPHA = (function () {
@@ -476,10 +490,12 @@
 
     function build() {
       var mul = qMul();
-      var n = Math.round(Math.min(700, Math.max(120, W * H / 5200 * mul)));
+      /* 下限刻意留高：低档也要看得出"在下雨、有雾在升"，
+         否则弱机上会被误认为完全没有动画 */
+      var n = Math.round(Math.min(700, Math.max(260, W * H / 4200 * mul)));
       drops = [];
       for (var i = 0; i < n; i++) drops.push(newDrop(true));
-      var m = Math.round(Math.min(12, Math.max(3, W / 200 * mul)));   // 雾团数量按档位缩放
+      var m = Math.round(Math.min(12, Math.max(5, W / 170 * mul)));
       mists = [];
       for (var j = 0; j < m; j++) mists.push(newMist(true));
     }
