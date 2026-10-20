@@ -3,32 +3,45 @@
   <home hero="/img/test.jpg" hero-alt="响马卦学习中枢">
     <card id="learn"
           title="响马卦"
-          subtitle="东北派 · 西北派 · 两派对照"
-          image="/img/test.jpg"
+          subtitle="东北仙门 · 西北兵占 · 两派对照"
+          image="/img/xiangma.jpg"
           link="/htdocs/"
-          desc="两派学习路径分别拆解为若干阶段，从识牌、起卦、盘层、用神，到分类占、进阶技法、牌谱与实战，逐层推进。左栏目录可搜索，右栏知识图谱随笔记动态生成。"/>
+          desc="两派学习路径分别拆解为若干阶段，从识牌、起卦、盘层、用神，到分类占、进阶技法、牌谱与实战，逐层推进。"/>
     <card id="quiz"
           title="古法六爻"
-          subtitle="分阶小测 · 自检进度"
-          image="/img/test.jpg"
+          subtitle="干支易象 · 全宫大卦 · 传承经验"
+          image="/img/liuyao.jpg"
           link="/lydocs/"
-          desc="每阶段配小测，便于自检。答题提交后即可见得分与正确答案，进度自动保存在浏览器本地，刷新、关闭浏览器都不会丢失。"/>
+          desc="将复杂的学习路径简化，拆分为为期九周的学习路径，后续零散掉落福利。"/>
+    <card id="quiz"
+          title="古壬遗诀"
+          subtitle="六壬古诀 · 步法腾挪 · 理气定规"
+          image="/img/daliuren.jpg"
+          link="/dlrdocs/"
+          desc="阐六壬之简易，定数理之幽微"/>
     
   </home>
 
   <about hero="/img/test.jpg" hero-alt="响马卦学习中枢">
     <member name="姜玄衣"
             avatar="/img/test.jpg"
-            role="主讲师 · 作者"
+            role="讲师 · 响马卦"
             bio="自癸卯始习响马卦，遍览前贤诸篇，后承明华师传，遍历东北西北两家民间诸派所传。删繁就简，理气定规，使统系自洽。"
             message="愿学者循序而进，勿贪多求快。"
             contact=""
             contact-type=""/>
     <member name="明华"
             avatar="/img/test.jpg"
-            role="师承 · 顾问"
+            role="讲师 · 响马卦"
             bio="民间响马卦传承人。"
             message="理法简易，举重若轻，四盘备立，遍推八门。"
+            contact=""
+            contact-type=""/>
+    <member name="尔思"
+            avatar="/img/test.jpg"
+            role="讲师 · 六爻"
+            bio="学易数载，尤善六爻。曾与李纯文弟子一诺老师学习六爻之法，又与贺云飞老师本人学习干支易象学，后续又陆续接触学习过多套六爻体系，最终结合自己多年的实战经验，总结出独家实战体系，信息量大，断事细腻。"
+            message="本人不盲目推崇某个书上的铁论，更注重活学活用，对于教学有一定的经验。"
             contact=""
             contact-type=""/>
 
