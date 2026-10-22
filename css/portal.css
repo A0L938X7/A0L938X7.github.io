@@ -1,90 +1,7 @@
 /* ============================================================
-   Portal Specific Styles & Weather Effects
+   Portal Specific Styles (Initial Layout Restored)
    ============================================================ */
 
-/* ============================================================
-   Weather Layer (Fog & Rain)
-   ============================================================ */
-.weather-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0; /* Sits behind header/main/footer which are z-index:1 */
-  overflow: hidden;
-  /* Vignette blending */
-  background: radial-gradient(circle at center, transparent 30%, var(--bg-soft) 100%);
-}
-
-/* --- Fog --- */
-.fog-container {
-  position: absolute;
-  inset: -50%;
-  opacity: 0.6;
-  filter: blur(40px); /* Static blur, NOT animated */
-}
-.fog {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
-  animation: fog-drift linear infinite;
-  will-change: transform;
-}
-body.dark .fog {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-}
-.fog-1 { top: -10%; left: -10%; animation-duration: 45s; background-size: 50% 50%; }
-.fog-2 { 
-  top: 20%; left: 30%; animation-duration: 35s; animation-direction: reverse; 
-  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
-}
-body.dark .fog-2 { background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%); }
-.fog-3 { 
-  top: 50%; left: -20%; animation-duration: 25s; 
-  background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 40%);
-}
-body.dark .fog-3 { background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 40%); }
-
-@keyframes fog-drift {
-  0%   { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
-  50%  { transform: translateX(10%) translateY(5%) rotate(5deg); }
-  100% { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
-}
-
-/* --- Rain --- */
-.rain {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background-image: repeating-linear-gradient(
-    15deg, 
-    transparent, transparent 10px, 
-    rgba(255, 255, 255, 0.15) 10px, rgba(255, 255, 255, 0.15) 12px
-  );
-  background-size: 100px 100px; 
-  opacity: 0.4;
-  animation: rain-fall 0.3s linear infinite;
-  will-change: transform;
-}
-body.dark .rain {
-  background-image: repeating-linear-gradient(
-    15deg, transparent, transparent 10px, 
-    rgba(255, 255, 255, 0.08) 10px, rgba(255, 255, 255, 0.08) 12px
-  );
-  opacity: 0.3;
-}
-@keyframes rain-fall {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100px); } 
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fog, .rain { animation: none; }
-}
-
-
-/* ============================================================
-   Page Layout & Hero
-   ============================================================ */
 .page.active{overflow-y:auto;}
 .portal-wrap{
   max-width:1200px;
@@ -100,6 +17,7 @@ body.dark .rain {
   font-size:14px;
 }
 
+/* --- Hero Image --- */
 .page-hero{
   position:relative;
   width:100%;
@@ -108,25 +26,19 @@ body.dark .rain {
   background:linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
   flex-shrink:0;
 }
-
 .page-hero-bg{
   position:absolute;
   inset:0;
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  /* Default fallback */
   filter:brightness(0.55) saturate(0.85);
   transform:scale(1.06);
-  will-change:transform, filter;
 }
-
-/* Enhanced Hero Blur (Fixes the "not blurred" issue) */
+/* This applies the blur when the image loads */
 .page-hero.has-image .page-hero-bg{
-  filter:brightness(0.45) saturate(0.7) blur(8px); 
-  transform:scale(1.1); /* Scale up to prevent white blur edges */
+  filter:brightness(0.55) saturate(0.85) blur(2px);
 }
-
 .page-hero::after{
   content:'';
   position:absolute;
@@ -167,10 +79,7 @@ body.dark .rain {
 .page-hero:not(.has-image) .page-hero-content .portal-sub{ color:var(--text-3); text-shadow:none; }
 .page-hero:not(.has-image)::after{ display:none; }
 
-
-/* ============================================================
-   Home: Card Grid
-   ============================================================ */
+/* --- Cards --- */
 .card-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
@@ -232,10 +141,7 @@ body.dark .rain {
 }
 .card-enter:hover{ background:var(--accent); color:#fff; text-decoration:none; }
 
-
-/* ============================================================
-   About: Member Cards
-   ============================================================ */
+/* --- Members --- */
 .member-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
@@ -271,10 +177,7 @@ body.dark .rain {
 .member-message{ font-size:13px; color:var(--text-3); line-height:1.8; border-left:2px solid var(--accent); padding-left:10px; margin-top:8px; font-style:italic; }
 .member-contact{ font-size:12.5px; color:var(--text-4); margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); word-break:break-all; }
 
-
-/* ============================================================
-   Misc & Responsive
-   ============================================================ */
+/* --- Misc --- */
 .taiji-link{ display:flex; align-items:center; text-decoration:none; color:inherit; transition:opacity .15s ease; cursor:pointer; }
 .taiji-link:hover{ opacity:.75; text-decoration:none; }
 
@@ -285,4 +188,84 @@ body.dark .rain {
   .portal-wrap{ padding:24px 16px 60px; }
   .card-grid{ grid-template-columns:1fr; gap:16px; }
   .member-grid{ grid-template-columns:1fr; gap:80px 16px; padding-top:40px; }
+}
+
+/* ============================================================
+   Weather Effects (Appended at bottom so it doesn't break layout)
+   Colors adjusted to be visible on both light & dark backgrounds.
+   ============================================================ */
+
+.weather-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* Sits behind main content (which has z-index: 1) */
+  overflow: hidden;
+}
+
+/* --- Fog --- */
+.fog-container {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.5;
+  filter: blur(40px); /* Static blur */
+}
+.fog {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* Light mode fog: slightly blue/gray to be visible on paper */
+  background: radial-gradient(circle, rgba(180, 190, 200, 0.4) 0%, transparent 60%);
+  animation: fog-drift linear infinite;
+  will-change: transform;
+}
+body.dark .fog {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+}
+.fog-1 { top: -10%; left: -10%; animation-duration: 45s; background-size: 50% 50%; }
+.fog-2 { 
+  top: 20%; left: 30%; animation-duration: 35s; animation-direction: reverse; 
+  background: radial-gradient(circle at 30% 50%, rgba(170, 180, 190, 0.3) 0%, transparent 50%);
+}
+body.dark .fog-2 { background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%); }
+.fog-3 { 
+  top: 50%; left: -20%; animation-duration: 25s; 
+  background: radial-gradient(circle at 70% 50%, rgba(190, 200, 210, 0.3) 0%, transparent 40%);
+}
+body.dark .fog-3 { background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 40%); }
+
+@keyframes fog-drift {
+  0%   { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
+  50%  { transform: translateX(10%) translateY(5%) rotate(5deg); }
+  100% { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
+}
+
+/* --- Rain --- */
+.rain {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  /* Light mode rain: dark lines so it's visible on paper */
+  background-image: repeating-linear-gradient(
+    15deg, transparent, transparent 10px, 
+    rgba(0, 0, 0, 0.06) 10px, rgba(0, 0, 0, 0.06) 12px
+  );
+  background-size: 100px 100px; 
+  opacity: 0.8;
+  animation: rain-fall 0.3s linear infinite;
+  will-change: transform;
+}
+body.dark .rain {
+  background-image: repeating-linear-gradient(
+    15deg, transparent, transparent 10px, 
+    rgba(255, 255, 255, 0.1) 10px, rgba(255, 255, 255, 0.1) 12px
+  );
+  opacity: 0.6;
+}
+@keyframes rain-fall {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); } 
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fog, .rain { animation: none; }
 }
