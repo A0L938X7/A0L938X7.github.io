@@ -1,14 +1,22 @@
 /* ============================================================
-   Portal Specific Styles (Initial Layout Restored)
+   门户专有样式
+   · 主页卡片：展开时不影响同行其他卡片（align-items:start）
+   · 成员卡片：等高对齐（默认 stretch）
+   · 页面 Hero Image：暗化 + 虚化，文字悬浮
    ============================================================ */
 
+/* ============================================================
+   页面容器
+   ============================================================ */
 .page.active{overflow-y:auto;}
+
 .portal-wrap{
   max-width:1200px;
   margin:0 auto;
   padding:40px 24px 80px;
   width:100%;
 }
+
 .portal-loading{
   grid-column:1 / -1;
   padding:40px;
@@ -17,7 +25,9 @@
   font-size:14px;
 }
 
-/* --- Hero Image --- */
+/* ============================================================
+   页面 Hero Image
+   ============================================================ */
 .page-hero{
   position:relative;
   width:100%;
@@ -26,30 +36,42 @@
   background:linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
   flex-shrink:0;
 }
+
+/* 背景图层：负责暗化 + 虚化 */
 .page-hero-bg{
   position:absolute;
-  inset:0;
+  top:0; right:0; bottom:0; left:0;
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
   filter:brightness(0.55) saturate(0.85);
-  transform:scale(1.06);
+  transform:scale(1.06);            /* 防止 blur 边缘漏白 */
+  will-change:transform, filter;
 }
-/* This applies the blur when the image loads */
+/* 有实际背景图时才加 blur */
 .page-hero.has-image .page-hero-bg{
   filter:brightness(0.55) saturate(0.85) blur(2px);
 }
+
+/* 暗角渐变，让文字更清晰 */
 .page-hero::after{
   content:'';
   position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  top:0; right:0; bottom:0; left:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.35) 50%,
+    rgba(0,0,0,0.55) 100%
+  );
   pointer-events:none;
   z-index:1;
 }
+
+/* 文字悬浮层 */
 .page-hero-content{
   position:absolute;
-  inset:0;
+  top:0; right:0; bottom:0; left:0;
   z-index:2;
   display:flex;
   flex-direction:column;
@@ -59,6 +81,7 @@
   padding:20px;
   pointer-events:none;
 }
+
 .page-hero-content h1{
   font-family:var(--font-qiji);
   font-size:42px;
@@ -67,25 +90,42 @@
   color:#fff;
   margin-bottom:12px;
   line-height:1.3;
-  text-shadow:0 2px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8);
+  text-shadow:
+    0 2px 12px rgba(0,0,0,0.6),
+    0 1px 3px rgba(0,0,0,0.8);
 }
+
 .page-hero-content .portal-sub{
   font-size:15px;
   color:rgba(255,255,255,0.85);
   letter-spacing:5px;
   text-shadow:0 1px 6px rgba(0,0,0,0.7);
 }
-.page-hero:not(.has-image) .page-hero-content h1{ color:var(--accent); text-shadow:none; }
-.page-hero:not(.has-image) .page-hero-content .portal-sub{ color:var(--text-3); text-shadow:none; }
-.page-hero:not(.has-image)::after{ display:none; }
 
-/* --- Cards --- */
+/* 无图时：渐变背景，不虚化，文字用主题色 */
+.page-hero:not(.has-image) .page-hero-content h1{
+  color:var(--accent);
+  text-shadow:none;
+}
+.page-hero:not(.has-image) .page-hero-content .portal-sub{
+  color:var(--text-3);
+  text-shadow:none;
+}
+.page-hero:not(.has-image)::after{
+  display:none;
+}
+
+/* ============================================================
+   主页：卡片网格
+   注意：卡片展开时不能影响同行其他卡片 → align-items:start
+   ============================================================ */
 .card-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
   gap:24px;
   align-items:start;
 }
+
 .portal-card{
   background:var(--bg-card);
   border:1px solid var(--border);
@@ -97,57 +137,172 @@
   border-radius:0;
   outline:none;
   align-self:start;
-  transition:transform .22s cubic-bezier(.16,1,.3,1), box-shadow .22s cubic-bezier(.16,1,.3,1), border-color .15s ease;
+  transition:transform .22s cubic-bezier(.16,1,.3,1),
+             box-shadow .22s cubic-bezier(.16,1,.3,1),
+             border-color .15s ease;
 }
-.portal-card:focus-visible{ border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
-.portal-card:hover{ transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,0.10); border-color:var(--border-3); }
+.portal-card:focus-visible{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent-soft);
+}
+.portal-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+  border-color:var(--border-3);
+}
 .portal-card.disabled{cursor:not-allowed;}
-.portal-card.disabled:hover{ transform:none; box-shadow:0 1px 3px rgba(0,0,0,0.05); border-color:var(--border); }
-.portal-card.expanded{ border-color:var(--accent); box-shadow:0 10px 28px rgba(0,0,0,0.10); }
+.portal-card.disabled:hover{
+  transform:none;
+  box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  border-color:var(--border);
+}
+.portal-card.expanded{
+  border-color:var(--accent);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+}
 
-.card-image{ position:relative; width:100%; aspect-ratio:16 / 9; background:var(--bg-card-soft); overflow:hidden; }
-.card-image img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s cubic-bezier(.16,1,.3,1); }
-.portal-card:hover .card-image img{ transform:scale(1.04); }
-.portal-card.disabled .card-image img{ filter:grayscale(1) brightness(0.72); opacity:.65; }
-.portal-card.disabled:hover .card-image img{ transform:none; }
-.card-image.no-image{ background:linear-gradient(135deg, var(--bg-card-soft), var(--bg-soft)); }
+/* 图片区 */
+/* 16:9 比例盒：用 padding 撑高（老浏览器也认），内部图片绝对定位填满。
+   原来用 aspect-ratio:16/9（Chrome 88+），老浏览器上图片区会塌成 0 高。 */
+.card-image{
+  position:relative;
+  width:100%;
+  height:0;
+  padding-top:56.25%;
+  background:var(--bg-card-soft);
+  overflow:hidden;
+}
+.card-image img{
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.portal-card:hover .card-image img{transform:scale(1.04);}
+.portal-card.disabled .card-image img{
+  filter:grayscale(1) brightness(0.72);
+  opacity:.65;
+}
+.portal-card.disabled:hover .card-image img{transform:none;}
+
+.card-image.no-image{
+  background:linear-gradient(135deg, var(--bg-card-soft), var(--bg-soft));
+}
 .card-image.no-image::before{
-  content:''; position:absolute; inset:0;
-  background-image:repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.025) 12px, rgba(0,0,0,0.025) 24px);
+  content:'';
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  background-image:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 12px,
+    rgba(0,0,0,0.025) 12px,
+    rgba(0,0,0,0.025) 24px
+  );
   pointer-events:none;
 }
+
+/* 锁图标 */
 .card-lock{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  color:rgba(255,255,255,0.95); filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5));
-  pointer-events:none; z-index:2;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  color:rgba(255,255,255,0.95);
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  pointer-events:none;
+  z-index:2;
 }
+
+/* 未开放角标 */
 .card-badge{
-  position:absolute; top:10px; right:10px; padding:3px 10px; font-size:11px;
-  letter-spacing:1.5px; background:var(--accent); color:#fff; z-index:2; font-family:var(--font-qiji);
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:3px 10px;
+  font-size:11px;
+  letter-spacing:1.5px;
+  background:var(--accent);
+  color:#fff;
+  z-index:2;
+  font-family:var(--font-qiji);
 }
 
-.card-body{ padding:18px 20px 20px; display:flex; flex-direction:column; }
-.card-title{ font-family:var(--font-qiji); font-size:19px; letter-spacing:2px; font-weight:400; color:var(--text); margin-bottom:6px; line-height:1.4; }
-.card-subtitle{ font-size:13px; color:var(--text-3); letter-spacing:1px; line-height:1.5; }
+/* 内容区 */
+.card-body{
+  padding:18px 20px 20px;
+  display:flex;
+  flex-direction:column;
+}
+.card-title{
+  font-family:var(--font-qiji);
+  font-size:19px;
+  letter-spacing:2px;
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:6px;
+  line-height:1.4;
+}
+.card-subtitle{
+  font-size:13px;
+  color:var(--text-3);
+  letter-spacing:1px;
+  line-height:1.5;
+}
 
-.card-expand{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.16,1,.3,1); overflow:hidden; }
-.portal-card.expanded .card-expand{ grid-template-rows:1fr; }
-.card-expand > .card-expand-inner{ min-height:0; overflow:hidden; }
-.card-desc{ font-size:13.5px; color:var(--text-2); line-height:1.9; margin-top:14px; padding-top:12px; border-top:1px dashed var(--border); }
+/* 展开区 */
+.card-expand{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows .35s cubic-bezier(.16,1,.3,1);
+  overflow:hidden;
+}
+.portal-card.expanded .card-expand{grid-template-rows:1fr;}
+.card-expand > .card-expand-inner{
+  min-height:0;
+  overflow:hidden;
+}
+.card-desc{
+  font-size:13.5px;
+  color:var(--text-2);
+  line-height:1.9;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px dashed var(--border);
+}
 .card-enter{
-  display:inline-block; margin-top:12px; padding:6px 16px; font-size:13px;
-  color:var(--accent); border:1px solid var(--accent); text-decoration:none;
-  letter-spacing:1px; transition:background .15s ease, color .15s ease; align-self:flex-start;
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 16px;
+  font-size:13px;
+  color:var(--accent);
+  border:1px solid var(--accent);
+  text-decoration:none;
+  letter-spacing:1px;
+  transition:background .15s ease, color .15s ease;
+  align-self:flex-start;
 }
-.card-enter:hover{ background:var(--accent); color:#fff; text-decoration:none; }
+.card-enter:hover{
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+}
 
-/* --- Members --- */
+/* ============================================================
+   关于我们：成员卡片
+   注意：成员卡片必须等高对齐 → 默认 stretch
+   ============================================================ */
 .member-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
   gap:80px 24px;
   padding-top:60px;
+  /* 默认 align-items:stretch，卡片等高 */
 }
+
 .member-card{
   position:relative;
   background:var(--bg-card);
@@ -155,117 +310,395 @@
   box-shadow:0 1px 3px rgba(0,0,0,0.05);
   padding:72px 22px 26px;
   border-radius:0;
-  display:flex; flex-direction:column;
-  transition:transform .22s cubic-bezier(.16,1,.3,1), box-shadow .22s cubic-bezier(.16,1,.3,1);
+  display:flex;
+  flex-direction:column;
+  transition:transform .22s cubic-bezier(.16,1,.3,1),
+             box-shadow .22s cubic-bezier(.16,1,.3,1);
 }
-.member-card:hover{ transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,0.10); }
+.member-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+}
 
 .member-avatar-wrap{
-  position:absolute; top:-55px; left:50%; transform:translateX(-50%);
-  width:110px; height:110px; border-radius:50%; overflow:hidden;
-  border:4px solid var(--bg); background:var(--bg-card-soft); box-shadow:0 4px 16px rgba(0,0,0,0.10);
+  position:absolute;
+  top:-55px;
+  left:50%;
+  transform:translateX(-50%);
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid var(--bg);
+  background:var(--bg-card-soft);
+  box-shadow:0 4px 16px rgba(0,0,0,0.10);
 }
-.member-avatar{ width:100%; height:100%; object-fit:cover; display:block; }
+.member-avatar{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 .member-avatar-fallback{
-  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-qiji); font-size:44px; color:var(--accent); background:var(--bg-card-soft);
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-qiji);
+  font-size:44px;
+  color:var(--accent);
+  background:var(--bg-card-soft);
 }
-.member-body{ display:flex; flex-direction:column; gap:6px; text-align:left; flex:1; }
-.member-name{ font-family:var(--font-qiji); font-size:20px; letter-spacing:3px; color:var(--text); text-align:center; margin-bottom:2px; }
-.member-role{ font-size:12.5px; color:var(--accent); letter-spacing:1px; text-align:center; margin-bottom:10px; }
-.member-bio{ font-size:13.5px; color:var(--text-2); line-height:1.9; }
-.member-message{ font-size:13px; color:var(--text-3); line-height:1.8; border-left:2px solid var(--accent); padding-left:10px; margin-top:8px; font-style:italic; }
-.member-contact{ font-size:12.5px; color:var(--text-4); margin-top:auto; padding-top:10px; border-top:1px dashed var(--border); word-break:break-all; }
 
-/* --- Misc --- */
-.taiji-link{ display:flex; align-items:center; text-decoration:none; color:inherit; transition:opacity .15s ease; cursor:pointer; }
-.taiji-link:hover{ opacity:.75; text-decoration:none; }
+.member-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  text-align:left;
+  flex:1;
+}
 
-@media (max-width:820px){
-  .page-hero{ height:220px; }
-  .page-hero-content h1{ font-size:26px; letter-spacing:5px; }
-  .page-hero-content .portal-sub{ font-size:13px; letter-spacing:3px; }
-  .portal-wrap{ padding:24px 16px 60px; }
-  .card-grid{ grid-template-columns:1fr; gap:16px; }
-  .member-grid{ grid-template-columns:1fr; gap:80px 16px; padding-top:40px; }
+.member-name{
+  font-family:var(--font-qiji);
+  font-size:20px;
+  letter-spacing:3px;
+  color:var(--text);
+  text-align:center;
+  margin-bottom:2px;
+}
+.member-role{
+  font-size:12.5px;
+  color:var(--accent);
+  letter-spacing:1px;
+  text-align:center;
+  margin-bottom:10px;
+}
+.member-bio{
+  font-size:13.5px;
+  color:var(--text-2);
+  line-height:1.9;
+}
+.member-message{
+  font-size:13px;
+  color:var(--text-3);
+  line-height:1.8;
+  border-left:2px solid var(--accent);
+  padding-left:10px;
+  margin-top:8px;
+  font-style:italic;
+}
+.member-contact{
+  font-size:12.5px;
+  color:var(--text-4);
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px dashed var(--border);
+  word-break:break-all;
 }
 
 /* ============================================================
-   Weather Effects (Appended at bottom so it doesn't break layout)
-   Colors adjusted to be visible on both light & dark backgrounds.
+   太极图标链接
    ============================================================ */
-
-.weather-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0; /* Sits behind main content (which has z-index: 1) */
-  overflow: hidden;
+.taiji-link{
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  color:inherit;
+  transition:opacity .15s ease;
+  cursor:pointer;
+}
+.taiji-link:hover{
+  opacity:.75;
+  text-decoration:none;
 }
 
-/* --- Fog --- */
-.fog-container {
-  position: absolute;
-  inset: -50%;
-  opacity: 0.5;
-  filter: blur(40px); /* Static blur */
-}
-.fog {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  /* Light mode fog: slightly blue/gray to be visible on paper */
-  background: radial-gradient(circle, rgba(180, 190, 200, 0.4) 0%, transparent 60%);
-  animation: fog-drift linear infinite;
-  will-change: transform;
-}
-body.dark .fog {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-}
-.fog-1 { top: -10%; left: -10%; animation-duration: 45s; background-size: 50% 50%; }
-.fog-2 { 
-  top: 20%; left: 30%; animation-duration: 35s; animation-direction: reverse; 
-  background: radial-gradient(circle at 30% 50%, rgba(170, 180, 190, 0.3) 0%, transparent 50%);
-}
-body.dark .fog-2 { background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%); }
-.fog-3 { 
-  top: 50%; left: -20%; animation-duration: 25s; 
-  background: radial-gradient(circle at 70% 50%, rgba(190, 200, 210, 0.3) 0%, transparent 40%);
-}
-body.dark .fog-3 { background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 40%); }
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width:820px){
+  /* 手机端 Hero：竖幅原图（512×768）整幅显示，一点不裁切。
+     · 前层 .page-hero-bg 用 contain 把整幅图完整放进画框
+     · 底衬 .page-hero::before 用同一张图 cover + 高斯模糊，填满两侧留白，
+       于是既看得全，又不会有空荡的暗边（图片地址由 js 写入 --hero-img）
+     · 底部渐隐从 76% 放宽到 88%，原图下半部不再被擦掉 */
+  .page-hero{
+    /* 画框高度 = 视口宽 × 原图高宽比（768/512 = 1.5）。
+       这样 background-size:cover 恰好等于 contain —— 既铺满整幅宽度，又一像素不裁。
+       max-height 防止平板/矮屏把它撑得过高（被裁时仍是满铺，不会留边）。 */
+    height:calc(100vw * 1.5);
+    max-height:620px;
+    -webkit-mask-image:linear-gradient(to bottom,#000 88%,rgba(0,0,0,.55) 96%,transparent 100%);
+            mask-image:linear-gradient(to bottom,#000 88%,rgba(0,0,0,.55) 96%,transparent 100%);
+  }
+  /* 画框比例与原图一致后不再有留白，模糊延展层就不需要了（少一层合成） */
+  .page-hero.has-image::before{ display:none; }
+  .page-hero.has-image .page-hero-bg{
+    background-size:cover;           /* 满铺：宽度铺满、高度也刚好，不裁切 */
+    background-position:center;
+    background-color:transparent;
+    filter:brightness(.85) saturate(.90);
+    transform:none;
+  }
+  /* 整幅图清晰之后，标题会压在亮部；在文字那一带加一道柔和压暗，保证可读 */
+  .page-hero::after{
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0) 36%, rgba(0,0,0,.46) 50%, rgba(0,0,0,.22) 62%, rgba(0,0,0,0) 76%),
+      linear-gradient(to bottom, rgba(0,0,0,.10) 0%, rgba(0,0,0,.28) 50%, rgba(0,0,0,.52) 100%);
+  }
+  .page-hero-content h1{
+    font-size:26px;
+    letter-spacing:5px;
+  }
+  .page-hero-content .portal-sub{
+    font-size:13px;
+    letter-spacing:3px;
+  }
 
-@keyframes fog-drift {
-  0%   { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
-  50%  { transform: translateX(10%) translateY(5%) rotate(5deg); }
-  100% { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
-}
-
-/* --- Rain --- */
-.rain {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  /* Light mode rain: dark lines so it's visible on paper */
-  background-image: repeating-linear-gradient(
-    15deg, transparent, transparent 10px, 
-    rgba(0, 0, 0, 0.06) 10px, rgba(0, 0, 0, 0.06) 12px
-  );
-  background-size: 100px 100px; 
-  opacity: 0.8;
-  animation: rain-fall 0.3s linear infinite;
-  will-change: transform;
-}
-body.dark .rain {
-  background-image: repeating-linear-gradient(
-    15deg, transparent, transparent 10px, 
-    rgba(255, 255, 255, 0.1) 10px, rgba(255, 255, 255, 0.1) 12px
-  );
-  opacity: 0.6;
-}
-@keyframes rain-fall {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(100px); } 
+  .portal-wrap{
+    padding:24px 16px 60px;
+  }
+  .card-grid{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  .member-grid{
+    grid-template-columns:1fr;
+    gap:80px 16px;
+    padding-top:40px;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fog, .rain { animation: none; }
+/* ============================================================
+   阴云雨幕（装饰层）
+   · 昏暗的雨云天色 + 云雾自下而上漂浮 + 雨丝
+   · 纯装饰：固定定位、pointer-events:none，不参与布局
+   · 卡片与成员档案的样式一律不动，只是浮在雨幕之上
+   ============================================================ */
+body{
+  background:#050505;                 /* 云层之外的底色也保持昏暗（纯黑灰，无冷色） */
+}
+
+.storm{
+  position:fixed;
+  top:0; right:0; bottom:0; left:0;
+  z-index:0;                          /* 最底层天色：在 Hero 图与所有部件之下 */
+  overflow:hidden;
+  pointer-events:none;
+  contain:paint;                      /* 隔离绘制，减少整页重绘 */
+  /* 云后一点天光 + 暗角 + 兜底云块都并入这里的渐变：
+     天光原是一个 mix-blend-mode 图层、暗角原是一个独立图层，两者都会加大每帧合成开销；
+     现在它们只是静态渐变（无 JS 时也成立）。
+     最上面四层"兜底云块"专门应付云图 404 的情况——即使 img/portal/ 没上传或路径写错，
+     天色也不会退化成一片死板的渐变。 */
+  background:
+    radial-gradient(38% 26% at 22% 30%, rgba(255,255,255,.085), rgba(255,255,255,0) 70%),
+    radial-gradient(46% 30% at 74% 62%, rgba(255,255,255,.062), rgba(255,255,255,0) 72%),
+    radial-gradient(30% 22% at 46% 80%, rgba(255,255,255,.05), rgba(255,255,255,0) 70%),
+    radial-gradient(52% 34% at 10% 74%, rgba(0,0,0,.38), rgba(0,0,0,0) 75%),
+    radial-gradient(58% 42% at 76% 16%, rgba(255,255,255,.075), rgba(255,255,255,0) 72%),
+    radial-gradient(132% 92% at 50% 38%, rgba(0,0,0,0) 40%, rgba(0,0,0,.58) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.46) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,.38) 100%),
+    radial-gradient(125% 85% at 78% 14%, #3c3c3c 0%, #171717 46%, #050505 100%),
+    linear-gradient(to bottom, #070707 0%, #0d0d0d 55%, #050505 100%);
+}
+
+/* 两层云：远层慢而虚、近层快而实，形成自下而上的漂浮与纵深
+   几何：盒子 4 块 tile 高（每块 = 1 个视口高），每周期正好上移"一块"，
+   图案与起始帧完全重合（云图双向无缝），盒底始终在视口之外。
+   性能要点：明暗与模糊都烘焙进图片，这里只留 opacity + transform。
+   （曾试过把云搬进画布做 pattern 填充：实测 193ms/帧，比这里慢一个数量级，已回退。） */
+.storm-layer{
+  position:absolute;
+  left:-6%; right:-6%;
+  top:-100%;
+  height:400%;
+  background-repeat:repeat-y;
+  background-size:100% 25%;
+  will-change:transform;
+  backface-visibility:hidden;
+  animation:storm-rise 150s linear infinite;
+}
+.storm-far{
+  background-image:url("../img/portal/storm-clouds-far.jpg");
+  opacity:.50;
+  animation-duration:55s;                 /* 约 16 px/s */
+}
+.storm-near{
+  background-image:url("../img/portal/storm-clouds.jpg");
+  opacity:.86;
+  animation-duration:30s;                 /* 约 30 px/s，比最初快 4 倍 */
+  animation-delay:-10s;
+}
+@keyframes storm-rise{
+  from{ transform:translate3d(0,0,0); }
+  to{ transform:translate3d(0,-25%,0); }   /* 正好一块 tile */
+}
+
+/* 弱机降级：js/portal.js 依实测帧时间设置 html[data-q]
+   档位越低，参与合成的动画层越少（对弱机来说层数比速度更致命）。
+   ★ 上浮雾与近层雨在任何档位都保留——那是这个页面的"天气签名"，
+     收掉会让人以为动画坏了（这坑踩过一次）。 */
+html[data-q="1"] .storm-far{ opacity:.38; }
+html[data-q="1"] .storm-rainfall-far{ display:none; }        /* 收掉远层雨 */
+html[data-q="0"] .storm-far{ display:none; }                 /* 再收掉远层云 */
+html[data-q="0"] .storm-rainfall-far{ display:none; }
+html[data-q="0"] .storm-near{ animation-duration:44s; }
+
+/* 暗角：静态图层，不参与动画 */
+.storm-vignette{
+  position:absolute;
+  top:0; right:0; bottom:0; left:0;
+  background:
+    radial-gradient(132% 92% at 50% 38%, rgba(0,0,0,0) 38%, rgba(0,0,0,.58) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,.46) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,.38) 100%);
+}
+
+/* 天气层容器：在 Hero 之上、卡片与文字之下（与原先雨画布同一层级）。
+   里面全部是预渲染无缝贴图的 transform 动画 —— 不用 canvas，
+   既避开"画布不合成"的显卡兼容问题，也没有逐帧 JS 绘制开销。 */
+.storm-weather{
+  position:fixed;
+  top:0; right:0; bottom:0; left:0;
+  z-index:2;
+  overflow:hidden;
+  pointer-events:none;
+  contain:paint;
+}
+
+/* 雨：贴图向下平移，一个周期正好一块贴图高（贴图纵向无缝 → 循环无痕）
+   速度 = 贴图高 / animation-duration：
+     近层 600px / 0.6s ≈ 1000 px/s，远层 440px / 0.9s ≈ 490 px/s
+   ★ 贴图尺寸与位移距离直接决定合成器的光栅面积（层高 = 视口 + 位移），
+     所以这里刻意用小贴图 + 短位移：三层的总光栅面积比大贴图方案少约四成。 */
+.storm-rainfall{
+  position:absolute;
+  left:-6%; right:-6%;
+  background-image:url("../img/portal/rain.png");
+  background-repeat:repeat;
+  will-change:transform;
+  backface-visibility:hidden;
+}
+.storm-rainfall-near{
+  top:-600px; bottom:-600px;
+  background-size:300px auto;              /* 图 512×1024 → 一块 300×600 */
+  opacity:.62;
+  animation:storm-fall 0.6s linear infinite;
+}
+.storm-rainfall-far{
+  top:-440px; bottom:-440px;
+  background-size:220px auto;              /* 图 512×1024 → 一块 220×440 */
+  opacity:.40;
+  animation:storm-fall-far 0.9s linear infinite;
+}
+@keyframes storm-fall{
+  from{ transform:translate3d(0,-600px,0); }
+  to  { transform:translate3d(0,0,0); }    /* 下落 */
+}
+@keyframes storm-fall-far{
+  from{ transform:translate3d(0,-440px,0); }
+  to  { transform:translate3d(0,0,0); }
+}
+
+/* 上浮雾：贴图向上平移，一块 560×560，周期 16s ≈ 35 px/s */
+.storm-fog{
+  position:absolute;
+  left:-10%; right:-10%;
+  top:-560px; bottom:-560px;
+  background-image:url("../img/portal/storm-mist.png");
+  background-repeat:repeat;
+  background-size:560px auto;
+  opacity:.60;
+  will-change:transform;
+  backface-visibility:hidden;
+  animation:storm-mist-rise 16s linear infinite;
+}
+@keyframes storm-mist-rise{
+  from{ transform:translate3d(0,0,0); }
+  to  { transform:translate3d(0,-560px,0); }
+}
+
+/* 页面部件浮在雨幕之上：雨丝不穿过卡片、文字与页脚
+   注意：.page-hero-content 必须保持原有的 position:absolute + 四边定位 0（标题在 Hero 内居中），
+   这里只补 z-index，绝不能改成 position:relative */
+.portal-card,
+.member-card,
+.portal-loading{
+  position:relative;
+  z-index:3;
+}
+.page-hero-content{ z-index:3; }
+
+/* 顶栏与导航：暗色半透明（不做 backdrop-filter 磨砂——页面背后是整屏动画，
+   磨砂会逼浏览器每帧重新模糊整屏，是卡顿的首要来源） */
+header{
+  background:rgba(8,8,8,.78);
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.brand{ color:#eaeaea; }
+.navbar a{ color:#b4b4b4; border-right-color:rgba(255,255,255,.10); }
+.navbar a:first-child{ border-left-color:rgba(255,255,255,.10); }
+.navbar a:hover{ background:rgba(255,255,255,.07); color:#fff; }
+.navbar a.active{ background:#e6e6e6; color:#0d0d0d; }
+.icon-btn{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.18);
+  color:#d2d2d2;
+}
+.icon-btn:hover{ background:rgba(255,255,255,.14); }
+
+.mobile-nav{
+  background:rgba(10,10,10,.97);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.mobile-nav-item{ color:#c4c4c4; border-bottom-color:rgba(255,255,255,.08); }
+.mobile-nav-item:hover{ background:rgba(255,255,255,.07); color:#fff; }
+.mobile-nav-item.active{
+  color:#f08b84;
+  background:rgba(192,57,43,.22);
+  border-left-color:#c0392b;
+}
+.mobile-nav-group-title{
+  color:#f08b84;
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.08);
+}
+.mobile-nav-subgroup-title{
+  color:#8f8f8f;
+  background:rgba(255,255,255,.03);
+  border-color:rgba(255,255,255,.06);
+}
+.mobile-nav-page-label{ color:#8f8f8f; }
+.mobile-nav-divider{ border-top-color:rgba(255,255,255,.16); }
+
+footer{
+  position:relative;
+  z-index:3;
+  background:transparent;
+  border-top:1px solid rgba(255,255,255,.14);
+  color:#ababab;
+}
+.portal-loading{ color:#969696; }
+.portal-sub{ /* Hero 副标题在雨幕上保持可读 */ text-shadow:0 1px 8px rgba(0,0,0,.75); }
+
+/* Hero 图保留，只在底缘化开，与雨云自然衔接 */
+.page-hero{
+  -webkit-mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.45) 92%,transparent 100%);
+          mask-image:linear-gradient(to bottom,#000 76%,rgba(0,0,0,.45) 92%,transparent 100%);
+}
+
+@media (max-width:820px) and (max-height:720px){
+  .page-hero{ height:360px; }        /* 矮屏（横放/小屏手机）别让 Hero 占满整屏 */
+}
+
+/* 系统「减少动态」：只把天气动画冻住，贴图仍然全部显示。
+   ★ 千万不要在这里 display:none 或 animation:none 收掉图层——
+     那样页面会变成一片死黑，用户会以为整页坏了（这坑踩过一次）。
+   想在这种情况下仍要动画：地址后加 ?motion=1（js/portal.js 会给 html 加 .force-motion） */
+@media (prefers-reduced-motion: reduce){
+  html:not(.force-motion) .storm-layer,
+  html:not(.force-motion) .storm-rainfall,
+  html:not(.force-motion) .storm-fog{
+    animation-play-state:paused;
+  }
 }
