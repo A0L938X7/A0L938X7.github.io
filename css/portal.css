@@ -437,10 +437,26 @@
     background-size:cover;           /* 满铺：宽度铺满、高度也刚好，不裁切 */
     background-position:center;
     background-color:transparent;
-    filter:brightness(.85) saturate(.90);
+    /* 压暗到 .66：图像细节仍清楚（不模糊），但不会被亮部盖掉白色雨丝 */
+    filter:brightness(.66) saturate(.92);
     transform:none;
   }
-  /* 整幅图清晰之后，标题会压在亮部；在文字那一带加一道柔和压暗，保证可读 */
+  /* 手机端雨层单独调粗：
+     512px 宽的雨丝贴图压到 300px 铺时，单根只有 0.6–1.5 CSS px，肉眼几乎看不见。
+     这里换成 520 / 380 的贴图尺寸（雨丝约 1.0–2.6px），并把位移距离与关键帧一起改，
+     保证一个周期正好一块贴图高，循环依旧无缝。 */
+  .storm-rainfall-near{
+    top:-1040px; bottom:-1040px;
+    background-size:520px auto;            /* 一块 520×1040 */
+    opacity:.90;
+    animation:storm-fall-m .95s linear infinite;   /* 约 1095 px/s */
+  }
+  .storm-rainfall-far{
+    top:-760px; bottom:-760px;
+    background-size:380px auto;            /* 一块 380×760 */
+    opacity:.62;
+    animation:storm-fall-far-m 1.15s linear infinite; /* 约 660 px/s */
+  }  /* 整幅图清晰之后，标题会压在亮部；在文字那一带加一道柔和压暗，保证可读 */
   .page-hero::after{
     background:
       linear-gradient(to bottom, rgba(0,0,0,0) 36%, rgba(0,0,0,.46) 50%, rgba(0,0,0,.22) 62%, rgba(0,0,0,0) 76%),
@@ -701,4 +717,14 @@ footer{
   html:not(.force-motion) .storm-fog{
     animation-play-state:paused;
   }
+}
+
+/* 手机端雨层专用关键帧（位移 = 对应贴图高，循环无痕） */
+@keyframes storm-fall-m{
+  from{ transform:translate3d(0,-1040px,0); }
+  to  { transform:translate3d(0,0,0); }
+}
+@keyframes storm-fall-far-m{
+  from{ transform:translate3d(0,-760px,0); }
+  to  { transform:translate3d(0,0,0); }
 }
