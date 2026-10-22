@@ -601,3 +601,130 @@ footer{
 @media (prefers-reduced-motion: reduce){
   .storm-layer{ animation:none; }
 }
+
+
+/* ============================================================
+   Weather Effects (Rain & Fog)
+   Optimized for GPU acceleration (transform & opacity)
+   ============================================================ */
+
+/* Base container: Fixed, covering the screen, behind content */
+.weather-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* Prevent blocking clicks */
+  z-index: -1;          /* Keep behind main content */
+  overflow: hidden;
+  /* Subtle vignette for atmosphere */
+  background: radial-gradient(circle at center, transparent 30%, var(--bg-soft) 100%);
+}
+
+/* ============================================================
+   FOG ANIMATION
+   ============================================================ */
+.fog-container {
+  position: absolute;
+  inset: -50%; /* Larger than screen to allow movement */
+  opacity: 0.6;
+  /* Blur is applied here once, not animated */
+  filter: blur(40px);
+}
+
+.fog {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+  animation: fog-drift linear infinite;
+  will-change: transform;
+}
+
+/* Light mode fog color adjustments */
+body.dark .fog {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+}
+
+/* Layer 1: Slow moving, large */
+.fog-1 {
+  top: -10%;
+  left: -10%;
+  animation-duration: 45s;
+  background-size: 50% 50%;
+}
+
+/* Layer 2: Medium speed, offset */
+.fog-2 {
+  top: 20%;
+  left: 30%;
+  animation-duration: 35s;
+  animation-direction: reverse;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+}
+body.dark .fog-2 {
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+}
+
+/* Layer 3: Fast, smaller */
+.fog-3 {
+  top: 50%;
+  left: -20%;
+  animation-duration: 25s;
+  background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 40%);
+}
+body.dark .fog-3 {
+  background: radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+}
+
+@keyframes fog-drift {
+  0%   { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
+  50%  { transform: translateX(10%) translateY(5%) rotate(5deg); }
+  100% { transform: translateX(-10%) translateY(-5%) rotate(0deg); }
+}
+
+/* ============================================================
+   RAIN ANIMATION
+   ============================================================ */
+.rain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Using a repeating linear gradient for rain drops */
+  background-image: repeating-linear-gradient(
+    15deg, 
+    transparent, 
+    transparent 10px, 
+    rgba(255, 255, 255, 0.15) 10px, 
+    rgba(255, 255, 255, 0.15) 12px
+  );
+  /* The background size determines the distance between drops */
+  background-size: 100px 100px; 
+  opacity: 0.4;
+  animation: rain-fall 0.3s linear infinite;
+  will-change: transform;
+}
+
+/* Dark mode rain: lighter and less opaque */
+body.dark .rain {
+  background-image: repeating-linear-gradient(
+    15deg, 
+    transparent, 
+    transparent 10px, 
+    rgba(255, 255, 255, 0.08) 10px, 
+    rgba(255, 255, 255, 0.08) 12px
+  );
+  opacity: 0.3;
+}
+
+@keyframes rain-fall {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); } /* Must match background-size height */
+}
+
+/* Accessibility: Disable animations if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fog, .rain {
+    animation: none;
+  }
+}
