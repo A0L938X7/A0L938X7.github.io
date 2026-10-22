@@ -3,26 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>响马卦 · 学习中枢</title>
-<!-- Cache busting updated to force reload -->
-<link rel="stylesheet" href="css/common.css?v=20261025">
-<link rel="stylesheet" href="css/portal.css?v=20261025">
+<title>太清術院</title>
+<link rel="stylesheet" href="css/common.css?v=20261026">
+<link rel="stylesheet" href="css/portal.css?v=20261026">
 </head>
 <body>
 
-<!-- Weather Layer: Sits between background and content -->
-<div class="weather-layer" aria-hidden="true">
-  <div class="fog-container">
-    <div class="fog fog-1"></div>
-    <div class="fog fog-2"></div>
-    <div class="fog fog-3"></div>
-  </div>
-  <div class="rain"></div>
+<!-- 阴云天色：静态渐变兜底；两层云用合成器 transform 上浮 -->
+<div class="storm" aria-hidden="true">
+  <div class="storm-layer storm-far"></div>
+  <div class="storm-layer storm-near"></div>
+  <div class="storm-vignette"></div>
+</div>
+
+<!-- 雨与上浮雾：纯 CSS 合成器动画（预渲染无缝贴图，不用 canvas），
+     盖在 Hero 图上、卡片与文字之下。近层雨快而实，远层雨慢而虚，雾自下而上 -->
+<div class="storm-weather" aria-hidden="true">
+  <div class="storm-fog"></div>
+  <div class="storm-rainfall storm-rainfall-far"></div>
+  <div class="storm-rainfall storm-rainfall-near"></div>
 </div>
 
 <header>
   <div class="header-left">
-    <a href="#" class="taiji-link" id="taiji-home" title="返回主页">
+    <a href="portal.html" class="taiji-link" title="返回主页">
       <svg class="taiji-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="50" cy="50" r="48" fill="var(--taiji-yang)" stroke="var(--taiji-border)" stroke-width="2"/>
         <path d="M50,2 A48,48 0 0,1 50,98 Z" fill="var(--taiji-yin)"/>
@@ -32,10 +36,10 @@
         <circle cx="50" cy="74" r="7" fill="var(--taiji-yang)"/>
       </svg>
     </a>
-    <div class="brand">响马卦</div>
+    <div class="brand">太清術院</div>
   </div>
-  <nav class="navbar" id="navbar">
-    <a href="#" data-page="home" class="active">主页</a>
+  <nav class="navbar">
+    <a href="portal.html" data-page="home" class="active">主页</a>
     <a href="#about" data-page="about">关于我们</a>
   </nav>
   <div class="header-right">
@@ -47,41 +51,40 @@
 <div class="mobile-nav" id="mobile-nav"></div>
 
 <main>
-  <section class="page active" id="page-home">
-    <div class="page-hero" id="home-hero">
-      <div class="page-hero-bg"></div>
-      <div class="page-hero-content">
-        <h1 id="portal-title">响马卦 · 学习中枢</h1>
-        <p class="portal-sub" id="portal-subtitle"></p>
-      </div>
+<section class="page active" id="page-home">
+  <div class="page-hero" id="home-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-content">
+      <h1 id="portal-title">太清術院</h1>
+      <p class="portal-sub" id="portal-subtitle">一个免费且高质量的術数学习平台</p>
     </div>
-    <div class="portal-wrap">
-      <div class="card-grid" id="home-grid">
-        <div class="portal-loading">正在加载…</div>
-      </div>
+  </div>
+  <div class="portal-wrap">
+    <div class="card-grid" id="home-grid">
+      <div class="portal-loading">正在加载…</div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="page" id="page-about">
-    <div class="page-hero" id="about-hero">
-      <div class="page-hero-bg"></div>
-      <div class="page-hero-content">
-        <h1 id="about-title">关于我们</h1>
-        <p class="portal-sub" id="about-subtitle">讲师与整理者</p>
-      </div>
+<section class="page" id="page-about">
+  <div class="page-hero" id="about-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-content">
+      <h1 id="about-title">关于我们</h1>
+      <p class="portal-sub" id="about-subtitle">讲师与整理者</p>
     </div>
-    <div class="portal-wrap">
-      <div class="member-grid" id="member-grid">
-        <div class="portal-loading">正在加载…</div>
-      </div>
+  </div>
+  <div class="portal-wrap">
+    <div class="member-grid" id="member-grid">
+      <div class="portal-loading">正在加载…</div>
     </div>
-  </section>
+  </div>
+</section>
 </main>
 
-<footer>响马卦学习中枢 · 姜玄衣 · 仅供学习研究</footer>
-<div id="toast"></div>
+<footer>太清術院学习站点 · 作者：姜玄衣 · 仅供学习研究</footer>
 
-<script src="js/common.js?v=20261025"></script>
-<script src="js/portal.js?v=20261025"></script>
+<script src="js/common.js?v=20261026"></script>
+<script src="js/portal.js?v=20261026"></script>
 </body>
 </html>
