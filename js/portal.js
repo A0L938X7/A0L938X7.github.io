@@ -63,19 +63,15 @@
     };
   }
 
+  // Initial version of applyHero (no preloader, so it never fails to apply)
   function applyHero(heroEl, heroData) {
     if (!heroEl) return;
     var bg = heroEl.querySelector('.page-hero-bg');
     if (!bg) return;
 
     if (heroData && heroData.image) {
-      var probe = new Image();
-      probe.onload = function () {
-        bg.style.backgroundImage = 'url("' + heroData.image.replace(/"/g, '\\"') + '")';
-        heroEl.classList.add('has-image');
-      };
-      probe.onerror = function () { heroEl.classList.remove('has-image'); };
-      probe.src = heroData.image;
+      bg.style.backgroundImage = 'url("' + heroData.image.replace(/"/g, '\\"') + '")';
+      heroEl.classList.add('has-image');
     } else {
       heroEl.classList.remove('has-image');
     }
