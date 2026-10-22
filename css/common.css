@@ -1,5 +1,5 @@
 /* ============================================================
-   门户通用样式：变量 / 全局 / header / footer / 移动导航
+   Global Variables & Base Styles
    ============================================================ */
 
 @font-face{
@@ -9,7 +9,6 @@
   font-display:swap;
 }
 
-/* ===== 颜色变量 ===== */
 :root{
   --bg:#FFFFF0;--bg-soft:#f8f8ec;--bg-panel:#fafae8;--bg-panel-border:#e8e8d0;
   --bg-card:#fff;--bg-card-soft:#fbfbf0;
@@ -35,26 +34,34 @@ body.dark{
   color-scheme:dark;
 }
 
-/* ===== 全局 ===== */
+/* ===== Global ===== */
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
+html{
+  height:100%;
+  background:var(--bg);
+  transition:background .2s;
+}
 body{
   font-family:var(--font-serif);
-  background:var(--bg);color:var(--text);
+  background:transparent; /* Let the HTML background show through */
+  color:var(--text);
   font-size:15px;line-height:1.7;
   display:flex;flex-direction:column;
   min-height:100vh;
   overflow-x:hidden;
-  transition:background .2s,color .2s;
-  /* Ensure content sits above the weather layer */
   position:relative;
-  z-index:1;
 }
 a{color:var(--link);text-decoration:none;}
 a:hover{text-decoration:underline;}
 button{font-family:inherit;}
 
-/* ===== 头部 ===== */
+/* Ensure main content sits above the weather layer */
+header, main, footer {
+  position:relative;
+  z-index:1;
+}
+
+/* ===== Header ===== */
 header{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   background:var(--bg);border-bottom:1px solid var(--border);
@@ -85,7 +92,7 @@ header{
 .hamburger{display:none;transition:transform .22s;}
 .hamburger.open{transform:rotate(90deg);}
 
-/* ===== 移动导航 ===== */
+/* ===== Mobile Nav ===== */
 .mobile-nav{
   position:fixed;top:56px;left:0;right:0;
   background:var(--bg-panel);border-bottom:1px solid var(--border);
@@ -107,7 +114,7 @@ header{
   border-left:2px solid var(--accent);padding-left:18px;
 }
 
-/* ===== main / footer ===== */
+/* ===== Main & Footer ===== */
 main{
   flex:1;
   min-height:0;
@@ -121,7 +128,6 @@ footer{
   background:var(--bg);
 }
 
-/* ===== 页面容器 ===== */
 .page{
   display:none;
   flex:1;
@@ -130,7 +136,6 @@ footer{
 }
 .page.active{display:flex;}
 
-/* ===== toast ===== */
 #toast{
   position:fixed;left:50%;bottom:80px;transform:translateX(-50%);
   background:rgba(0,0,0,.85);color:#fff;padding:11px 24px;font-size:15px;
@@ -138,7 +143,6 @@ footer{
 }
 #toast.show{opacity:1;}
 
-/* ===== 响应式 ===== */
 @media(max-width:820px){
   .navbar{display:none;}
   .hamburger{display:flex;}
