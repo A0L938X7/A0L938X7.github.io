@@ -72,7 +72,7 @@
     var btn = document.getElementById('start-learning');
     if (btn) {
       btn.addEventListener('click', function () {
-        location.href = 'learn.html';
+        location.href = 'lear_n.html';
       });
     }
 
